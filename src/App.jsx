@@ -619,7 +619,8 @@ function ChefEnglishApp({ lang = "en" }) {
             aria-label="Cambiar modo"
             style={{ ...S.darkBtn, background: T.chipBg, border: `1px solid ${T.chipBorder}`, color: T.subtle }}
           >
-            {dark ? "☀ Claro" : "☾ Oscuro"}
+            <span className="ce-dark-icon">{dark ? "☀" : "☾"}</span>
+            <span className="ce-dark-label">{dark ? " Claro" : " Oscuro"}</span>
           </button>
           <div style={{ ...S.streakBox, background: T.chipBg, border: `1px solid ${T.chipBorder}` }} className="ce-streak">
             <div style={S.streakNum}>{totalLearned}</div>
@@ -997,6 +998,8 @@ const MOBILE_CSS = `
     .ce-title { font-size: 17px !important; letter-spacing: -0.3px !important; white-space: nowrap; }
     .ce-subtitle { font-size: 10px !important; white-space: nowrap; }
     .ce-streak { padding: 5px 8px !important; min-width: 56px; }
+    .ce-dark-label { display: none; }
+    .ce-dark-icon { font-size: 16px; }
   }
 `;
 
