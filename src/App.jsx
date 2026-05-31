@@ -855,6 +855,7 @@ const LANG_META = {
   pt: { flag:"🇧🇷", name:"Portugués", subtitle:"Serviço de mesas · 30 dias · 5 frases por dia",  pronLabel:"Pronúncia", voiceLang:"pt-BR", voiceMatch:/pt[-_]BR/i, voiceFallback:/^pt/i },
   zh: { flag:"🇨🇳", name:"Chino",     subtitle:"中文服务员课程 · 30天 · 每天5句",                 pronLabel:"Pinyin",    voiceLang:"zh-CN", voiceMatch:/zh[-_]CN/i, voiceFallback:/^zh/i },
 };
+const PHRASE_KEY = { en:"en", pt:"pt", zh:"zh" };
 
 function Dictionary({ speak, speaking, playBell, T, wordsList = WORDS, phraseKey = "en", meta = {} }) {
   const [search, setSearch] = useState("");
