@@ -394,15 +394,16 @@ function ChefEnglishApp() {
 
   return (
     <div style={S.root}>
+      <style>{MOBILE_CSS}</style>
       <header style={S.header}>
         <div style={S.brand}>
           <span style={S.logoMark}>✦</span>
           <div>
-            <h1 style={S.title}>Chef's English</h1>
-            <p style={S.subtitle}>Servicio de mesas · 30 días · 5 frases al día</p>
+            <h1 style={S.title} className="ce-title">Chef's English</h1>
+            <p style={S.subtitle} className="ce-subtitle">Servicio de mesas · 30 días · 5 frases al día</p>
           </div>
         </div>
-        <div style={S.streakBox}>
+        <div style={S.streakBox} className="ce-streak">
           <div style={S.streakNum}>{totalLearned}</div>
           <div style={S.streakLbl}>frases<br />dominadas</div>
         </div>
@@ -510,6 +511,15 @@ function Quiz({ phrases, speak, flipped, setFlipped }) {
   );
 }
 
+const MOBILE_CSS = `
+  html, body, #root { min-height: 100%; }
+  @media (max-width: 480px) {
+    .ce-title { font-size: 20px !important; letter-spacing: -0.3px !important; }
+    .ce-subtitle { font-size: 10.5px !important; }
+    .ce-streak { padding: 5px 10px !important; min-width: 64px; }
+  }
+`;
+
 const S = {
   root: {
     minHeight: "100vh",
@@ -519,12 +529,14 @@ const S = {
     paddingBottom: 40,
     maxWidth: 760,
     margin: "0 auto",
+    width: "100%",
+    overflowX: "hidden",
   },
-  header: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "28px 24px 18px" },
-  brand: { display: "flex", alignItems: "center", gap: 14 },
+  header: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px 16px 14px", gap: 8 },
+  brand: { display: "flex", alignItems: "center", gap: 10, minWidth: 0 },
   logoMark: {
-    fontSize: 26, color: "#fff", background: "#7a3b1d",
-    width: 46, height: 46, borderRadius: 14, display: "grid", placeItems: "center",
+    fontSize: 22, color: "#fff", background: "#7a3b1d",
+    width: 40, height: 40, borderRadius: 12, display: "grid", placeItems: "center",
     boxShadow: "0 6px 18px #7a3b1d55", flexShrink: 0,
   },
   title: { fontFamily: "'Fraunces', serif", fontWeight: 900, fontSize: 27, letterSpacing: -0.5, lineHeight: 1 },
@@ -535,11 +547,11 @@ const S = {
   },
   streakNum: { fontFamily: "'Fraunces', serif", fontWeight: 900, fontSize: 26, color: "#d4763a", lineHeight: 1 },
   streakLbl: { fontSize: 9.5, color: "#8a6f54", lineHeight: 1.1, marginTop: 2, textTransform: "uppercase", letterSpacing: 0.5 },
-  progressWrap: { padding: "0 24px 12px", display: "flex", alignItems: "center", gap: 12 },
+  progressWrap: { padding: "0 16px 12px", display: "flex", alignItems: "center", gap: 12 },
   progressBar: { flex: 1, height: 8, background: "#00000012", borderRadius: 99, overflow: "hidden" },
   progressFill: { height: "100%", background: "linear-gradient(90deg,#d4763a,#a8431f)", borderRadius: 99, transition: "width .5s ease" },
   progressTxt: { fontSize: 12, color: "#8a6f54", whiteSpace: "nowrap", fontWeight: 500 },
-  daysScroll: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(132px, 1fr))", gap: 10, padding: "8px 24px 16px" },
+  daysScroll: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: 8, padding: "8px 16px 16px" },
   dayChip: {
     width: "100%", textAlign: "left", cursor: "pointer",
     background: "#fff8ef", border: "1px solid #e3cfb2", borderRadius: 16,
@@ -552,14 +564,14 @@ const S = {
   dayChipTheme: { fontSize: 11.5, opacity: 0.75, lineHeight: 1.25, minHeight: 28 },
   dayChipDots: { display: "flex", gap: 4, marginTop: 2 },
   dot: { width: 7, height: 7, borderRadius: 99, display: "block" },
-  tabs: { display: "flex", gap: 8, padding: "0 24px 4px" },
+  tabs: { display: "flex", gap: 8, padding: "0 16px 4px" },
   tab: {
     flex: 1, padding: "11px", borderRadius: 12, border: "none", cursor: "pointer",
     background: "#00000008", color: "#8a6f54", fontWeight: 600, fontSize: 14,
     fontFamily: "'Outfit', sans-serif", transition: "all .2s",
   },
   tabActive: { background: "#3a2c1e", color: "#f4e6d4" },
-  main: { padding: "16px 24px 0" },
+  main: { padding: "16px 16px 0" },
   dayHeader: { display: "flex", alignItems: "baseline", gap: 12, marginBottom: 16 },
   dayTitle: { fontFamily: "'Fraunces', serif", fontWeight: 900, fontSize: 22 },
   dayTheme: { fontSize: 14, color: "#a8431f", fontWeight: 600 },
@@ -581,7 +593,7 @@ const S = {
   },
   speakBtnOn: { background: "#d4763a", color: "#fff" },
   audioWarn: {
-    margin: "0 24px 12px", padding: "10px 14px", borderRadius: 12,
+    margin: "0 16px 12px", padding: "10px 14px", borderRadius: 12,
     background: "#fbe9d8", border: "1px solid #e3a06a", color: "#8a4a1d",
     fontSize: 12.5, lineHeight: 1.5, fontWeight: 500,
   },
@@ -610,5 +622,5 @@ const S = {
     cursor: "pointer", fontSize: 13, fontWeight: 600, padding: "7px 16px", borderRadius: 99,
     fontFamily: "'Outfit', sans-serif",
   },
-  footer: { textAlign: "center", fontSize: 12.5, color: "#9c805f", padding: "26px 24px 0", lineHeight: 1.6 },
+  footer: { textAlign: "center", fontSize: 12.5, color: "#9c805f", padding: "26px 16px 0", lineHeight: 1.6 },
 };

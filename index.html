@@ -12,7 +12,11 @@
     />
     <style>
       * { box-sizing: border-box; margin: 0; padding: 0; }
-      body { background: #e3d4bd; }
+      html, body { min-height: 100%; }
+      body {
+        background: radial-gradient(circle at 20% 0%, #f4e6d4 0%, #ece0cf 40%, #e3d4bd 100%);
+        background-attachment: fixed;
+      }
       ::selection { background: #d4763a; color: #fff; }
       ::-webkit-scrollbar { height: 6px; width: 6px; }
       ::-webkit-scrollbar-thumb { background: #c9a98955; border-radius: 9px; }
