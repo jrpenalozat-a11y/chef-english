@@ -609,65 +609,83 @@ function ChefEnglishApp() {
 
       {audioError && <div style={S.audioWarn}>⚠ {audioError}</div>}
 
-      <div style={S.daysScroll}>
-        {CURRICULUM.map((d) => {
-          const done = dayLearnedCount(d.day);
-          const active = d.day === selectedDay;
-          return (
-            <button
-              key={d.day}
-              onClick={() => { setSelectedDay(d.day); setView("learn"); setFlipped({}); }}
-              style={{ ...S.dayChip, background: T.chipBg, border: `1px solid ${T.chipBorder}`, ...(active ? S.dayChipActive : {}), ...(done === 5 ? { borderColor: "#d4763a" } : {}) }}
-            >
-              <span style={{ ...S.dayChipNum, color: active ? "#f4e6d4" : T.text }}>Día {d.day}</span>
-              <span style={{ ...S.dayChipTheme, color: active ? "#f4e6d4" : T.subtle }}>{d.theme}</span>
-              <span style={S.dayChipDots}>
-                {[0, 1, 2, 3, 4].map((i) => (
-                  <i key={i} style={{ ...S.dot, background: progress[`${d.day}-${i}`] ? "#d4763a" : (active ? "#f4e6d455" : T.dotEmpty) }} />
-                ))}
-              </span>
-            </button>
-          );
-        })}
+      {/* NAVEGACIÓN PRINCIPAL */}
+      <div style={S.mainNav}>
+        {["curso","diccionario","local"].map(v => (
+          <button key={v} onClick={() => setView(v)}
+            style={{ ...S.mainNavBtn, background: view===v ? "#d4763a" : T.chipBg, color: view===v ? "#fff" : T.subtle, border: `1px solid ${view===v ? "#d4763a" : T.chipBorder}` }}>
+            {v==="curso" ? "📖 Curso" : v==="diccionario" ? "📚 Diccionario" : "🏠 En el local"}
+          </button>
+        ))}
       </div>
 
-      <div style={S.tabs}>
-        <button onClick={() => setView("learn")} style={{ ...S.tab, background: view === "learn" ? T.tabActiveBg : T.tabBg, color: view === "learn" ? T.tabActiveText : T.subtle }}>Aprender</button>
-        <button onClick={() => setView("quiz")} style={{ ...S.tab, background: view === "quiz" ? T.tabActiveBg : T.tabBg, color: view === "quiz" ? T.tabActiveText : T.subtle }}>Practicar</button>
-      </div>
-
-      <main style={S.main}>
-        <div style={S.dayHeader}>
-          <h2 style={{ ...S.dayTitle, color: T.text }}>Día {dayData.day}</h2>
-          <span style={S.dayTheme}>{dayData.theme}</span>
+      {/* ── SECCIÓN CURSO ── */}
+      {(view==="learn"||view==="quiz"||view==="curso") && view !== "diccionario" && view !== "local" && (<>
+        <div style={S.daysScroll}>
+          {CURRICULUM.map((d) => {
+            const done = dayLearnedCount(d.day);
+            const active = d.day === selectedDay;
+            return (
+              <button key={d.day}
+                onClick={() => { setSelectedDay(d.day); setView("learn"); setFlipped({}); }}
+                style={{ ...S.dayChip, background: T.chipBg, border: `1px solid ${T.chipBorder}`, ...(active ? S.dayChipActive : {}), ...(done===5 ? { borderColor:"#d4763a" } : {}) }}>
+                <span style={{ ...S.dayChipNum, color: active?"#f4e6d4":T.text }}>Día {d.day}</span>
+                <span style={{ ...S.dayChipTheme, color: active?"#f4e6d4":T.subtle }}>{d.theme}</span>
+                <span style={S.dayChipDots}>
+                  {[0,1,2,3,4].map(i=>(
+                    <i key={i} style={{ ...S.dot, background: progress[`${d.day}-${i}`]?"#d4763a":(active?"#f4e6d455":T.dotEmpty) }} />
+                  ))}
+                </span>
+              </button>
+            );
+          })}
         </div>
-
-        {view === "learn" ? (
-          <div style={S.cardList}>
-            {dayData.phrases.map((ph, idx) => {
-              const learned = progress[`${selectedDay}-${idx}`];
-              return (
-                <div key={idx} style={{ ...S.card, background: T.cardBg, border: `1px solid ${learned ? "#d4763a" : T.cardBorder}`, boxShadow: learned ? "0 6px 22px #d4763a22" : "0 6px 20px #00000010" }}>
-                  <div style={S.cardTop}>
-                    <span style={S.cardNum}>{idx + 1}</span>
-                    <button style={{ ...S.speakBtn, ...(speaking === ph.en ? S.speakBtnOn : {}) }} onClick={() => speak(ph.en)} aria-label="Escuchar">
-                      {speaking === ph.en ? "◗ sonando…" : "◗ escuchar"}
+        <div style={S.tabs}>
+          <button onClick={() => setView("learn")} style={{ ...S.tab, background: view==="learn"?T.tabActiveBg:T.tabBg, color: view==="learn"?T.tabActiveText:T.subtle }}>Aprender</button>
+          <button onClick={() => setView("quiz")}  style={{ ...S.tab, background: view==="quiz" ?T.tabActiveBg:T.tabBg, color: view==="quiz" ?T.tabActiveText:T.subtle }}>Practicar</button>
+        </div>
+        <main style={S.main}>
+          <div style={S.dayHeader}>
+            <h2 style={{ ...S.dayTitle, color: T.text }}>Día {dayData.day}</h2>
+            <span style={S.dayTheme}>{dayData.theme}</span>
+          </div>
+          {view==="learn" ? (
+            <div style={S.cardList}>
+              {dayData.phrases.map((ph, idx) => {
+                const learned = progress[`${selectedDay}-${idx}`];
+                return (
+                  <div key={idx} style={{ ...S.card, background: T.cardBg, border:`1px solid ${learned?"#d4763a":T.cardBorder}`, boxShadow: learned?"0 6px 22px #d4763a22":"0 6px 20px #00000010" }}>
+                    <div style={S.cardTop}>
+                      <span style={S.cardNum}>{idx+1}</span>
+                      <button style={{ ...S.speakBtn, ...(speaking===ph.en?S.speakBtnOn:{}) }} onClick={() => speak(ph.en)}>
+                        {speaking===ph.en?"◗ sonando…":"◗ escuchar"}
+                      </button>
+                    </div>
+                    <p style={{ ...S.enText, color: T.enText }}>{ph.en}</p>
+                    <p style={S.ipaText}>/{ph.ipa}/</p>
+                    <p style={{ ...S.esText, color: T.esText }}>{ph.es}</p>
+                    <button onClick={() => toggleLearned(idx)} style={{ ...S.learnBtn, background: learned?"#d4763a":T.learnBtnBg, borderColor: learned?"#d4763a":T.cardBorder, color: learned?"#fff":T.subtle }}>
+                      {learned?"✓ Dominada":"Marcar como aprendida"}
                     </button>
                   </div>
-                  <p style={{ ...S.enText, color: T.enText }}>{ph.en}</p>
-                  <p style={S.ipaText}>/{ph.ipa}/</p>
-                  <p style={{ ...S.esText, color: T.esText }}>{ph.es}</p>
-                  <button onClick={() => toggleLearned(idx)} style={{ ...S.learnBtn, background: learned ? "#d4763a" : T.learnBtnBg, borderColor: learned ? "#d4763a" : T.cardBorder, color: learned ? "#fff" : T.subtle }}>
-                    {learned ? "✓ Dominada" : "Marcar como aprendida"}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <Quiz phrases={dayData.phrases} speak={speak} flipped={flipped} setFlipped={setFlipped} dark={dark} T={T} />
-        )}
-      </main>
+                );
+              })}
+            </div>
+          ) : (
+            <Quiz phrases={dayData.phrases} speak={speak} flipped={flipped} setFlipped={setFlipped} T={T} />
+          )}
+        </main>
+      </>)}
+
+      {/* ── SECCIÓN DICCIONARIO ── */}
+      {view==="diccionario" && (
+        <Dictionary speak={speak} speaking={speaking} playBell={playBell} T={T} />
+      )}
+
+      {/* ── SECCIÓN EN EL LOCAL ── */}
+      {view==="local" && (
+        <EnElLocal speak={speak} speaking={speaking} T={T} />
+      )}
 
       <footer style={{ ...S.footer, color: T.subtle }}>
         Toca <b>escuchar</b> para oír la pronunciación · practica en voz alta
@@ -703,6 +721,185 @@ function Quiz({ phrases, speak, flipped, setFlipped, T }) {
           </div>
         );
       })}
+    </div>
+  );
+}
+
+// ── DICCIONARIO: 100 palabras gastronómicas ──────────────────
+const WORDS = [
+  {en:"reservation",es:"reserva",ipa:"ˌrɛzərˈveɪʃən"},{en:"appetizer",es:"entrada / aperitivo",ipa:"ˈæpɪtaɪzər"},
+  {en:"main course",es:"plato principal",ipa:"meɪn kɔːrs"},{en:"dessert",es:"postre",ipa:"dɪˈzɜːrt"},
+  {en:"beverage",es:"bebida",ipa:"ˈbɛvərɪdʒ"},{en:"menu",es:"carta / menú",ipa:"ˈmɛnjuː"},
+  {en:"bill / check",es:"cuenta",ipa:"bɪl / tʃɛk"},{en:"tip / gratuity",es:"propina",ipa:"tɪp / ɡrəˈtjuːɪti"},
+  {en:"waiter",es:"mesero / garzón",ipa:"ˈweɪtər"},{en:"host",es:"anfitrión / recepcionista",ipa:"hoʊst"},
+  {en:"chef",es:"chef / cocinero",ipa:"ʃɛf"},{en:"kitchen",es:"cocina",ipa:"ˈkɪtʃən"},
+  {en:"table",es:"mesa",ipa:"ˈteɪbəl"},{en:"booth",es:"reservado / cabina",ipa:"buːθ"},
+  {en:"terrace",es:"terraza",ipa:"ˈtɛrəs"},{en:"bar",es:"barra / bar",ipa:"bɑːr"},
+  {en:"wine list",es:"carta de vinos",ipa:"waɪn lɪst"},{en:"glass",es:"copa / vaso",ipa:"ɡlɑːs"},
+  {en:"bottle",es:"botella",ipa:"ˈbɒtəl"},{en:"carafe",es:"jarra",ipa:"kəˈræf"},
+  {en:"steak",es:"filete / bife",ipa:"steɪk"},{en:"salmon",es:"salmón",ipa:"ˈsæmən"},
+  {en:"chicken",es:"pollo",ipa:"ˈtʃɪkɪn"},{en:"lamb",es:"cordero",ipa:"læm"},
+  {en:"seafood",es:"mariscos",ipa:"ˈsiːfuːd"},{en:"vegetables",es:"verduras",ipa:"ˈvɛdʒtəbəlz"},
+  {en:"salad",es:"ensalada",ipa:"ˈsæləd"},{en:"soup",es:"sopa",ipa:"suːp"},
+  {en:"bread",es:"pan",ipa:"brɛd"},{en:"butter",es:"mantequilla",ipa:"ˈbʌtər"},
+  {en:"sauce",es:"salsa",ipa:"sɔːs"},{en:"dressing",es:"aderezo",ipa:"ˈdrɛsɪŋ"},
+  {en:"seasoning",es:"condimento",ipa:"ˈsiːzənɪŋ"},{en:"pepper",es:"pimienta",ipa:"ˈpɛpər"},
+  {en:"salt",es:"sal",ipa:"sɔːlt"},{en:"oil",es:"aceite",ipa:"ɔɪl"},
+  {en:"vinegar",es:"vinagre",ipa:"ˈvɪnɪɡər"},{en:"garlic",es:"ajo",ipa:"ˈɡɑːrlɪk"},
+  {en:"onion",es:"cebolla",ipa:"ˈʌnjən"},{en:"mushroom",es:"champiñón",ipa:"ˈmʌʃruːm"},
+  {en:"rare",es:"vuelta y vuelta",ipa:"rɛr"},{en:"medium",es:"al punto",ipa:"ˈmiːdiəm"},
+  {en:"well done",es:"bien cocido",ipa:"wɛl dʌn"},{en:"grilled",es:"a la parrilla",ipa:"ɡrɪld"},
+  {en:"fried",es:"frito",ipa:"fraɪd"},{en:"baked",es:"al horno",ipa:"beɪkt"},
+  {en:"steamed",es:"al vapor",ipa:"stiːmd"},{en:"roasted",es:"asado",ipa:"ˈroʊstɪd"},
+  {en:"fresh",es:"fresco",ipa:"frɛʃ"},{en:"seasonal",es:"de temporada",ipa:"ˈsiːzənəl"},
+  {en:"organic",es:"orgánico",ipa:"ɔːrˈɡænɪk"},{en:"homemade",es:"casero",ipa:"ˈhoʊmmeɪd"},
+  {en:"gluten-free",es:"sin gluten",ipa:"ˈɡluːtən friː"},{en:"vegan",es:"vegano",ipa:"ˈviːɡən"},
+  {en:"vegetarian",es:"vegetariano",ipa:"ˌvɛdʒəˈtɛəriən"},{en:"dairy-free",es:"sin lácteos",ipa:"ˈdɛri friː"},
+  {en:"allergy",es:"alergia",ipa:"ˈælərdʒi"},{en:"nuts",es:"frutos secos",ipa:"nʌts"},
+  {en:"shellfish",es:"mariscos de concha",ipa:"ˈʃɛlfɪʃ"},{en:"spicy",es:"picante",ipa:"ˈspaɪsi"},
+  {en:"mild",es:"suave / no picante",ipa:"maɪld"},{en:"sweet",es:"dulce",ipa:"swiːt"},
+  {en:"sour",es:"ácido",ipa:"ˈsaʊər"},{en:"bitter",es:"amargo",ipa:"ˈbɪtər"},
+  {en:"portion",es:"porción",ipa:"ˈpɔːrʃən"},{en:"side dish",es:"guarnición",ipa:"saɪd dɪʃ"},
+  {en:"platter",es:"bandeja / fuente",ipa:"ˈplætər"},{en:"tasting menu",es:"menú degustación",ipa:"ˈteɪstɪŋ ˈmɛnjuː"},
+  {en:"special",es:"sugerencia del día",ipa:"ˈspɛʃəl"},{en:"pairing",es:"maridaje",ipa:"ˈpɛərɪŋ"},
+  {en:"sparkling water",es:"agua con gas",ipa:"ˈspɑːrklɪŋ ˈwɔːtər"},{en:"still water",es:"agua sin gas",ipa:"stɪl ˈwɔːtər"},
+  {en:"house wine",es:"vino de la casa",ipa:"haʊs waɪn"},{en:"red wine",es:"vino tinto",ipa:"rɛd waɪn"},
+  {en:"white wine",es:"vino blanco",ipa:"waɪt waɪn"},{en:"rosé",es:"vino rosado",ipa:"roʊˈzeɪ"},
+  {en:"draft beer",es:"cerveza de barril",ipa:"dræft bɪr"},{en:"cocktail",es:"cóctel",ipa:"ˈkɒkteɪl"},
+  {en:"on the rocks",es:"con hielo",ipa:"ɒn ðə rɒks"},{en:"neat",es:"solo / sin hielo",ipa:"niːt"},
+  {en:"espresso",es:"café espresso",ipa:"ɛˈsprɛsoʊ"},{en:"cappuccino",es:"capuchino",ipa:"ˌkæpʊˈtʃiːnoʊ"},
+  {en:"receipt",es:"boleta / comprobante",ipa:"rɪˈsiːt"},{en:"cash",es:"efectivo",ipa:"kæʃ"},
+  {en:"credit card",es:"tarjeta de crédito",ipa:"ˈkrɛdɪt kɑːrd"},{en:"change",es:"vuelto",ipa:"tʃeɪndʒ"},
+  {en:"complimentary",es:"cortesía de la casa",ipa:"ˌkɒmplɪˈmɛntəri"},{en:"takeaway",es:"para llevar",ipa:"ˈteɪkəweɪ"},
+  {en:"refill",es:"rellenar / repetir",ipa:"ˈriːfɪl"},{en:"high chair",es:"silla para bebé",ipa:"haɪ tʃɛr"},
+  {en:"manager",es:"encargado / gerente",ipa:"ˈmænɪdʒər"},{en:"complaint",es:"queja / reclamo",ipa:"kəmˈpleɪnt"},
+  {en:"feedback",es:"opinión / comentario",ipa:"ˈfiːdbæk"},{en:"reservation book",es:"libro de reservas",ipa:"ˌrɛzərˈveɪʃən bʊk"},
+];
+
+// ── EN EL LOCAL ──────────────────────────────────────────────
+const LOCAL_SECTIONS = [
+  {
+    title: "🚻 Indicaciones",
+    phrases: [
+      {en:"The restrooms are at the back on the left.", es:"Los baños están al fondo a la izquierda.", ipa:"ðə ˈrɛstruːmz ɑːr æt ðə bæk ɒn ðə lɛft"},
+      {en:"The exit is straight ahead.", es:"La salida está derecho al frente.", ipa:"ðiː ˈɛksɪt ɪz streɪt əˈhɛd"},
+      {en:"The entrance is on the right.", es:"La entrada está a la derecha.", ipa:"ðiː ˈɛntrəns ɪz ɒn ðə raɪt"},
+      {en:"The terrace is through that door.", es:"La terraza es por esa puerta.", ipa:"ðə ˈtɛrəs ɪz θruː ðæt dɔːr"},
+      {en:"The elevator is next to the bar.", es:"El ascensor está al lado del bar.", ipa:"ðiː ˈɛlɪveɪtər ɪz nɛkst tuː ðə bɑːr"},
+      {en:"The parking is in the basement.", es:"El estacionamiento está en el sótano.", ipa:"ðə ˈpɑːrkɪŋ ɪz ɪn ðə ˈbeɪsmənt"},
+      {en:"The coat check is near the entrance.", es:"El guardarropa está cerca de la entrada.", ipa:"ðə koʊt tʃɛk ɪz nɪər ðiː ˈɛntrəns"},
+    ]
+  },
+  {
+    title: "🗺️ Direcciones",
+    phrases: [
+      {en:"Turn right.", es:"Gire a la derecha.", ipa:"tɜːrn raɪt"},
+      {en:"Turn left.", es:"Gire a la izquierda.", ipa:"tɜːrn lɛft"},
+      {en:"Go straight ahead.", es:"Siga derecho.", ipa:"ɡoʊ streɪt əˈhɛd"},
+      {en:"It's at the end of the hallway.", es:"Está al final del pasillo.", ipa:"ɪts æt ðiː ɛnd ɒv ðə ˈhɔːlweɪ"},
+      {en:"Go up the stairs.", es:"Suba las escaleras.", ipa:"ɡoʊ ʌp ðə stɛrz"},
+      {en:"Go down to the lower level.", es:"Baje al nivel inferior.", ipa:"ɡoʊ daʊn tuː ðə ˈloʊər ˈlɛvəl"},
+      {en:"It's just around the corner.", es:"Está justo a la vuelta.", ipa:"ɪts dʒʌst əˈraʊnd ðə ˈkɔːrnər"},
+      {en:"Follow me, I'll show you.", es:"Sígame, yo le indico.", ipa:"ˈfɒloʊ miː aɪl ʃoʊ juː"},
+    ]
+  },
+  {
+    title: "🚨 Emergencias",
+    phrases: [
+      {en:"The emergency exit is over there.", es:"La salida de emergencia está por allá.", ipa:"ðiː ɪˈmɜːrdʒənsi ˈɛksɪt ɪz ˈoʊvər ðɛr"},
+      {en:"Please stay calm.", es:"Por favor mantenga la calma.", ipa:"pliːz steɪ kɑːm"},
+      {en:"I'll call the manager right away.", es:"Llamo al encargado enseguida.", ipa:"aɪl kɔːl ðə ˈmænɪdʒər raɪt əˈweɪ"},
+      {en:"Is anyone hurt?", es:"¿Alguien resultó herido?", ipa:"ɪz ˈɛniwʌn hɜːrt"},
+      {en:"Do you need medical assistance?", es:"¿Necesita asistencia médica?", ipa:"duː juː niːd ˈmɛdɪkəl əˈsɪstəns"},
+      {en:"Please use the emergency exit.", es:"Por favor use la salida de emergencia.", ipa:"pliːz juːz ðiː ɪˈmɜːrdʒənsi ˈɛksɪt"},
+    ]
+  },
+];
+
+function Dictionary({ speak, speaking, playBell, T }) {
+  const [search, setSearch] = useState("");
+  const [learned, setLearned] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("gbDictLearned") || "{}"); } catch { return {}; }
+  });
+  useEffect(() => {
+    try { localStorage.setItem("gbDictLearned", JSON.stringify(learned)); } catch {}
+  }, [learned]);
+
+  const toggle = (i) => {
+    setLearned(l => {
+      if (!l[i]) playBell();
+      return { ...l, [i]: !l[i] };
+    });
+  };
+
+  const filtered = WORDS.filter(w =>
+    w.en.toLowerCase().includes(search.toLowerCase()) ||
+    w.es.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div style={{ padding: "16px 16px 0" }}>
+      <div style={S.dayHeader}>
+        <h2 style={{ ...S.dayTitle, color: T.text }}>Diccionario</h2>
+        <span style={S.dayTheme}>100 palabras clave</span>
+      </div>
+      <input
+        placeholder="🔍 Buscar en inglés o español..."
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+        style={{ ...S.searchInput, background: T.cardBg, border: `1px solid ${T.cardBorder}`, color: T.text }}
+      />
+      <div style={S.cardList}>
+        {filtered.map((w, i) => {
+          const idx = WORDS.indexOf(w);
+          const isLearned = learned[idx];
+          return (
+            <div key={idx} style={{ ...S.card, background: T.cardBg, border: `1px solid ${isLearned ? "#d4763a" : T.cardBorder}`, padding:"14px 16px" }}>
+              <div style={S.cardTop}>
+                <p style={{ ...S.enText, color: T.enText, fontSize: 17 }}>{w.en}</p>
+                <button style={{ ...S.speakBtn, ...(speaking===w.en?S.speakBtnOn:{}) }} onClick={() => speak(w.en)}>
+                  {speaking===w.en?"◗ sonando…":"◗ escuchar"}
+                </button>
+              </div>
+              <p style={S.ipaText}>/{w.ipa}/</p>
+              <p style={{ ...S.esText, color: T.esText, marginBottom: 10 }}>{w.es}</p>
+              <button onClick={() => toggle(idx)} style={{ ...S.learnBtn, background: isLearned?"#d4763a":T.learnBtnBg, borderColor: isLearned?"#d4763a":T.cardBorder, color: isLearned?"#fff":T.subtle }}>
+                {isLearned ? "✓ Aprendida" : "Marcar como aprendida"}
+              </button>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function EnElLocal({ speak, speaking, T }) {
+  return (
+    <div style={{ padding: "16px 16px 0" }}>
+      <div style={S.dayHeader}>
+        <h2 style={{ ...S.dayTitle, color: T.text }}>En el local</h2>
+        <span style={S.dayTheme}>Indicaciones · Direcciones · Emergencias</span>
+      </div>
+      {LOCAL_SECTIONS.map((sec, si) => (
+        <div key={si} style={{ marginBottom: 24 }}>
+          <h3 style={{ fontSize: 15, fontWeight: 700, color: T.text, marginBottom: 10 }}>{sec.title}</h3>
+          <div style={S.cardList}>
+            {sec.phrases.map((ph, i) => (
+              <div key={i} style={{ ...S.card, background: T.cardBg, border: `1px solid ${T.cardBorder}`, padding:"14px 16px" }}>
+                <div style={S.cardTop}>
+                  <p style={{ ...S.enText, color: T.enText, fontSize: 16 }}>{ph.en}</p>
+                  <button style={{ ...S.speakBtn, ...(speaking===ph.en?S.speakBtnOn:{}) }} onClick={() => speak(ph.en)}>
+                    {speaking===ph.en?"◗ sonando…":"◗ escuchar"}
+                  </button>
+                </div>
+                <p style={S.ipaText}>/{ph.ipa}/</p>
+                <p style={{ ...S.esText, color: T.esText, marginBottom: 0 }}>{ph.es}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
@@ -857,6 +1054,9 @@ const S = {
     fontFamily: "'Outfit', sans-serif",
   },
   footer: { textAlign: "center", fontSize: 12.5, color: "#9c805f", padding: "26px 16px 0", lineHeight: 1.6 },
+  mainNav: { display:"flex", gap:6, padding:"0 16px 12px", overflowX:"auto" },
+  mainNavBtn: { flex:"0 0 auto", padding:"9px 14px", borderRadius:12, border:"none", cursor:"pointer", fontWeight:600, fontSize:13, fontFamily:"'Outfit',sans-serif", transition:"all .2s", whiteSpace:"nowrap" },
+  searchInput: { display:"block", width:"100%", marginBottom:14, padding:"11px 14px", borderRadius:12, fontSize:14, fontFamily:"'Outfit',sans-serif", outline:"none" },
   darkBtn: {
     border: "none", cursor: "pointer", fontSize: 12, fontWeight: 600,
     padding: "6px 12px", borderRadius: 99, fontFamily: "'Outfit', sans-serif",
