@@ -389,9 +389,32 @@ function ChefEnglishApp() {
     synth.speak(u);
   };
 
+  const playBell = () => {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const frequencies = [880, 1108, 1320];
+      frequencies.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.07);
+        gain.gain.setValueAtTime(0.35, ctx.currentTime + i * 0.07);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.07 + 1.2);
+        osc.start(ctx.currentTime + i * 0.07);
+        osc.stop(ctx.currentTime + i * 0.07 + 1.2);
+      });
+    } catch {}
+  };
+
   const toggleLearned = (idx) => {
     const key = `${selectedDay}-${idx}`;
-    setProgress((p) => ({ ...p, [key]: !p[key] }));
+    setProgress((p) => {
+      const wasLearned = p[key];
+      if (!wasLearned) playBell();
+      return { ...p, [key]: !p[key] };
+    });
   };
 
   const dayLearnedCount = (day) =>
@@ -406,7 +429,26 @@ function ChefEnglishApp() {
       <style>{MOBILE_CSS}</style>
       <header style={S.header}>
         <div style={S.brand}>
-          <span style={S.logoMark}>✦</span>
+          <span style={S.logoMark}>
+            <svg width="26" height="26" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* cabeza */}
+              <circle cx="20" cy="10" r="6" fill="#f4e6d4"/>
+              {/* cuerpo con moño de mozo */}
+              <path d="M12 28 Q12 20 20 20 Q28 20 28 28 L28 36 L12 36 Z" fill="#f4e6d4"/>
+              {/* corbatín */}
+              <path d="M18 20 L20 23 L22 20 L20 22 Z" fill="#7a3b1d"/>
+              {/* brazo con bandeja */}
+              <path d="M28 24 Q33 22 35 24" stroke="#f4e6d4" strokeWidth="2.5" strokeLinecap="round"/>
+              <ellipse cx="35" cy="23" rx="4" ry="1.5" fill="#f4e6d4"/>
+              {/* burbuja de habla */}
+              <rect x="24" y="2" width="14" height="9" rx="3" fill="#fff" opacity="0.9"/>
+              <path d="M26 11 L24 14 L29 11 Z" fill="#fff" opacity="0.9"/>
+              {/* puntos en burbuja */}
+              <circle cx="28" cy="6.5" r="1.2" fill="#7a3b1d"/>
+              <circle cx="31" cy="6.5" r="1.2" fill="#7a3b1d"/>
+              <circle cx="34" cy="6.5" r="1.2" fill="#7a3b1d"/>
+            </svg>
+          </span>
           <div>
             <h1 style={{ ...S.title, color: T.text }} className="ce-title">Garzón Bilingüe</h1>
             <p style={{ ...S.subtitle, color: T.subtle }} className="ce-subtitle">Servicio de mesas · 30 días · 5 frases al día</p>
