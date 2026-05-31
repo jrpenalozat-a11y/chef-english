@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { CURRICULUM_PT, WORDS_PT, LOCAL_PT } from "./data/pt.js";
+import { CURRICULUM_ZH, WORDS_ZH, LOCAL_ZH } from "./data/zh.js";
 
 // ─────────────────────────────────────────────────────────────
 // CONTENIDO: 30 días · 5 frases por día · gastronomía / servicio
@@ -325,6 +327,7 @@ class Boundary extends React.Component {
 
 export default function App() {
   const [started, setStarted] = useState(false);
+  const [lang, setLang] = useState("en");
 
   const playIntro = () => {
     try {
@@ -392,6 +395,11 @@ export default function App() {
   };
 
   if (!started) {
+    const LANGS = [
+      { id:"en", flag:"🇬🇧", label:"Inglés",    sub:"English for waiters" },
+      { id:"pt", flag:"🇧🇷", label:"Portugués", sub:"Português para garçons" },
+      { id:"zh", flag:"🇨🇳", label:"Chino",     sub:"中文服务员用语" },
+    ];
     return (
       <Boundary>
         <div style={SW.overlay}>
@@ -411,11 +419,21 @@ export default function App() {
               </svg>
             </div>
             <h1 style={SW.title}>Garzón Bilingüe</h1>
-            <p style={SW.sub}>Inglés para el servicio de mesas</p>
+            <p style={SW.sub}>Elige el idioma que quieres aprender</p>
             <p style={SW.author}>por Jaime Ricardo Peñaloza</p>
-            <button style={SW.btn} onClick={playIntro}>
-              ▶ Comenzar
-            </button>
+            <div style={{ display:"flex", flexDirection:"column", gap:10, width:"100%", marginTop:8 }}>
+              {LANGS.map(l => (
+                <button key={l.id}
+                  onClick={() => { setLang(l.id); playIntro(); }}
+                  style={{ ...SW.langBtn, background: lang===l.id ? "#d4763a" : "rgba(255,255,255,0.12)", border: lang===l.id ? "2px solid #d4763a" : "2px solid rgba(255,255,255,0.2)" }}>
+                  <span style={{ fontSize:24 }}>{l.flag}</span>
+                  <div style={{ textAlign:"left" }}>
+                    <div style={{ fontWeight:700, fontSize:16, color:"#f4e6d4" }}>{l.label}</div>
+                    <div style={{ fontSize:12, color:"#c4906a" }}>{l.sub}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </Boundary>
@@ -424,7 +442,7 @@ export default function App() {
 
   return (
     <Boundary>
-      <ChefEnglishApp />
+      <ChefEnglishApp lang={lang} />
     </Boundary>
   );
 }
@@ -460,9 +478,19 @@ const SW = {
     boxShadow: "0 8px 28px #d4763a55",
     transition: "transform .15s",
   },
+  langBtn: {
+    display:"flex", alignItems:"center", gap:14, padding:"14px 20px",
+    borderRadius:16, cursor:"pointer", transition:"all .2s",
+    fontFamily:"'Outfit',sans-serif", width:"100%",
+  },
 };
 
-function ChefEnglishApp() {
+function ChefEnglishApp({ lang = "en" }) {
+  const meta = LANG_META[lang];
+  const curriculum = CURRICULA[lang];
+  const wordsList  = WORDS_MAP[lang];
+  const localSections = LOCAL_MAP[lang];
+  const phraseKey = PHRASE_KEY[lang];
   const [selectedDay, setSelectedDay] = useState(1);
   const [progress, setProgress] = useState(() => {
     try {
@@ -496,7 +524,7 @@ function ChefEnglishApp() {
     load();
   }, []);
 
-  const dayData = CURRICULUM.find((d) => d.day === selectedDay);
+  const dayData = curriculum.find((d) => d.day === selectedDay);
 
   const speak = (text) => {
     setAudioError("");
@@ -508,11 +536,11 @@ function ChefEnglishApp() {
     synth.cancel();
     const u = new SpeechSynthesisUtterance(text);
     const voices = synth.getVoices();
-    const enVoice =
-      voices.find((v) => /en[-_]US/i.test(v.lang)) ||
-      voices.find((v) => /^en/i.test(v.lang));
-    if (enVoice) u.voice = enVoice;
-    u.lang = "en-US";
+    const targetVoice =
+      voices.find((v) => meta.voiceMatch.test(v.lang)) ||
+      voices.find((v) => meta.voiceFallback.test(v.lang));
+    if (targetVoice) u.voice = targetVoice;
+    u.lang = meta.voiceLang;
     u.rate = 0.9;
     u.onstart = () => setSpeaking(text);
     u.onend = () => setSpeaking(null);
@@ -549,10 +577,10 @@ function ChefEnglishApp() {
   };
 
   const dayLearnedCount = (day) =>
-    CURRICULUM.find((d) => d.day === day).phrases.filter((_, i) => progress[`${day}-${i}`]).length;
+    curriculum.find((d) => d.day === day).phrases.filter((_, i) => progress[`${day}-${i}`]).length;
 
   const totalLearned = Object.values(progress).filter(Boolean).length;
-  const totalPhrases = CURRICULUM.length * 5;
+  const totalPhrases = curriculum.length * 5;
   const pct = Math.round((totalLearned / totalPhrases) * 100);
 
   return (
@@ -581,8 +609,8 @@ function ChefEnglishApp() {
             </svg>
           </span>
           <div>
-            <h1 style={{ ...S.title, color: T.text }} className="ce-title">Garzón Bilingüe</h1>
-            <p style={{ ...S.subtitle, color: T.subtle }} className="ce-subtitle">Servicio de mesas · 30 días · 5 frases al día</p>
+            <h1 style={{ ...S.title, color: T.text }} className="ce-title">Garzón Bilingüe <span style={{fontSize:16}}>{meta.flag}</span></h1>
+            <p style={{ ...S.subtitle, color: T.subtle }} className="ce-subtitle">{meta.subtitle}</p>
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
@@ -622,7 +650,7 @@ function ChefEnglishApp() {
       {/* ── SECCIÓN CURSO ── */}
       {(view==="learn"||view==="quiz"||view==="curso") && view !== "diccionario" && view !== "local" && (<>
         <div style={S.daysScroll}>
-          {CURRICULUM.map((d) => {
+          {curriculum.map((d) => {
             const done = dayLearnedCount(d.day);
             const active = d.day === selectedDay;
             return (
@@ -651,18 +679,19 @@ function ChefEnglishApp() {
           </div>
           {view==="learn" ? (
             <div style={S.cardList}>
-              {dayData.phrases.map((ph, idx) => {
+              {dayData && dayData.phrases.map((ph, idx) => {
                 const learned = progress[`${selectedDay}-${idx}`];
+                const phraseText = ph[phraseKey];
                 return (
                   <div key={idx} style={{ ...S.card, background: T.cardBg, border:`1px solid ${learned?"#d4763a":T.cardBorder}`, boxShadow: learned?"0 6px 22px #d4763a22":"0 6px 20px #00000010" }}>
                     <div style={S.cardTop}>
                       <span style={S.cardNum}>{idx+1}</span>
-                      <button style={{ ...S.speakBtn, ...(speaking===ph.en?S.speakBtnOn:{}) }} onClick={() => speak(ph.en)}>
-                        {speaking===ph.en?"◗ sonando…":"◗ escuchar"}
+                      <button style={{ ...S.speakBtn, ...(speaking===phraseText?S.speakBtnOn:{}) }} onClick={() => speak(phraseText)}>
+                        {speaking===phraseText?"◗ sonando…":"◗ escuchar"}
                       </button>
                     </div>
-                    <p style={{ ...S.enText, color: T.enText }}>{ph.en}</p>
-                    <p style={S.ipaText}>/{ph.ipa}/</p>
+                    <p style={{ ...S.enText, color: T.enText }}>{phraseText}</p>
+                    <p style={S.ipaText}>{meta.pronLabel}: {ph.pron || ph.ipa}</p>
                     <p style={{ ...S.esText, color: T.esText }}>{ph.es}</p>
                     <button onClick={() => toggleLearned(idx)} style={{ ...S.learnBtn, background: learned?"#d4763a":T.learnBtnBg, border: `1px solid ${learned?"#d4763a":T.cardBorder}`, color: learned?"#fff":T.subtle }}>
                       {learned?"✓ Dominada":"Marcar como aprendida"}
@@ -672,19 +701,19 @@ function ChefEnglishApp() {
               })}
             </div>
           ) : (
-            <Quiz phrases={dayData.phrases} speak={speak} flipped={flipped} setFlipped={setFlipped} T={T} />
+            <Quiz phrases={dayData.phrases} speak={speak} flipped={flipped} setFlipped={setFlipped} T={T} phraseKey={phraseKey} />
           )}
         </main>
       </>)}
 
       {/* ── SECCIÓN DICCIONARIO ── */}
       {view==="diccionario" && (
-        <Dictionary speak={speak} speaking={speaking} playBell={playBell} T={T} />
+        <Dictionary speak={speak} speaking={speaking} playBell={playBell} T={T} wordsList={wordsList} phraseKey={phraseKey} meta={meta} />
       )}
 
       {/* ── SECCIÓN EN EL LOCAL ── */}
       {view==="local" && (
-        <EnElLocal speak={speak} speaking={speaking} T={T} />
+        <EnElLocal speak={speak} speaking={speaking} T={T} localSections={localSections} phraseKey={phraseKey} meta={meta} />
       )}
 
       <footer style={{ ...S.footer, color: T.subtle }}>
@@ -698,24 +727,25 @@ function ChefEnglishApp() {
   );
 }
 
-function Quiz({ phrases, speak, flipped, setFlipped, T }) {
+function Quiz({ phrases, speak, flipped, setFlipped, T, phraseKey = "en" }) {
   return (
     <div style={S.quizGrid}>
       {phrases.map((ph, i) => {
         const isFlip = flipped[i];
+        const phraseText = ph[phraseKey];
         return (
           <div key={i} onClick={() => setFlipped((f) => ({ ...f, [i]: !f[i] }))}
             style={{ ...S.flash, background: isFlip ? T.flashBackBg : T.cardBg, border: `1px solid ${T.cardBorder}` }}>
             {!isFlip ? (
               <>
-                <span style={{ ...S.flashHint, color: T.subtle }}>traduce al inglés</span>
-                <p style={{ ...S.flashEs, color: T.enText }}>{ph.es}</p>
+                <span style={{ ...S.flashHint, color: T.subtle }}>traduce al español →</span>
+                <p style={{ ...S.flashEs, color: T.enText }}>{phraseText}</p>
                 <span style={{ ...S.flashTap, color: T.subtle }}>toca para revelar →</span>
               </>
             ) : (
               <>
-                <p style={S.flashEn}>{ph.en}</p>
-                <button style={S.flashSpeak} onClick={(e) => { e.stopPropagation(); speak(ph.en); }}>◗ escuchar</button>
+                <p style={S.flashEn}>{ph.es}</p>
+                <button style={S.flashSpeak} onClick={(e) => { e.stopPropagation(); speak(phraseText); }}>◗ escuchar</button>
               </>
             )}
           </div>
@@ -816,14 +846,25 @@ const LOCAL_SECTIONS = [
   },
 ];
 
-function Dictionary({ speak, speaking, playBell, T }) {
+// ── Mapas de datos por idioma (deben ir DESPUÉS de CURRICULUM, WORDS, LOCAL_SECTIONS) ──
+const CURRICULA = { en: CURRICULUM, pt: CURRICULUM_PT, zh: CURRICULUM_ZH };
+const WORDS_MAP = { en: WORDS, pt: WORDS_PT, zh: WORDS_ZH };
+const LOCAL_MAP = { en: LOCAL_SECTIONS, pt: LOCAL_PT, zh: LOCAL_ZH };
+const LANG_META = {
+  en: { flag:"🇬🇧", name:"Inglés",    subtitle:"Servicio de mesas · 30 días · 5 frases al día", pronLabel:"IPA",       voiceLang:"en-US", voiceMatch:/en[-_]US/i, voiceFallback:/^en/i },
+  pt: { flag:"🇧🇷", name:"Portugués", subtitle:"Serviço de mesas · 30 dias · 5 frases por dia",  pronLabel:"Pronúncia", voiceLang:"pt-BR", voiceMatch:/pt[-_]BR/i, voiceFallback:/^pt/i },
+  zh: { flag:"🇨🇳", name:"Chino",     subtitle:"中文服务员课程 · 30天 · 每天5句",                 pronLabel:"Pinyin",    voiceLang:"zh-CN", voiceMatch:/zh[-_]CN/i, voiceFallback:/^zh/i },
+};
+
+function Dictionary({ speak, speaking, playBell, T, wordsList = WORDS, phraseKey = "en", meta = {} }) {
   const [search, setSearch] = useState("");
+  const storageKey = `gbDictLearned_${phraseKey}`;
   const [learned, setLearned] = useState(() => {
-    try { return JSON.parse(localStorage.getItem("gbDictLearned") || "{}"); } catch { return {}; }
+    try { return JSON.parse(localStorage.getItem(storageKey) || "{}"); } catch { return {}; }
   });
   useEffect(() => {
-    try { localStorage.setItem("gbDictLearned", JSON.stringify(learned)); } catch {}
-  }, [learned]);
+    try { localStorage.setItem(storageKey, JSON.stringify(learned)); } catch {}
+  }, [learned, storageKey]);
 
   const toggle = (i) => {
     setLearned(l => {
@@ -832,10 +873,13 @@ function Dictionary({ speak, speaking, playBell, T }) {
     });
   };
 
-  const filtered = WORDS.filter(w =>
-    w.en.toLowerCase().includes(search.toLowerCase()) ||
-    w.es.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = wordsList.filter(w => {
+    const word = w[phraseKey] || w.en || "";
+    return word.toLowerCase().includes(search.toLowerCase()) ||
+      w.es.toLowerCase().includes(search.toLowerCase());
+  });
+
+  const pronLabel = meta.pronLabel || "IPA";
 
   return (
     <div style={{ padding: "16px 16px 0" }}>
@@ -844,24 +888,25 @@ function Dictionary({ speak, speaking, playBell, T }) {
         <span style={S.dayTheme}>100 palabras clave</span>
       </div>
       <input
-        placeholder="🔍 Buscar en inglés o español..."
+        placeholder="🔍 Buscar..."
         value={search}
         onChange={e => setSearch(e.target.value)}
         style={{ ...S.searchInput, background: T.cardBg, border: `1px solid ${T.cardBorder}`, color: T.text }}
       />
       <div style={S.cardList}>
         {filtered.map((w, i) => {
-          const idx = WORDS.indexOf(w);
+          const idx = wordsList.indexOf(w);
           const isLearned = learned[idx];
+          const wordText = w[phraseKey] || w.en;
           return (
             <div key={idx} style={{ ...S.card, background: T.cardBg, border: `1px solid ${isLearned ? "#d4763a" : T.cardBorder}`, padding:"14px 16px" }}>
               <div style={S.cardTop}>
-                <p style={{ ...S.enText, color: T.enText, fontSize: 17 }}>{w.en}</p>
-                <button style={{ ...S.speakBtn, ...(speaking===w.en?S.speakBtnOn:{}) }} onClick={() => speak(w.en)}>
-                  {speaking===w.en?"◗ sonando…":"◗ escuchar"}
+                <p style={{ ...S.enText, color: T.enText, fontSize: 17 }}>{wordText}</p>
+                <button style={{ ...S.speakBtn, ...(speaking===wordText?S.speakBtnOn:{}) }} onClick={() => speak(wordText)}>
+                  {speaking===wordText?"◗ sonando…":"◗ escuchar"}
                 </button>
               </div>
-              <p style={S.ipaText}>/{w.ipa}/</p>
+              <p style={S.ipaText}>{pronLabel}: {w.pron || w.ipa}</p>
               <p style={{ ...S.esText, color: T.esText, marginBottom: 10 }}>{w.es}</p>
               <button onClick={() => toggle(idx)} style={{ ...S.learnBtn, background: isLearned?"#d4763a":T.learnBtnBg, border: `1px solid ${isLearned?"#d4763a":T.cardBorder}`, color: isLearned?"#fff":T.subtle }}>
                 {isLearned ? "✓ Aprendida" : "Marcar como aprendida"}
@@ -874,29 +919,33 @@ function Dictionary({ speak, speaking, playBell, T }) {
   );
 }
 
-function EnElLocal({ speak, speaking, T }) {
+function EnElLocal({ speak, speaking, T, localSections = LOCAL_SECTIONS, phraseKey = "en", meta = {} }) {
+  const pronLabel = meta.pronLabel || "IPA";
   return (
     <div style={{ padding: "16px 16px 0" }}>
       <div style={S.dayHeader}>
         <h2 style={{ ...S.dayTitle, color: T.text }}>En el local</h2>
         <span style={S.dayTheme}>Indicaciones · Direcciones · Emergencias</span>
       </div>
-      {LOCAL_SECTIONS.map((sec, si) => (
+      {localSections.map((sec, si) => (
         <div key={si} style={{ marginBottom: 24 }}>
           <h3 style={{ fontSize: 15, fontWeight: 700, color: T.text, marginBottom: 10 }}>{sec.title}</h3>
           <div style={S.cardList}>
-            {sec.phrases.map((ph, i) => (
-              <div key={i} style={{ ...S.card, background: T.cardBg, border: `1px solid ${T.cardBorder}`, padding:"14px 16px" }}>
-                <div style={S.cardTop}>
-                  <p style={{ ...S.enText, color: T.enText, fontSize: 16 }}>{ph.en}</p>
-                  <button style={{ ...S.speakBtn, ...(speaking===ph.en?S.speakBtnOn:{}) }} onClick={() => speak(ph.en)}>
-                    {speaking===ph.en?"◗ sonando…":"◗ escuchar"}
-                  </button>
+            {sec.phrases.map((ph, i) => {
+              const phraseText = ph[phraseKey] || ph.en;
+              return (
+                <div key={i} style={{ ...S.card, background: T.cardBg, border: `1px solid ${T.cardBorder}`, padding:"14px 16px" }}>
+                  <div style={S.cardTop}>
+                    <p style={{ ...S.enText, color: T.enText, fontSize: 16 }}>{phraseText}</p>
+                    <button style={{ ...S.speakBtn, ...(speaking===phraseText?S.speakBtnOn:{}) }} onClick={() => speak(phraseText)}>
+                      {speaking===phraseText?"◗ sonando…":"◗ escuchar"}
+                    </button>
+                  </div>
+                  <p style={S.ipaText}>{pronLabel}: {ph.pron || ph.ipa}</p>
+                  <p style={{ ...S.esText, color: T.esText, marginBottom: 0 }}>{ph.es}</p>
                 </div>
-                <p style={S.ipaText}>/{ph.ipa}/</p>
-                <p style={{ ...S.esText, color: T.esText, marginBottom: 0 }}>{ph.es}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       ))}
