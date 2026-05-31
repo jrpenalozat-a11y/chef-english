@@ -324,12 +324,143 @@ class Boundary extends React.Component {
 }
 
 export default function App() {
+  const [started, setStarted] = useState(false);
+
+  const playIntro = () => {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+      const bass = [130, 146, 164, 174];
+      bass.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.45);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.45);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.45 + 0.5);
+        osc.start(ctx.currentTime + i * 0.45);
+        osc.stop(ctx.currentTime + i * 0.45 + 0.5);
+      });
+
+      [[261,329,392],[293,369,440],[329,415,494],[349,440,523]].forEach((chord, i) => {
+        chord.forEach(freq => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + i * 0.45 + 0.1);
+          gain.gain.setValueAtTime(0.1, ctx.currentTime + i * 0.45 + 0.1);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.45 + 0.7);
+          osc.start(ctx.currentTime + i * 0.45 + 0.1);
+          osc.stop(ctx.currentTime + i * 0.45 + 0.8);
+        });
+      });
+
+      const mel = [
+        {freq:784,t:0.05},{freq:698,t:0.35},{freq:659,t:0.65},
+        {freq:587,t:0.95},{freq:523,t:1.3},
+        {freq:659,t:1.6},{freq:784,t:1.82},{freq:880,t:2.0},{freq:1047,t:2.18}
+      ];
+      mel.forEach(({freq,t}, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = "sine";
+        const isEnding = i >= 5;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + t);
+        gain.gain.setValueAtTime(0.0, ctx.currentTime + t);
+        gain.gain.linearRampToValueAtTime(isEnding ? 0.25 : 0.18, ctx.currentTime + t + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + (isEnding ? 0.35 : 0.5));
+        osc.start(ctx.currentTime + t);
+        osc.stop(ctx.currentTime + t + 0.6);
+      });
+
+      [1047, 1319, 1568].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + 2.45 + i * 0.1);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime + 2.45 + i * 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.45 + i * 0.1 + 0.8);
+        osc.start(ctx.currentTime + 2.45 + i * 0.1);
+        osc.stop(ctx.currentTime + 2.45 + i * 0.1 + 0.9);
+      });
+    } catch {}
+    setTimeout(() => setStarted(true), 2800);
+  };
+
+  if (!started) {
+    return (
+      <Boundary>
+        <div style={SW.overlay}>
+          <div style={SW.card}>
+            <div style={SW.logo}>
+              <svg width="64" height="64" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="10" r="6" fill="#f4e6d4"/>
+                <path d="M12 28 Q12 20 20 20 Q28 20 28 28 L28 36 L12 36 Z" fill="#f4e6d4"/>
+                <path d="M18 20 L20 23 L22 20 L20 22 Z" fill="#7a3b1d"/>
+                <path d="M28 24 Q33 22 35 24" stroke="#f4e6d4" strokeWidth="2.5" strokeLinecap="round"/>
+                <ellipse cx="35" cy="23" rx="4" ry="1.5" fill="#f4e6d4"/>
+                <rect x="24" y="2" width="14" height="9" rx="3" fill="#fff" opacity="0.9"/>
+                <path d="M26 11 L24 14 L29 11 Z" fill="#fff" opacity="0.9"/>
+                <circle cx="28" cy="6.5" r="1.2" fill="#7a3b1d"/>
+                <circle cx="31" cy="6.5" r="1.2" fill="#7a3b1d"/>
+                <circle cx="34" cy="6.5" r="1.2" fill="#7a3b1d"/>
+              </svg>
+            </div>
+            <h1 style={SW.title}>Garzón Bilingüe</h1>
+            <p style={SW.sub}>Inglés para el servicio de mesas</p>
+            <p style={SW.author}>por Jaime Ricardo Peñaloza</p>
+            <button style={SW.btn} onClick={playIntro}>
+              ▶ Comenzar
+            </button>
+          </div>
+        </div>
+      </Boundary>
+    );
+  }
+
   return (
     <Boundary>
       <ChefEnglishApp />
     </Boundary>
   );
 }
+
+const SW = {
+  overlay: {
+    minHeight: "100vh",
+    background: "radial-gradient(circle at 30% 20%, #7a3b1d 0%, #4a1f08 60%, #1a0a02 100%)",
+    display: "flex", alignItems: "center", justifyContent: "center",
+    fontFamily: "'Outfit', sans-serif",
+  },
+  card: {
+    display: "flex", flexDirection: "column", alignItems: "center",
+    gap: 14, padding: "48px 36px", textAlign: "center",
+    maxWidth: 320,
+  },
+  logo: {
+    width: 100, height: 100, borderRadius: 28, background: "#9a4a20",
+    display: "grid", placeItems: "center",
+    boxShadow: "0 12px 40px #00000060",
+  },
+  title: {
+    fontFamily: "'Fraunces', serif", fontWeight: 900, fontSize: 32,
+    color: "#f4e6d4", letterSpacing: -0.5, lineHeight: 1.1, margin: 0,
+  },
+  sub: { fontSize: 15, color: "#d4a882", margin: 0 },
+  author: { fontSize: 12, color: "#a07050", margin: 0, marginTop: -6 },
+  btn: {
+    marginTop: 12, padding: "16px 48px", borderRadius: 99,
+    background: "#d4763a", border: "none", color: "#fff",
+    fontSize: 18, fontWeight: 700, cursor: "pointer",
+    fontFamily: "'Outfit', sans-serif",
+    boxShadow: "0 8px 28px #d4763a55",
+    transition: "transform .15s",
+  },
+};
 
 function ChefEnglishApp() {
   const [selectedDay, setSelectedDay] = useState(1);
