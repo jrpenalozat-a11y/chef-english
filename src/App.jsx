@@ -490,7 +490,7 @@ function ChefEnglishApp({ lang = "en" }) {
   const curriculum = CURRICULA[lang];
   const wordsList  = WORDS_MAP[lang];
   const localSections = LOCAL_MAP[lang];
-  const phraseKey = PHRASE_KEY[lang];
+  const phraseKey = lang; // "en" | "pt" | "zh"
   const [selectedDay, setSelectedDay] = useState(1);
   const [progress, setProgress] = useState(() => {
     try {
@@ -855,7 +855,6 @@ const LANG_META = {
   pt: { flag:"🇧🇷", name:"Portugués", subtitle:"Serviço de mesas · 30 dias · 5 frases por dia",  pronLabel:"Pronúncia", voiceLang:"pt-BR", voiceMatch:/pt[-_]BR/i, voiceFallback:/^pt/i },
   zh: { flag:"🇨🇳", name:"Chino",     subtitle:"中文服务员课程 · 30天 · 每天5句",                 pronLabel:"Pinyin",    voiceLang:"zh-CN", voiceMatch:/zh[-_]CN/i, voiceFallback:/^zh/i },
 };
-const PHRASE_KEY = { en:"en", pt:"pt", zh:"zh" };
 
 function Dictionary({ speak, speaking, playBell, T, wordsList = WORDS, phraseKey = "en", meta = {} }) {
   const [search, setSearch] = useState("");
