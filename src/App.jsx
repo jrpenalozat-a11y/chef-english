@@ -480,6 +480,10 @@ function ChefEnglishApp() {
 
       <footer style={S.footer}>
         Toca <b>escuchar</b> para oír la pronunciación · practica en voz alta
+        <br />
+        <span style={{ fontSize: 11, opacity: 0.7, marginTop: 6, display: "block" }}>
+          Creado por Jaime Ricardo Peñaloza
+        </span>
       </footer>
     </div>
   );
