@@ -343,6 +343,15 @@ function ChefEnglishApp() {
   const [flipped, setFlipped] = useState({});
   const [speaking, setSpeaking] = useState(null);
   const [audioError, setAudioError] = useState("");
+  const [dark, setDark] = useState(() => {
+    try { return localStorage.getItem("gbDark") === "1"; } catch { return false; }
+  });
+
+  useEffect(() => {
+    try { localStorage.setItem("gbDark", dark ? "1" : "0"); } catch {}
+  }, [dark]);
+
+  const T = dark ? DARK : LIGHT;
 
   useEffect(() => {
     try { localStorage.setItem("chefEnglishProgress", JSON.stringify(progress)); } catch {}
@@ -393,27 +402,36 @@ function ChefEnglishApp() {
   const pct = Math.round((totalLearned / totalPhrases) * 100);
 
   return (
-    <div style={S.root}>
+    <div style={{ ...S.root, background: T.rootBg, color: T.text }}>
       <style>{MOBILE_CSS}</style>
       <header style={S.header}>
         <div style={S.brand}>
           <span style={S.logoMark}>✦</span>
           <div>
-            <h1 style={S.title} className="ce-title">Chef's English</h1>
-            <p style={S.subtitle} className="ce-subtitle">Servicio de mesas · 30 días · 5 frases al día</p>
+            <h1 style={{ ...S.title, color: T.text }} className="ce-title">Garzón Bilingüe</h1>
+            <p style={{ ...S.subtitle, color: T.subtle }} className="ce-subtitle">Servicio de mesas · 30 días · 5 frases al día</p>
           </div>
         </div>
-        <div style={S.streakBox} className="ce-streak">
-          <div style={S.streakNum}>{totalLearned}</div>
-          <div style={S.streakLbl}>frases<br />dominadas</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+          <button
+            onClick={() => setDark(d => !d)}
+            aria-label="Cambiar modo"
+            style={{ ...S.darkBtn, background: T.chipBg, border: `1px solid ${T.chipBorder}`, color: T.subtle }}
+          >
+            {dark ? "☀ Claro" : "☾ Oscuro"}
+          </button>
+          <div style={{ ...S.streakBox, background: T.chipBg, border: `1px solid ${T.chipBorder}` }} className="ce-streak">
+            <div style={S.streakNum}>{totalLearned}</div>
+            <div style={{ ...S.streakLbl, color: T.subtle }}>frases<br />dominadas</div>
+          </div>
         </div>
       </header>
 
       <div style={S.progressWrap}>
-        <div style={S.progressBar}>
+        <div style={{ ...S.progressBar, background: T.progressTrack }}>
           <div style={{ ...S.progressFill, width: `${pct}%` }} />
         </div>
-        <span style={S.progressTxt}>{pct}% del curso completo</span>
+        <span style={{ ...S.progressTxt, color: T.subtle }}>{pct}% del curso completo</span>
       </div>
 
       {audioError && <div style={S.audioWarn}>⚠ {audioError}</div>}
@@ -426,13 +444,13 @@ function ChefEnglishApp() {
             <button
               key={d.day}
               onClick={() => { setSelectedDay(d.day); setView("learn"); setFlipped({}); }}
-              style={{ ...S.dayChip, ...(active ? S.dayChipActive : {}), ...(done === 5 ? S.dayChipDone : {}) }}
+              style={{ ...S.dayChip, background: T.chipBg, border: `1px solid ${T.chipBorder}`, ...(active ? S.dayChipActive : {}), ...(done === 5 ? { borderColor: "#d4763a" } : {}) }}
             >
-              <span style={{ ...S.dayChipNum, ...(active ? { color: "#f4e6d4" } : {}) }}>Día {d.day}</span>
-              <span style={{ ...S.dayChipTheme, ...(active ? { color: "#f4e6d4" } : {}) }}>{d.theme}</span>
+              <span style={{ ...S.dayChipNum, color: active ? "#f4e6d4" : T.text }}>Día {d.day}</span>
+              <span style={{ ...S.dayChipTheme, color: active ? "#f4e6d4" : T.subtle }}>{d.theme}</span>
               <span style={S.dayChipDots}>
                 {[0, 1, 2, 3, 4].map((i) => (
-                  <i key={i} style={{ ...S.dot, background: progress[`${d.day}-${i}`] ? "#d4763a" : (active ? "#f4e6d455" : "#00000018") }} />
+                  <i key={i} style={{ ...S.dot, background: progress[`${d.day}-${i}`] ? "#d4763a" : (active ? "#f4e6d455" : T.dotEmpty) }} />
                 ))}
               </span>
             </button>
@@ -441,13 +459,13 @@ function ChefEnglishApp() {
       </div>
 
       <div style={S.tabs}>
-        <button onClick={() => setView("learn")} style={{ ...S.tab, ...(view === "learn" ? S.tabActive : {}) }}>Aprender</button>
-        <button onClick={() => setView("quiz")} style={{ ...S.tab, ...(view === "quiz" ? S.tabActive : {}) }}>Practicar</button>
+        <button onClick={() => setView("learn")} style={{ ...S.tab, background: view === "learn" ? T.tabActiveBg : T.tabBg, color: view === "learn" ? T.tabActiveText : T.subtle }}>Aprender</button>
+        <button onClick={() => setView("quiz")} style={{ ...S.tab, background: view === "quiz" ? T.tabActiveBg : T.tabBg, color: view === "quiz" ? T.tabActiveText : T.subtle }}>Practicar</button>
       </div>
 
       <main style={S.main}>
         <div style={S.dayHeader}>
-          <h2 style={S.dayTitle}>Día {dayData.day}</h2>
+          <h2 style={{ ...S.dayTitle, color: T.text }}>Día {dayData.day}</h2>
           <span style={S.dayTheme}>{dayData.theme}</span>
         </div>
 
@@ -456,17 +474,17 @@ function ChefEnglishApp() {
             {dayData.phrases.map((ph, idx) => {
               const learned = progress[`${selectedDay}-${idx}`];
               return (
-                <div key={idx} style={{ ...S.card, ...(learned ? S.cardLearned : {}) }}>
+                <div key={idx} style={{ ...S.card, background: T.cardBg, border: `1px solid ${learned ? "#d4763a" : T.cardBorder}`, boxShadow: learned ? "0 6px 22px #d4763a22" : "0 6px 20px #00000010" }}>
                   <div style={S.cardTop}>
                     <span style={S.cardNum}>{idx + 1}</span>
                     <button style={{ ...S.speakBtn, ...(speaking === ph.en ? S.speakBtnOn : {}) }} onClick={() => speak(ph.en)} aria-label="Escuchar">
                       {speaking === ph.en ? "◗ sonando…" : "◗ escuchar"}
                     </button>
                   </div>
-                  <p style={S.enText}>{ph.en}</p>
+                  <p style={{ ...S.enText, color: T.enText }}>{ph.en}</p>
                   <p style={S.ipaText}>/{ph.ipa}/</p>
-                  <p style={S.esText}>{ph.es}</p>
-                  <button onClick={() => toggleLearned(idx)} style={{ ...S.learnBtn, ...(learned ? S.learnBtnDone : {}) }}>
+                  <p style={{ ...S.esText, color: T.esText }}>{ph.es}</p>
+                  <button onClick={() => toggleLearned(idx)} style={{ ...S.learnBtn, background: learned ? "#d4763a" : T.learnBtnBg, borderColor: learned ? "#d4763a" : T.cardBorder, color: learned ? "#fff" : T.subtle }}>
                     {learned ? "✓ Dominada" : "Marcar como aprendida"}
                   </button>
                 </div>
@@ -474,11 +492,11 @@ function ChefEnglishApp() {
             })}
           </div>
         ) : (
-          <Quiz phrases={dayData.phrases} speak={speak} flipped={flipped} setFlipped={setFlipped} />
+          <Quiz phrases={dayData.phrases} speak={speak} flipped={flipped} setFlipped={setFlipped} dark={dark} T={T} />
         )}
       </main>
 
-      <footer style={S.footer}>
+      <footer style={{ ...S.footer, color: T.subtle }}>
         Toca <b>escuchar</b> para oír la pronunciación · practica en voz alta
         <br />
         <span style={{ fontSize: 11, opacity: 0.7, marginTop: 6, display: "block" }}>
@@ -489,18 +507,19 @@ function ChefEnglishApp() {
   );
 }
 
-function Quiz({ phrases, speak, flipped, setFlipped }) {
+function Quiz({ phrases, speak, flipped, setFlipped, T }) {
   return (
     <div style={S.quizGrid}>
       {phrases.map((ph, i) => {
         const isFlip = flipped[i];
         return (
-          <div key={i} onClick={() => setFlipped((f) => ({ ...f, [i]: !f[i] }))} style={{ ...S.flash, ...(isFlip ? S.flashBack : {}) }}>
+          <div key={i} onClick={() => setFlipped((f) => ({ ...f, [i]: !f[i] }))}
+            style={{ ...S.flash, background: isFlip ? T.flashBackBg : T.cardBg, border: `1px solid ${T.cardBorder}` }}>
             {!isFlip ? (
               <>
-                <span style={S.flashHint}>traduce al inglés</span>
-                <p style={S.flashEs}>{ph.es}</p>
-                <span style={S.flashTap}>toca para revelar →</span>
+                <span style={{ ...S.flashHint, color: T.subtle }}>traduce al inglés</span>
+                <p style={{ ...S.flashEs, color: T.enText }}>{ph.es}</p>
+                <span style={{ ...S.flashTap, color: T.subtle }}>toca para revelar →</span>
               </>
             ) : (
               <>
@@ -515,12 +534,50 @@ function Quiz({ phrases, speak, flipped, setFlipped }) {
   );
 }
 
+// ── TEMAS DE COLOR ──────────────────────────────────────────
+const LIGHT = {
+  rootBg: "radial-gradient(circle at 20% 0%, #f4e6d4 0%, #ece0cf 40%, #e3d4bd 100%)",
+  text: "#3a2c1e",
+  subtle: "#8a6f54",
+  enText: "#2a1f14",
+  esText: "#6b5640",
+  chipBg: "#fff8ef",
+  chipBorder: "#e3cfb2",
+  progressTrack: "#00000012",
+  dotEmpty: "#00000018",
+  tabBg: "#00000008",
+  tabActiveBg: "#3a2c1e",
+  tabActiveText: "#f4e6d4",
+  cardBg: "#fffaf3",
+  cardBorder: "#e9d8bf",
+  learnBtnBg: "#fff",
+  flashBackBg: "#3a2c1e",
+};
+const DARK = {
+  rootBg: "radial-gradient(circle at 20% 0%, #1a1210 0%, #221812 40%, #2a1e14 100%)",
+  text: "#f0ddc8",
+  subtle: "#a08060",
+  enText: "#f4e6d4",
+  esText: "#c4a07a",
+  chipBg: "#2e2018",
+  chipBorder: "#4a3020",
+  progressTrack: "#ffffff12",
+  dotEmpty: "#ffffff18",
+  tabBg: "#ffffff08",
+  tabActiveBg: "#f4e6d4",
+  tabActiveText: "#2a1a0e",
+  cardBg: "#261a10",
+  cardBorder: "#3e2a18",
+  learnBtnBg: "#2e2018",
+  flashBackBg: "#0e0a06",
+};
+
 const MOBILE_CSS = `
   html, body, #root { min-height: 100%; }
   @media (max-width: 480px) {
-    .ce-title { font-size: 20px !important; letter-spacing: -0.3px !important; }
-    .ce-subtitle { font-size: 10.5px !important; }
-    .ce-streak { padding: 5px 10px !important; min-width: 64px; }
+    .ce-title { font-size: 17px !important; letter-spacing: -0.3px !important; white-space: nowrap; }
+    .ce-subtitle { font-size: 10px !important; white-space: nowrap; }
+    .ce-streak { padding: 5px 8px !important; min-width: 56px; }
   }
 `;
 
@@ -627,4 +684,9 @@ const S = {
     fontFamily: "'Outfit', sans-serif",
   },
   footer: { textAlign: "center", fontSize: 12.5, color: "#9c805f", padding: "26px 16px 0", lineHeight: 1.6 },
+  darkBtn: {
+    border: "none", cursor: "pointer", fontSize: 12, fontWeight: 600,
+    padding: "6px 12px", borderRadius: 99, fontFamily: "'Outfit', sans-serif",
+    transition: "all .2s", whiteSpace: "nowrap",
+  },
 };
