@@ -628,7 +628,7 @@ function ChefEnglishApp() {
             return (
               <button key={d.day}
                 onClick={() => { setSelectedDay(d.day); setView("learn"); setFlipped({}); }}
-                style={{ ...S.dayChip, background: T.chipBg, border: `1px solid ${T.chipBorder}`, ...(active ? S.dayChipActive : {}), ...(done===5 ? { borderColor:"#d4763a" } : {}) }}>
+                style={{ ...S.dayChip, background: T.chipBg, border: `1px solid ${T.chipBorder}`, ...(active ? S.dayChipActive : {}), ...(done===5 ? { border:"1px solid #d4763a" } : {}) }}>
                 <span style={{ ...S.dayChipNum, color: active?"#f4e6d4":T.text }}>Día {d.day}</span>
                 <span style={{ ...S.dayChipTheme, color: active?"#f4e6d4":T.subtle }}>{d.theme}</span>
                 <span style={S.dayChipDots}>
@@ -664,7 +664,7 @@ function ChefEnglishApp() {
                     <p style={{ ...S.enText, color: T.enText }}>{ph.en}</p>
                     <p style={S.ipaText}>/{ph.ipa}/</p>
                     <p style={{ ...S.esText, color: T.esText }}>{ph.es}</p>
-                    <button onClick={() => toggleLearned(idx)} style={{ ...S.learnBtn, background: learned?"#d4763a":T.learnBtnBg, borderColor: learned?"#d4763a":T.cardBorder, color: learned?"#fff":T.subtle }}>
+                    <button onClick={() => toggleLearned(idx)} style={{ ...S.learnBtn, background: learned?"#d4763a":T.learnBtnBg, border: `1px solid ${learned?"#d4763a":T.cardBorder}`, color: learned?"#fff":T.subtle }}>
                       {learned?"✓ Dominada":"Marcar como aprendida"}
                     </button>
                   </div>
@@ -863,7 +863,7 @@ function Dictionary({ speak, speaking, playBell, T }) {
               </div>
               <p style={S.ipaText}>/{w.ipa}/</p>
               <p style={{ ...S.esText, color: T.esText, marginBottom: 10 }}>{w.es}</p>
-              <button onClick={() => toggle(idx)} style={{ ...S.learnBtn, background: isLearned?"#d4763a":T.learnBtnBg, borderColor: isLearned?"#d4763a":T.cardBorder, color: isLearned?"#fff":T.subtle }}>
+              <button onClick={() => toggle(idx)} style={{ ...S.learnBtn, background: isLearned?"#d4763a":T.learnBtnBg, border: `1px solid ${isLearned?"#d4763a":T.cardBorder}`, color: isLearned?"#fff":T.subtle }}>
                 {isLearned ? "✓ Aprendida" : "Marcar como aprendida"}
               </button>
             </div>
@@ -989,8 +989,8 @@ const S = {
     padding: "12px 14px", display: "flex", flexDirection: "column", gap: 6,
     transition: "all .2s", fontFamily: "'Outfit', sans-serif",
   },
-  dayChipActive: { background: "#7a3b1d", borderColor: "#7a3b1d", boxShadow: "0 8px 22px #7a3b1d44", transform: "translateY(-2px)" },
-  dayChipDone: { borderColor: "#d4763a" },
+  dayChipActive: { background: "#7a3b1d", border: "1px solid #7a3b1d", boxShadow: "0 8px 22px #7a3b1d44", transform: "translateY(-2px)" },
+  dayChipDone: { border: "1px solid #d4763a" },
   dayChipNum: { fontFamily: "'Fraunces', serif", fontWeight: 600, fontSize: 15 },
   dayChipTheme: { fontSize: 11.5, opacity: 0.75, lineHeight: 1.25, minHeight: 28 },
   dayChipDots: { display: "flex", gap: 4, marginTop: 2 },
@@ -1011,7 +1011,7 @@ const S = {
     background: "#fffaf3", borderRadius: 20, padding: "18px 20px",
     border: "1px solid #e9d8bf", boxShadow: "0 6px 20px #00000010", transition: "all .25s",
   },
-  cardLearned: { background: "#fff", borderColor: "#d4763a", boxShadow: "0 6px 22px #d4763a22" },
+  cardLearned: { background: "#fff", border: "1px solid #d4763a", boxShadow: "0 6px 22px #d4763a22" },
   cardTop: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 },
   cardNum: {
     fontFamily: "'Fraunces', serif", fontWeight: 900, fontSize: 14, color: "#fff",
@@ -1036,7 +1036,7 @@ const S = {
     background: "#fff", color: "#8a6f54", fontWeight: 600, fontSize: 13.5, cursor: "pointer",
     fontFamily: "'Outfit', sans-serif", transition: "all .2s",
   },
-  learnBtnDone: { background: "#d4763a", borderColor: "#d4763a", color: "#fff" },
+  learnBtnDone: { background: "#d4763a", border: "1px solid #d4763a", color: "#fff" },
   quizGrid: { display: "flex", flexDirection: "column", gap: 14 },
   flash: {
     minHeight: 120, borderRadius: 20, padding: "22px 20px", cursor: "pointer",
