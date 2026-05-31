@@ -1,4 +1,4 @@
-const CACHE = "chefs-english-v3";
+const CACHE = "chefs-english-v5";
 const ASSETS = [
   "/",
   "/index.html",
