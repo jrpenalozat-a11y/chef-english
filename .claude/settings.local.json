@@ -3,7 +3,11 @@
     "allow": [
       "Bash(npm install *)",
       "PowerShell(Get-Command node, npm -ErrorAction SilentlyContinue | Select-Object Name, Source; [System.Environment]::GetEnvironmentVariable\\(\"PATH\",\"Machine\"\\) -split \";\" | Select-String -Pattern \"node\")",
-      "PowerShell(Get-ChildItem \"C:\\\\Program Files\\\\nodejs\" -ErrorAction SilentlyContinue | Select-Object Name; Get-ChildItem \"C:\\\\Program Files \\(x86\\)\\\\nodejs\" -ErrorAction SilentlyContinue | Select-Object Name; Test-Path \"$env:APPDATA\\\\npm\\\\npm.cmd\")"
+      "PowerShell(Get-ChildItem \"C:\\\\Program Files\\\\nodejs\" -ErrorAction SilentlyContinue | Select-Object Name; Get-ChildItem \"C:\\\\Program Files \\(x86\\)\\\\nodejs\" -ErrorAction SilentlyContinue | Select-Object Name; Test-Path \"$env:APPDATA\\\\npm\\\\npm.cmd\")",
+      "PowerShell($paths = @\\(\"C:\\\\Program Files\\\\nodejs\\\\node.exe\",\"C:\\\\Program Files \\(x86\\)\\\\nodejs\\\\node.exe\",\"$env:LOCALAPPDATA\\\\node\\\\node.exe\",\"$env:ProgramFiles\\\\node\\\\node.exe\"\\); foreach\\($p in $paths\\){ if\\(Test-Path $p\\){ Write-Output \"Found: $p\" } }; Get-ChildItem \"C:\\\\\" -Filter \"node.exe\" -Recurse -ErrorAction SilentlyContinue -Depth 4 | Select-Object FullName -First 5)",
+      "PowerShell($env:PATH = \"C:\\\\Program Files\\\\nodejs;\" + $env:PATH; cd \"C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english\"; npm install 2>&1)",
+      "mcp__Claude_Preview__preview_start",
+      "PowerShell(Get-Command git -ErrorAction SilentlyContinue)"
     ]
   }
 }
