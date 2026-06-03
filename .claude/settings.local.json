@@ -76,7 +76,8 @@
       "WebFetch(domain:chef-english.vercel.app)",
       "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" commit -m \"Fix vercel.json: explicit buildCommand and outputDirectory\")",
       "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" commit -m \"Slow rate adjusted to 0.4x\")",
-      "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" commit -m \"Fix vercel.json: remove broken rewrite that blocked JS assets\")"
+      "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" commit -m \"Fix vercel.json: remove broken rewrite that blocked JS assets\")",
+      "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" commit -m \"Reduce normal audio rate to 0.75x\")"
     ]
   }
 }
