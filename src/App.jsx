@@ -500,7 +500,7 @@ function ChefEnglishApp({ lang = "en" }) {
   });
   const [view, setView] = useState("learn");
   const [flipped, setFlipped] = useState({});
-  const [speaking, setSpeaking] = useState(null);
+  const [speaking, setSpeaking] = useState(null); // "text" or "text|slow"
   const [audioError, setAudioError] = useState("");
   const [dark, setDark] = useState(() => {
     try { return localStorage.getItem("gbDark") === "1"; } catch { return false; }
@@ -526,7 +526,7 @@ function ChefEnglishApp({ lang = "en" }) {
 
   const dayData = curriculum.find((d) => d.day === selectedDay);
 
-  const speak = (text) => {
+  const speak = (text, slow = false) => {
     setAudioError("");
     const synth = window.speechSynthesis;
     if (!synth || typeof SpeechSynthesisUtterance === "undefined") {
@@ -541,8 +541,9 @@ function ChefEnglishApp({ lang = "en" }) {
       voices.find((v) => meta.voiceFallback.test(v.lang));
     if (targetVoice) u.voice = targetVoice;
     u.lang = meta.voiceLang;
-    u.rate = 0.9;
-    u.onstart = () => setSpeaking(text);
+    u.rate = slow ? 0.55 : 0.9;
+    const key = slow ? text + "|slow" : text;
+    u.onstart = () => setSpeaking(key);
     u.onend = () => setSpeaking(null);
     u.onerror = () => { setSpeaking(null); setAudioError("No se pudo reproducir el audio."); };
     synth.speak(u);
@@ -687,9 +688,14 @@ function ChefEnglishApp({ lang = "en" }) {
                   <div key={idx} style={{ ...S.card, background: T.cardBg, border:`1px solid ${learned?"#d4763a":T.cardBorder}`, boxShadow: learned?"0 6px 22px #d4763a22":"0 6px 20px #00000010" }}>
                     <div style={S.cardTop}>
                       <span style={S.cardNum}>{idx+1}</span>
-                      <button style={{ ...S.speakBtn, ...(speaking===phraseText?S.speakBtnOn:{}) }} onClick={() => speak(phraseText)}>
-                        {speaking===phraseText?"◗ sonando…":"◗ escuchar"}
-                      </button>
+                      <div style={{ display:"flex", gap:6 }}>
+                        <button style={{ ...S.speakBtn, ...(speaking===phraseText?S.speakBtnOn:{}) }} onClick={() => speak(phraseText)}>
+                          {speaking===phraseText?"◗ sonando…":"◗ normal"}
+                        </button>
+                        <button style={{ ...S.speakBtn, ...(speaking===phraseText+"|slow"?S.speakBtnOn:{}) }} onClick={() => speak(phraseText, true)}>
+                          {speaking===phraseText+"|slow"?"◗ sonando…":"🐢 lento"}
+                        </button>
+                      </div>
                     </div>
                     <p style={{ ...S.enText, color: T.enText }}>{phraseText}</p>
                     <p style={S.ipaText}>{meta.pronLabel}: {ph.pron || ph.ipa}</p>
@@ -746,7 +752,10 @@ function Quiz({ phrases, speak, flipped, setFlipped, T, phraseKey = "en" }) {
             ) : (
               <>
                 <p style={S.flashEn}>{ph.es}</p>
-                <button style={S.flashSpeak} onClick={(e) => { e.stopPropagation(); speak(phraseText); }}>◗ escuchar</button>
+                <div style={{ display:"flex", gap:8 }}>
+                  <button style={S.flashSpeak} onClick={(e) => { e.stopPropagation(); speak(phraseText); }}>◗ normal</button>
+                  <button style={S.flashSpeak} onClick={(e) => { e.stopPropagation(); speak(phraseText, true); }}>🐢 lento</button>
+                </div>
               </>
             )}
           </div>
@@ -903,9 +912,14 @@ function Dictionary({ speak, speaking, playBell, T, wordsList = WORDS, phraseKey
             <div key={idx} style={{ ...S.card, background: T.cardBg, border: `1px solid ${isLearned ? "#d4763a" : T.cardBorder}`, padding:"14px 16px" }}>
               <div style={S.cardTop}>
                 <p style={{ ...S.enText, color: T.enText, fontSize: 17 }}>{wordText}</p>
-                <button style={{ ...S.speakBtn, ...(speaking===wordText?S.speakBtnOn:{}) }} onClick={() => speak(wordText)}>
-                  {speaking===wordText?"◗ sonando…":"◗ escuchar"}
-                </button>
+                <div style={{ display:"flex", gap:6 }}>
+                  <button style={{ ...S.speakBtn, ...(speaking===wordText?S.speakBtnOn:{}) }} onClick={() => speak(wordText)}>
+                    {speaking===wordText?"◗ sonando…":"◗ normal"}
+                  </button>
+                  <button style={{ ...S.speakBtn, ...(speaking===wordText+"|slow"?S.speakBtnOn:{}) }} onClick={() => speak(wordText, true)}>
+                    {speaking===wordText+"|slow"?"◗ sonando…":"🐢 lento"}
+                  </button>
+                </div>
               </div>
               <p style={S.ipaText}>{pronLabel}: {w.pron || w.ipa}</p>
               <p style={{ ...S.esText, color: T.esText, marginBottom: 10 }}>{w.es}</p>
@@ -936,11 +950,16 @@ function EnElLocal({ speak, speaking, T, localSections = LOCAL_SECTIONS, phraseK
               const phraseText = ph[phraseKey] || ph.en;
               return (
                 <div key={i} style={{ ...S.card, background: T.cardBg, border: `1px solid ${T.cardBorder}`, padding:"14px 16px" }}>
-                  <div style={S.cardTop}>
-                    <p style={{ ...S.enText, color: T.enText, fontSize: 16 }}>{phraseText}</p>
-                    <button style={{ ...S.speakBtn, ...(speaking===phraseText?S.speakBtnOn:{}) }} onClick={() => speak(phraseText)}>
-                      {speaking===phraseText?"◗ sonando…":"◗ escuchar"}
-                    </button>
+                  <div style={{ ...S.cardTop, flexWrap:"wrap", gap:8 }}>
+                    <p style={{ ...S.enText, color: T.enText, fontSize: 16, flex:1 }}>{phraseText}</p>
+                    <div style={{ display:"flex", gap:6 }}>
+                      <button style={{ ...S.speakBtn, ...(speaking===phraseText?S.speakBtnOn:{}) }} onClick={() => speak(phraseText)}>
+                        {speaking===phraseText?"◗ sonando…":"◗ normal"}
+                      </button>
+                      <button style={{ ...S.speakBtn, ...(speaking===phraseText+"|slow"?S.speakBtnOn:{}) }} onClick={() => speak(phraseText, true)}>
+                        {speaking===phraseText+"|slow"?"◗ sonando…":"🐢 lento"}
+                      </button>
+                    </div>
                   </div>
                   <p style={S.ipaText}>{pronLabel}: {ph.pron || ph.ipa}</p>
                   <p style={{ ...S.esText, color: T.esText, marginBottom: 0 }}>{ph.es}</p>
