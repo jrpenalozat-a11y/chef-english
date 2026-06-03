@@ -12,7 +12,7 @@ const CURRICULUM = [
       { en: "Good evening, welcome! Do you have a reservation?", es: "Buenas noches, ¡bienvenido! ¿Tiene reserva?", ipa: "ɡʊd ˈiːvnɪŋ ˈwɛlkəm duː juː hæv ə ˌrɛzərˈveɪʃən" },
       { en: "A table for two? Right this way, please.", es: "¿Mesa para dos? Por aquí, por favor.", ipa: "ə ˈteɪbəl fɔːr tuː raɪt ðɪs weɪ pliːz" },
       { en: "Can I take your coat?", es: "¿Le tomo el abrigo?", ipa: "kæn aɪ teɪk jɔːr koʊt" },
-      { en: "Would you prefer a table inside or on the terrace?", es: "¿Prefiere mesa adentro o en la terraza?", ipa: "wʊd juː prɪˈfɜːr ə ˈteɪbəl ɪnˈsaɪd ɔːr ɒn ðə ˈtɛrəs" },
+      { en: "Would you prefer a table inside or on the terrace?", es: "¿Prefiere una mesa adentro o en la terraza?", ipa: "wʊd juː prɪˈfɜːr ə ˈteɪbəl ɪnˈsaɪd ɔːr ɒn ðə ˈtɛrəs" },
       { en: "I'll be your server tonight.", es: "Seré su mesero/a esta noche.", ipa: "aɪl biː jɔːr ˈsɜːrvər təˈnaɪt" },
     ],
   },
