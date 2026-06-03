@@ -63,7 +63,8 @@
       "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english\" commit -m \"Add slow listen button \\(0.55x speed\\) to all phrase cards\")",
       "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english\" commit -m \"Fix slow button layout: move buttons below phrase, improve voice rate\")",
       "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english\" add -A)",
-      "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english\" commit -m \"Include built dist/ folder for direct Netlify deploy \\(no build step\\)\")"
+      "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english\" commit -m \"Include built dist/ folder for direct Netlify deploy \\(no build step\\)\")",
+      "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english\" commit -m \"Slow speed 0.45x for better pronunciation practice\")"
     ]
   }
 }
