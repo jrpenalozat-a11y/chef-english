@@ -541,11 +541,17 @@ function ChefEnglishApp({ lang = "en" }) {
       voices.find((v) => meta.voiceFallback.test(v.lang));
     if (targetVoice) u.voice = targetVoice;
     u.lang = meta.voiceLang;
-    u.rate = slow ? 0.45 : 1.0;
+    u.rate = slow ? 0.5 : 1.0;
     const key = slow ? text + "|slow" : text;
     u.onstart = () => setSpeaking(key);
     u.onend = () => setSpeaking(null);
-    u.onerror = () => { setSpeaking(null); setAudioError("No se pudo reproducir el audio."); };
+    u.onerror = (e) => {
+      setSpeaking(null);
+      if (e.error !== "interrupted") {
+        setAudioError("Audio no disponible. Prueba en Chrome.");
+        setTimeout(() => setAudioError(""), 3000);
+      }
+    };
     synth.speak(u);
   };
 

@@ -71,7 +71,8 @@
       "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" commit -m \"Fix: tip instead of tip/gratuity in dictionary\")",
       "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" commit -m \"Fix 3 dictionary entries: espresso, refill, well done\")",
       "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" commit -m \"Revert espresso back to cafe espresso\")",
-      "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" commit -m \"Fix espresso translation: remove redundant cafe prefix\")"
+      "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" commit -m \"Fix espresso translation: remove redundant cafe prefix\")",
+      "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" commit -m \"Fix audio: rate 0.5 min, ignore interrupted errors, auto-dismiss error\")"
     ]
   }
 }
