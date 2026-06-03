@@ -807,7 +807,7 @@ const WORDS = [
   {en:"white wine",es:"vino blanco",ipa:"waɪt waɪn"},{en:"rosé",es:"vino rosado",ipa:"roʊˈzeɪ"},
   {en:"draft beer",es:"cerveza de barril",ipa:"dræft bɪr"},{en:"cocktail",es:"cóctel",ipa:"ˈkɒkteɪl"},
   {en:"on the rocks",es:"con hielo",ipa:"ɒn ðə rɒks"},{en:"neat",es:"solo / sin hielo",ipa:"niːt"},
-  {en:"espresso",es:"café espresso",ipa:"ɛˈsprɛsoʊ"},{en:"cappuccino",es:"capuchino",ipa:"ˌkæpʊˈtʃiːnoʊ"},
+  {en:"espresso",es:"espresso",ipa:"ɛˈsprɛsoʊ"},{en:"cappuccino",es:"capuchino",ipa:"ˌkæpʊˈtʃiːnoʊ"},
   {en:"receipt",es:"boleta / comprobante",ipa:"rɪˈsiːt"},{en:"cash",es:"efectivo",ipa:"kæʃ"},
   {en:"credit card",es:"tarjeta de crédito",ipa:"ˈkrɛdɪt kɑːrd"},{en:"change",es:"vuelto",ipa:"tʃeɪndʒ"},
   {en:"complimentary",es:"cortesía de la casa",ipa:"ˌkɒmplɪˈmɛntəri"},{en:"takeaway",es:"para llevar",ipa:"ˈteɪkəweɪ"},
