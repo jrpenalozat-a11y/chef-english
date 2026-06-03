@@ -68,7 +68,8 @@
       "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" add -A)",
       "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" commit -m \"Add vercel.json for SPA routing\")",
       "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" push origin master)",
-      "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" commit -m \"Fix: tip instead of tip/gratuity in dictionary\")"
+      "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" commit -m \"Fix: tip instead of tip/gratuity in dictionary\")",
+      "Bash(\"C:\\\\Program Files\\\\Git\\\\bin\\\\git.exe\" commit -m \"Fix 3 dictionary entries: espresso, refill, well done\")"
     ]
   }
 }
