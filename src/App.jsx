@@ -19,7 +19,7 @@ const CURRICULUM = [
   {
     day: 2, theme: "Tomar el pedido",
     phrases: [
-      { en: "Are you ready to order, or do you need a few more minutes?", es: "¿Listos para ordenar o necesitan unos minutos más?", ipa: "ɑːr juː ˈrɛdi tuː ˈɔːrdər ɔːr duː juː niːd ə fjuː mɔːr ˈmɪnɪts" },
+      { en: "Are you ready to order, or do you need a few more minutes?", es: "¿Están listos para ordenar o necesitan unos minutos más?", ipa: "ɑːr juː ˈrɛdi tuː ˈɔːrdər ɔːr duː juː niːd ə fjuː mɔːr ˈmɪnɪts" },
       { en: "Can I start you off with something to drink?", es: "¿Empezamos con algo de tomar?", ipa: "kæn aɪ stɑːrt juː ɒf wɪð ˈsʌmθɪŋ tuː drɪŋk" },
       { en: "How would you like your steak cooked?", es: "¿Cómo desea su carne?", ipa: "haʊ wʊd juː laɪk jɔːr steɪk kʊkt" },
       { en: "Would you like to hear today's specials?", es: "¿Le gustaría conocer las sugerencias del día?", ipa: "wʊd juː laɪk tuː hɪər təˈdeɪz ˈspɛʃəlz" },
@@ -40,7 +40,7 @@ const CURRICULUM = [
     day: 4, theme: "Alergias y dietas",
     phrases: [
       { en: "Do you have any food allergies or dietary restrictions?", es: "¿Tiene alguna alergia o restricción alimentaria?", ipa: "duː juː hæv ˈɛni fuːd ˈælərdʒiz ɔːr ˈdaɪətɛri rɪˈstrɪkʃənz" },
-      { en: "This dish is gluten-free.", es: "Este plato es libre de gluten.", ipa: "ðɪs dɪʃ ɪz ˈɡluːtən friː" },
+      { en: "This dish is gluten-free.", es: "Este plato es sin gluten.", ipa: "ðɪs dɪʃ ɪz ˈɡluːtən friː" },
       { en: "We can prepare it without nuts.", es: "Podemos prepararlo sin frutos secos.", ipa: "wiː kæn prɪˈpɛər ɪt wɪˈðaʊt nʌts" },
       { en: "Is this suitable for vegetarians?", es: "¿Esto es apto para vegetarianos?", ipa: "ɪz ðɪs ˈsuːtəbəl fɔːr ˌvɛdʒəˈtɛəriənz" },
       { en: "Let me check with the kitchen for you.", es: "Permítame consultarlo con la cocina.", ipa: "lɛt miː tʃɛk wɪð ðə ˈkɪtʃən fɔːr juː" },
@@ -92,7 +92,7 @@ const CURRICULUM = [
       { en: "What can I get started for you?", es: "¿Qué le preparo?", ipa: "wɒt kæn aɪ ɡɛt ˈstɑːrtɪd fɔːr juː" },
       { en: "Would you like that on the rocks or neat?", es: "¿Lo desea con hielo o solo?", ipa: "wʊd juː laɪk ðæt ɒn ðə rɒks ɔːr niːt" },
       { en: "Can I see some ID, please?", es: "¿Me muestra una identificación, por favor?", ipa: "kæn aɪ siː sʌm ˌaɪˈdiː pliːz" },
-      { en: "Last call for drinks.", es: "Última ronda de tragos.", ipa: "lɑːst kɔːl fɔːr drɪŋks" },
+      { en: "Last call for drinks.", es: "Último llamado para pedir bebidas.", ipa: "lɑːst kɔːl fɔːr drɪŋks" },
       { en: "This one's on the house.", es: "Esta va por la casa.", ipa: "ðɪs wʌnz ɒn ðə haʊs" },
     ],
   },
@@ -161,7 +161,7 @@ const CURRICULUM = [
     phrases: [
       { en: "Have you dined with us before?", es: "¿Nos ha visitado antes?", ipa: "hæv juː daɪnd wɪð ʌs bɪˈfɔːr" },
       { en: "Our menu is divided into starters, mains and desserts.", es: "Nuestra carta se divide en entradas, principales y postres.", ipa: "ˈaʊər ˈmɛnjuː ɪz dɪˈvaɪdɪd ˈɪntuː ˈstɑːrtərz meɪnz ænd dɪˈzɜːrts" },
-      { en: "The dishes marked here are our chef's signatures.", es: "Los platos marcados aquí son los de autor del chef.", ipa: "ðə ˈdɪʃɪz mɑːrkt hɪər ɑːr ˈaʊər ʃɛfs ˈsɪɡnətʃərz" },
+      { en: "The dishes marked here are our chef's signatures.", es: "Los platos marcados son las especialidades del chef.", ipa: "ðə ˈdɪʃɪz mɑːrkt hɪər ɑːr ˈaʊər ʃɛfs ˈsɪɡnətʃərz" },
       { en: "Everything is freshly prepared, so it may take a little time.", es: "Todo se prepara al momento, puede tomar un poco de tiempo.", ipa: "ˈɛvriθɪŋ ɪz ˈfrɛʃli prɪˈpɛərd soʊ ɪt meɪ teɪk ə ˈlɪtəl taɪm" },
       { en: "Please let me know if you have any questions.", es: "Avíseme si tiene alguna pregunta.", ipa: "pliːz lɛt miː noʊ ɪf juː hæv ˈɛni ˈkwɛstʃənz" },
     ],
@@ -230,7 +230,7 @@ const CURRICULUM = [
     day: 23, theme: "Ofrecer postre y café",
     phrases: [
       { en: "Would you care to see the dessert menu?", es: "¿Desea ver la carta de postres?", ipa: "wʊd juː kɛər tuː siː ðə dɪˈzɜːrt ˈmɛnjuː" },
-      { en: "Can I tempt you with something sweet?", es: "¿Le tiento con algo dulce?", ipa: "kæn aɪ tɛmpt juː wɪð ˈsʌmθɪŋ swiːt" },
+      { en: "Can I tempt you with something sweet?", es: "¿Le ofrezco algo dulce?", ipa: "kæn aɪ tɛmpt juː wɪð ˈsʌmθɪŋ swiːt" },
       { en: "Would you like coffee or tea with that?", es: "¿Desea café o té con eso?", ipa: "wʊd juː laɪk ˈkɒfi ɔːr tiː wɪð ðæt" },
       { en: "The desserts are perfect for sharing.", es: "Los postres son perfectos para compartir.", ipa: "ðə dɪˈzɜːrts ɑːr ˈpɜːrfɪkt fɔːr ˈʃɛərɪŋ" },
       { en: "How about a coffee to finish?", es: "¿Qué tal un café para terminar?", ipa: "haʊ əˈbaʊt ə ˈkɒfi tuː ˈfɪnɪʃ" },
