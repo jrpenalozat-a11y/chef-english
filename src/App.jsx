@@ -770,7 +770,7 @@ const WORDS = [
   {en:"reservation",es:"reserva",ipa:"ˌrɛzərˈveɪʃən"},{en:"appetizer",es:"entrada / aperitivo",ipa:"ˈæpɪtaɪzər"},
   {en:"main course",es:"plato principal",ipa:"meɪn kɔːrs"},{en:"dessert",es:"postre",ipa:"dɪˈzɜːrt"},
   {en:"beverage",es:"bebida",ipa:"ˈbɛvərɪdʒ"},{en:"menu",es:"carta / menú",ipa:"ˈmɛnjuː"},
-  {en:"bill / check",es:"cuenta",ipa:"bɪl / tʃɛk"},{en:"tip / gratuity",es:"propina",ipa:"tɪp / ɡrəˈtjuːɪti"},
+  {en:"bill / check",es:"cuenta",ipa:"bɪl / tʃɛk"},{en:"tip",es:"propina",ipa:"tɪp"},
   {en:"waiter",es:"mesero / garzón",ipa:"ˈweɪtər"},{en:"host",es:"anfitrión / recepcionista",ipa:"hoʊst"},
   {en:"chef",es:"chef / cocinero",ipa:"ʃɛf"},{en:"kitchen",es:"cocina",ipa:"ˈkɪtʃən"},
   {en:"table",es:"mesa",ipa:"ˈteɪbəl"},{en:"booth",es:"reservado / cabina",ipa:"buːθ"},
