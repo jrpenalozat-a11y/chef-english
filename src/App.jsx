@@ -29,7 +29,7 @@ const CURRICULUM = [
   {
     day: 3, theme: "Describir platos",
     phrases: [
-      { en: "It's a grilled salmon served with seasonal vegetables.", es: "Es salmón a la parrilla con verduras de estación.", ipa: "ɪts ə ɡrɪld ˈsæmən sɜːrvd wɪð ˈsiːzənəl ˈvɛdʒtəbəlz" },
+      { en: "It's a grilled salmon served with seasonal vegetables.", es: "Es salmón a la parrilla con verduras de temporada.", ipa: "ɪts ə ɡrɪld ˈsæmən sɜːrvd wɪð ˈsiːzənəl ˈvɛdʒtəbəlz" },
       { en: "This dish is mildly spicy.", es: "Este plato es ligeramente picante.", ipa: "ðɪs dɪʃ ɪz ˈmaɪldli ˈspaɪsi" },
       { en: "The sauce is made in house.", es: "La salsa es de elaboración propia.", ipa: "ðə sɔːs ɪz meɪd ɪn haʊs" },
       { en: "It comes with a side of mashed potatoes.", es: "Viene con una guarnición de puré de papas.", ipa: "ɪt kʌmz wɪð ə saɪd ɒv mæʃt pəˈteɪtoʊz" },
@@ -40,7 +40,7 @@ const CURRICULUM = [
     day: 4, theme: "Alergias y dietas",
     phrases: [
       { en: "Do you have any food allergies or dietary restrictions?", es: "¿Tiene alguna alergia o restricción alimentaria?", ipa: "duː juː hæv ˈɛni fuːd ˈælərdʒiz ɔːr ˈdaɪətɛri rɪˈstrɪkʃənz" },
-      { en: "This dish is gluten-free.", es: "Este plato es sin gluten.", ipa: "ðɪs dɪʃ ɪz ˈɡluːtən friː" },
+      { en: "This dish is gluten-free.", es: "Este plato no contiene gluten.", ipa: "ðɪs dɪʃ ɪz ˈɡluːtən friː" },
       { en: "We can prepare it without nuts.", es: "Podemos prepararlo sin frutos secos.", ipa: "wiː kæn prɪˈpɛər ɪt wɪˈðaʊt nʌts" },
       { en: "Is this suitable for vegetarians?", es: "¿Esto es apto para vegetarianos?", ipa: "ɪz ðɪs ˈsuːtəbəl fɔːr ˌvɛdʒəˈtɛəriənz" },
       { en: "Let me check with the kitchen for you.", es: "Permítame consultarlo con la cocina.", ipa: "lɛt miː tʃɛk wɪð ðə ˈkɪtʃən fɔːr juː" },
@@ -180,7 +180,7 @@ const CURRICULUM = [
     day: 18, theme: "Anotar el pedido con detalle",
     phrases: [
       { en: "And for your starter?", es: "¿Y de entrada?", ipa: "ænd fɔːr jɔːr ˈstɑːrtər" },
-      { en: "Would you like that as a starter or a main?", es: "¿Lo desea de entrada o de principal?", ipa: "wʊd juː laɪk ðæt æz ə ˈstɑːrtər ɔːr ə meɪn" },
+      { en: "Would you like that as a starter or a main?", es: "¿Lo desea como entrada o como plato principal?", ipa: "wʊd juː laɪk ðæt æz ə ˈstɑːrtər ɔːr ə meɪn" },
       { en: "Any sides with that?", es: "¿Alguna guarnición con eso?", ipa: "ˈɛni saɪdz wɪð ðæt" },
       { en: "Let me read that back to you.", es: "Permítame repetirle el pedido.", ipa: "lɛt miː riːd ðæt bæk tuː juː" },
       { en: "Would you like everything brought out together?", es: "¿Desea que traigamos todo junto?", ipa: "wʊd juː laɪk ˈɛvriθɪŋ brɔːt aʊt təˈɡɛðər" },
@@ -191,7 +191,7 @@ const CURRICULUM = [
     phrases: [
       { en: "Of course, I can leave the onions off.", es: "Por supuesto, puedo dejarlo sin cebolla.", ipa: "ɒv kɔːrs aɪ kæn liːv ðiː ˈʌnjənz ɒf" },
       { en: "Would you like the dressing on the side?", es: "¿Desea el aderezo aparte?", ipa: "wʊd juː laɪk ðə ˈdrɛsɪŋ ɒn ðə saɪd" },
-      { en: "We can make that a smaller portion for the child.", es: "Podemos hacerlo en porción más pequeña para el niño.", ipa: "wiː kæn meɪk ðæt ə ˈsmɔːlər ˈpɔːrʃən fɔːr ðə tʃaɪld" },
+      { en: "We can make that a smaller portion for the child.", es: "Podemos hacerlo en una porción más pequeña para el niño.", ipa: "wiː kæn meɪk ðæt ə ˈsmɔːlər ˈpɔːrʃən fɔːr ðə tʃaɪld" },
       { en: "Let me check if the kitchen can do that.", es: "Déjeme ver si la cocina puede hacerlo.", ipa: "lɛt miː tʃɛk ɪf ðə ˈkɪtʃən kæn duː ðæt" },
       { en: "Absolutely, no problem at all.", es: "Claro que sí, ningún problema.", ipa: "ˈæbsəluːtli noʊ ˈprɒbləm æt ɔːl" },
     ],
@@ -300,7 +300,7 @@ const CURRICULUM = [
     day: 30, theme: "Despedir al comensal",
     phrases: [
       { en: "Thank you for joining us tonight.", es: "Gracias por acompañarnos esta noche.", ipa: "θæŋk juː fɔːr ˈdʒɔɪnɪŋ ʌs təˈnaɪt" },
-      { en: "I hope to see you again soon.", es: "Espero verle pronto de nuevo.", ipa: "aɪ hoʊp tuː siː juː əˈɡɛn suːn" },
+      { en: "I hope to see you again soon.", es: "Espero verle de nuevo pronto.", ipa: "aɪ hoʊp tuː siː juː əˈɡɛn suːn" },
       { en: "Mind the step on your way out.", es: "Cuidado con el escalón a la salida.", ipa: "maɪnd ðə stɛp ɒn jɔːr weɪ aʊt" },
       { en: "It was lovely having you with us.", es: "Fue un gusto tenerle con nosotros.", ipa: "ɪt wɒz ˈlʌvli ˈhævɪŋ juː wɪð ʌs" },
       { en: "Have a wonderful evening!", es: "¡Que tenga una excelente noche!", ipa: "hæv ə ˈwʌndərfəl ˈiːvnɪŋ" },
