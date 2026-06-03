@@ -1,0 +1,24 @@
+{
+  "name": "Garzón Bilingüe",
+  "short_name": "Garzón Bilingüe",
+  "description": "Aprende inglés para el servicio de mesas en 30 días",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#e3d4bd",
+  "theme_color": "#7a3b1d",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
