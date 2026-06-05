@@ -18,6 +18,42 @@
         "--strictPort"
       ],
       "port": 5174
+    },
+    {
+      "name": "senderismo-chile-dev",
+      "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
+      "runtimeArgs": [
+        "node_modules\\vite\\bin\\vite.js",
+        "C:\\Users\\jpena\\Desktop\\senderismo-chile",
+        "--port",
+        "5175",
+        "--strictPort"
+      ],
+      "port": 5175
+    },
+    {
+      "name": "sommelier-alternativo-chile-dev",
+      "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
+      "runtimeArgs": [
+        "C:\\Users\\jpena\\Desktop\\sommelier-alternativo-chile\\node_modules\\vite\\bin\\vite.js",
+        "C:\\Users\\jpena\\Desktop\\sommelier-alternativo-chile",
+        "--port",
+        "5176",
+        "--strictPort"
+      ],
+      "port": 5176
+    },
+    {
+      "name": "protocolos-servicio-dev",
+      "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
+      "runtimeArgs": [
+        "node_modules\\vite\\bin\\vite.js",
+        "C:\\Users\\jpena\\Desktop\\protocolos-servicio",
+        "--port",
+        "5177",
+        "--strictPort"
+      ],
+      "port": 5177
     }
   ]
 }
