@@ -1524,7 +1524,9 @@ document.addEventListener("click", (e)=>{
     const i=+el.getAttribute("data-idx");
     const was=state.dict[state.lang][i];
     state.dict[state.lang][i]=!was; if(!was) bell(); save("gbDict",state.dict);
+    const dc=dictStats();
     render();
+    if(!was && dc.done===dc.total){ celebrate("dict"); }
     return;
   }
   if(act==="ans"){
@@ -1532,9 +1534,11 @@ document.addEventListener("click", (e)=>{
     const chosen=el.getAttribute("data-opt");
     const correct=tphrase(D().words[q.wi]);
     q.answered={chosen,correct};
-    if(chosen===correct){ if(!state.quizDone[state.lang][q.wi]){ state.quizDone[state.lang][q.wi]=true; save("gbQuiz",state.quizDone); } bell(); }
+    let finished=false;
+    if(chosen===correct){ if(!state.quizDone[state.lang][q.wi]){ state.quizDone[state.lang][q.wi]=true; save("gbQuiz",state.quizDone); } bell(); if(quizPool().length===0) finished=true; }
     else tick();
     render();
+    if(finished) celebrate("quiz");
     return;
   }
   if(act==="qnext"){ nextQ(); return; }
@@ -1612,13 +1616,21 @@ const CEL = {
 };
 const pickFun = a => a[Math.floor(Math.random()*a.length)];
 
-function celebrate(){
+function celebrate(kind){
   const st=courseStats();
   const cel=document.getElementById("cel");
   const alt=document.getElementById("celAlt");
   const sis=document.getElementById("celSister");
   let title="¡Felicidades!", emoji="🎉", msg;
-  if(st.pct>=100){
+  if(kind==="dict"){
+    emoji="📚"; title="¡Diccionario completo!";
+    msg="¡Aprendiste las "+dictStats().total+" palabras del diccionario de "+D().meta.name+"! Tu vocabulario quedó afiladísimo. ✨";
+    alt.style.display="none"; sis.style.display="none";
+  } else if(kind==="quiz"){
+    emoji="🏅"; title="¡Evaluación superada!";
+    msg="¡Acertaste todas las palabras de la evaluación de "+D().meta.name+"! Eres una máquina del servicio. 🔥";
+    alt.style.display="none"; sis.style.display="none";
+  } else if(st.pct>=100){
     emoji="🏆"; title="¡Curso completo!";
     msg="¡Completaste TODO el curso de "+D().meta.name+"! Eres un crack. 🌟 Anímate con otro idioma, prueba Protocolos de Servicio, o repite este para ganar más seguridad.";
     alt.style.display=""; sis.style.display="";
