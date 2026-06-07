@@ -1259,6 +1259,7 @@ function render(){
         </div>
       </div>
       <div class="hbtns">
+        <button class="icon-btn" data-act="share" title="Compartir" aria-label="Compartir la app">📤</button>
         <button class="icon-btn" data-act="sound" title="Sonido">${state.sound?"🔊":"🔇"}</button>
         <button class="icon-btn" data-act="dark" title="Tema">${state.dark?"☀":"☾"}</button>
         <div class="streak"><div class="n">${st.done}</div><div class="l">frases<br>dominadas</div></div>
@@ -1497,6 +1498,7 @@ document.addEventListener("click", (e)=>{
   if(act==="motive"){ nextMotive(); tick(); return; }
   if(act==="dark"){ state.dark=!state.dark; save("gbDark",state.dark); render(); return; }
   if(act==="sound"){ state.sound=!state.sound; save("gbSound",state.sound); render(); return; }
+  if(act==="share"){ shareApp(); return; }
   if(act==="install"){
     if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.finally(()=>{ deferredPrompt=null; render(); }); }
     else {
@@ -1662,6 +1664,18 @@ render();
 setInterval(()=>{ const cel=document.getElementById("cel"); if(!cel || !cel.classList.contains("show")) nextMotive(); }, 11000);
 // precarga de voces
 try{ window.speechSynthesis && (window.speechSynthesis.onvoiceschanged=()=>{}); window.speechSynthesis && window.speechSynthesis.getVoices(); }catch{}
+
+// Compartir la app (Web Share API + respaldo WhatsApp)
+async function shareApp(){
+  tick();
+  const url="https://chef-english.vercel.app/";
+  const texto="🗣️ Garzón Bilingüe — aprende inglés, portugués y chino para atender mesas. Curso de 30 días, diccionario y quiz, ¡gratis! 👉";
+  if(navigator.share){
+    try{ await navigator.share({ title:"Garzón Bilingüe", text:texto, url }); return; }
+    catch(e){ if(e && e.name==="AbortError") return; }
+  }
+  window.open("https://wa.me/?text="+encodeURIComponent(texto+" "+url), "_blank");
+}
 
 // Instalación PWA (botón "Instalar app")
 let deferredPrompt=null;
