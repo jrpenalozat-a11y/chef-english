@@ -1211,6 +1211,7 @@ function courseStats(){
 }
 function dictStats(){ const o=state.dict[state.lang]||{}; const done=Object.keys(o).filter(k=>o[k]).length; const total=D().words.length; return {done,total,pct: total?Math.round(done/total*100):0}; }
 function quizScore(){ const o=state.quizDone[state.lang]||{}; const done=Object.keys(o).filter(k=>o[k]).length; const total=D().words.length; return {done,total,pct: total?Math.round(done/total*100):0}; }
+function totalStats(){ const c=courseStats(), dc=dictStats(), q=quizScore(); const done=c.done+dc.done+q.done, total=c.total+dc.total+q.total; return {done,total,pct: total?Math.round(done/total*100):0}; }
 function barColor(p){ return p>=67?"#37d39b":p>=34?"#ffb84d":"#ff5c5c"; }
 const mainTerm = t => String(t).split("/")[0].split("(")[0].trim();   // término principal para TTS
 function quizPool(){ const dn=state.quizDone[state.lang]||{}; return D().words.map((w,i)=>i).filter(i=>!dn[i]); }
@@ -1241,7 +1242,7 @@ const root=()=>document.getElementById("root");
 
 function render(){
   document.body.classList.toggle("dark", state.dark);
-  const m=D().meta; const st=courseStats();
+  const m=D().meta; const st=totalStats();
   let body="";
   if(state.view==="curso") body=viewCurso();
   else if(state.view==="dict") body=viewDict();
@@ -1262,7 +1263,7 @@ function render(){
         <button class="icon-btn" data-act="share" title="Compartir" aria-label="Compartir la app">📤</button>
         <button class="icon-btn" data-act="sound" title="Sonido">${state.sound?"🔊":"🔇"}</button>
         <button class="icon-btn" data-act="dark" title="Tema">${state.dark?"☀":"☾"}</button>
-        <div class="streak"><div class="n">${st.done}</div><div class="l">frases<br>dominadas</div></div>
+        <div class="streak"><div class="n">${st.done}</div><div class="l">puntos<br>dominados</div></div>
       </div>
     </header>
 
@@ -1617,12 +1618,16 @@ const CEL = {
 const pickFun = a => a[Math.floor(Math.random()*a.length)];
 
 function celebrate(kind){
-  const st=courseStats();
+  const st=totalStats();
   const cel=document.getElementById("cel");
   const alt=document.getElementById("celAlt");
   const sis=document.getElementById("celSister");
   let title="¡Felicidades!", emoji="🎉", msg;
-  if(kind==="dict"){
+  if(st.pct>=100){
+    emoji="🏆"; title="¡Todo completo!";
+    msg="¡Completaste el curso, el diccionario y la evaluación de "+D().meta.name+"! Eres una leyenda. 🌟 Anímate con otro idioma o prueba Protocolos de Servicio.";
+    alt.style.display=""; sis.style.display="";
+  } else if(kind==="dict"){
     emoji="📚"; title="¡Diccionario completo!";
     msg="¡Aprendiste las "+dictStats().total+" palabras del diccionario de "+D().meta.name+"! Tu vocabulario quedó afiladísimo. ✨";
     alt.style.display="none"; sis.style.display="none";
@@ -1630,13 +1635,11 @@ function celebrate(kind){
     emoji="🏅"; title="¡Evaluación superada!";
     msg="¡Acertaste todas las palabras de la evaluación de "+D().meta.name+"! Eres una máquina del servicio. 🔥";
     alt.style.display="none"; sis.style.display="none";
-  } else if(st.pct>=100){
-    emoji="🏆"; title="¡Curso completo!";
-    msg="¡Completaste TODO el curso de "+D().meta.name+"! Eres un crack. 🌟 Anímate con otro idioma, prueba Protocolos de Servicio, o repite este para ganar más seguridad.";
-    alt.style.display=""; sis.style.display="";
   } else {
     alt.style.display="none"; sis.style.display="none";
-    if(st.pct>=90) { emoji="🔥"; msg=pickFun(CEL.m90); }
+    const c=courseStats();
+    if(c.pct>=100){ emoji="🎊"; title="¡30 días completos!"; msg="¡Terminaste los 30 días del curso de "+D().meta.name+"! Te faltan el diccionario y la evaluación para el 100%. 💪"; }
+    else if(st.pct>=90){ emoji="🔥"; msg=pickFun(CEL.m90); }
     else if(st.pct>=75) msg=pickFun(CEL.m75);
     else if(st.pct>=50) msg=pickFun(CEL.m50);
     else if(st.pct>=25) msg=pickFun(CEL.m25);
