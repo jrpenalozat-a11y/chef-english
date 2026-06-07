@@ -1,66 +1,43 @@
-# Chef's English
+# Garzón Bilingüe
 
-Aplicación web para aprender inglés orientada al **servicio de mesas en gastronomía**.
+**Academia de bolsillo para personal de servicio gastronómico.** Aprende los idiomas que necesitas para atender mesas: **inglés, portugués y chino**. Instalable en el celular y funciona **sin conexión** (PWA).
 
-## ¿Qué es?
+🔗 **App:** https://chef-english.vercel.app
 
-Un curso de 30 días con 5 frases por día, todas enfocadas en situaciones reales del mundo gastronómico: recibir clientes, tomar pedidos, describir platos, manejar quejas, cerrar la cuenta y más.
+## Qué incluye
 
-Cada frase incluye:
-- Texto en inglés
-- Transcripción fonética (IPA) como guía de pronunciación
-- Traducción al español
-- Botón para **escuchar** la frase con síntesis de voz
+Para cada idioma (en / pt / zh):
 
-### Modos de uso
+- **📖 Curso** — 30 días × 5 frases reales del servicio: recibir, tomar el pedido, describir platos, alergias, quejas, la cuenta, despedir, y más. Cada frase con texto, **pronunciación guiada**, traducción al español y botón para **escuchar** (normal o despacio).
+- **📚 Diccionario** — ~94 palabras clave con buscador y audio.
+- **🏠 En el local** — indicaciones, direcciones y emergencias.
+- **🧠 Evaluación** — quiz de opción múltiple para practicar; al acertar suma a tu avance.
+- **📊 Mi Avance** — panel con tu progreso total y por área.
 
-- **Aprender** — lee cada frase, escúchala y márcala como dominada cuando la sepas de memoria.
-- **Practicar** — flashcards español → inglés: ve la frase en español, intenta traducirla mentalmente y toca para revelar la respuesta en inglés.
+Modos: **Aprender** (lee y escucha cada frase, márcala cuando la domines) y **Practicar** (flashcards español → idioma). El progreso se guarda solo en tu navegador.
 
-El progreso se guarda automáticamente en el navegador (`localStorage`).
+## Tecnología
+
+PWA de **un solo archivo** (`index.html`) en **HTML + CSS + JavaScript puro**, sin frameworks ni paso de compilación. Voz con la **Web Speech API** del navegador. Deploy estático en Vercel/Netlify.
+
+> Para oír la pronunciación, el dispositivo necesita tener instalada la **voz del idioma** (en los teléfonos suele venir o se descarga desde Ajustes → Idioma/Voz). Si falta, la app avisa en vez de leerlo con otra voz.
+
+## Cómo verlo en local
+
+No requiere instalación ni compilación. Basta un servidor estático en la raíz:
+
+```bash
+npx serve .
+```
+
+Y abre la dirección que indique (p. ej. http://localhost:3000).
+
+## Estructura
+
+- `index.html` — toda la app (datos + estilos + lógica).
+- `sw.js`, `manifest.json`, `icon-*.png` — PWA (offline e instalable).
+- `legacy-react/` — versión anterior en React (archivada, no se usa).
 
 ---
 
-## Cómo ejecutar en local
-
-### Requisitos previos
-
-- [Node.js](https://nodejs.org/) v18 o superior
-- npm (incluido con Node.js)
-
-### Pasos
-
-```bash
-# 1. Entra a la carpeta del proyecto
-cd chef-english
-
-# 2. Instala las dependencias
-npm install
-
-# 3. Inicia el servidor de desarrollo
-npm run dev
-```
-
-Abre tu navegador en **http://localhost:5173**
-
-### Compilar para producción
-
-```bash
-npm run build
-npm run preview
-```
-
-Los archivos listos para subir a un servidor quedan en la carpeta `dist/`.
-
----
-
-## Tecnologías
-
-- [React 18](https://react.dev/)
-- [Vite 5](https://vitejs.dev/)
-- Web Speech API (síntesis de voz nativa del navegador)
-- Google Fonts: Fraunces + Outfit
-
-## Notas sobre el audio
-
-El botón **◗ escuchar** usa la Web Speech API integrada en el navegador. Funciona en Chrome, Edge y Safari modernos. Firefox puede tener voces limitadas según el sistema operativo.
+Creado por **Jaime Ricardo Peñaloza** · Santiago, Chile.

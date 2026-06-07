@@ -1,44 +1,1677 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Garzón Bilingüe</title>
-    <!-- PWA -->
-    <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#7a3b1d" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Chef's English" />
-    <link rel="apple-touch-icon" href="/icon-192.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Outfit:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      * { box-sizing: border-box; margin: 0; padding: 0; }
-      html, body { min-height: 100%; }
-      body {
-        background: radial-gradient(circle at 20% 0%, #f4e6d4 0%, #ece0cf 40%, #e3d4bd 100%);
-        background-attachment: fixed;
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Garzón Bilingüe — Idiomas para atender mesas</title>
+<meta name="description" content="Academia de bolsillo para personal de servicio: aprende inglés, portugués y chino para atender mesas. 30 días, diccionario y frases del local. Funciona offline." />
+<link rel="manifest" href="/manifest.json" />
+<meta name="theme-color" content="#0f0d1a" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Garzón Bilingüe" />
+<link rel="apple-touch-icon" href="/icon-192.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  /* ===== Tokens: modo claro por defecto, .dark = noche ===== */
+  :root{
+    --bg1:#f3f1fb; --bg2:#eae6f7; --bg3:#f6eef0;
+    --surface:#ffffff; --surface2:#f1edfa; --border:#e7e1f3;
+    --text:#241f33; --soft:#6b6388; --target:#1a1530; --es:#5c5478; --pron:#8a7fb0;
+    --accent:#6d4fff; --accent2:#0ea7cc; --on-accent:#ffffff;
+    --shadow:0 6px 22px rgba(40,30,80,.08);
+    --shadow-lg:0 18px 50px rgba(40,30,80,.18);
+    --track:rgba(0,0,0,.07); --dotEmpty:rgba(0,0,0,.12);
+  }
+  body.dark{
+    --bg1:#0f0d1a; --bg2:#141022; --bg3:#1a1226;
+    --surface:#181426; --surface2:#221c34; --border:#2e2742;
+    --text:#f3f0ff; --soft:#a89fc7; --target:#ffffff; --es:#bcb2dc; --pron:#9b8fd0;
+    --accent:#8b6bff; --accent2:#3ccdf0; --on-accent:#ffffff;
+    --shadow:0 8px 26px rgba(0,0,0,.35);
+    --shadow-lg:0 20px 60px rgba(0,0,0,.5);
+    --track:rgba(255,255,255,.09); --dotEmpty:rgba(255,255,255,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{min-height:100%;}
+  body{
+    font-family:'Inter',system-ui,sans-serif; color:var(--text);
+    background:
+      radial-gradient(1100px 600px at 12% -8%, var(--bg3) 0%, transparent 55%),
+      radial-gradient(900px 500px at 100% 0%, var(--bg2) 0%, transparent 50%),
+      var(--bg1);
+    background-attachment:fixed; -webkit-tap-highlight-color:transparent;
+    transition:background .4s ease, color .3s ease;
+    padding-bottom:48px;
+  }
+  h1,h2,h3,.disp{font-family:'Sora',system-ui,sans-serif;}
+  ::selection{background:var(--accent);color:#fff;}
+  ::-webkit-scrollbar{height:7px;width:7px;}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:9px;}
+  .wrap{max-width:780px;margin:0 auto;width:100%;overflow-x:hidden;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+
+  /* ===== Header ===== */
+  header{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:18px 16px 12px;}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0;flex:1;}
+  .brand>div{min-width:0;overflow:hidden;}
+  .logo{width:44px;height:44px;border-radius:13px;flex-shrink:0;display:grid;place-items:center;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 8px 22px rgba(109,79,255,.35);}
+  .brand h1{font-size:22px;font-weight:800;letter-spacing:-.4px;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .brand .sub{font-size:11.5px;color:var(--soft);margin-top:3px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .hbtns{display:flex;align-items:center;gap:7px;flex-shrink:0;}
+  .icon-btn{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:16px;
+    background:var(--surface2);border:1px solid var(--border);color:var(--soft);transition:all .2s;}
+  .icon-btn:active{transform:scale(.92);}
+  .streak{text-align:center;background:var(--surface2);border:1px solid var(--border);border-radius:13px;
+    padding:6px 13px;flex-shrink:0;box-shadow:var(--shadow);}
+  .streak .n{font-family:'Sora';font-weight:800;font-size:21px;line-height:1;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .streak .l{font-size:8.5px;color:var(--soft);text-transform:uppercase;letter-spacing:.5px;line-height:1.1;margin-top:2px;font-weight:600;}
+
+  /* ===== Progress ===== */
+  .progress{padding:0 16px 12px;display:flex;align-items:center;gap:12px;}
+  .bar{flex:1;height:9px;background:var(--track);border-radius:99px;overflow:hidden;}
+  .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .6s cubic-bezier(.4,0,.2,1);}
+  .ptxt{font-size:12px;color:var(--soft);white-space:nowrap;font-weight:600;}
+
+  /* ===== Nav ===== */
+  nav{display:flex;gap:7px;padding:0 16px 14px;overflow-x:auto;scrollbar-width:none;}
+  nav::-webkit-scrollbar{display:none;}
+  .navb{flex:0 0 auto;padding:9px 15px;border-radius:12px;font-weight:600;font-size:13.5px;white-space:nowrap;
+    background:var(--surface2);border:1px solid var(--border);color:var(--soft);transition:all .2s;}
+  .navb.on{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;box-shadow:0 8px 20px rgba(109,79,255,.32);}
+  .navb.install{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;box-shadow:0 8px 20px rgba(14,167,204,.34);}
+
+  /* ===== Banner motivacional ===== */
+  .motive{display:flex;align-items:center;gap:10px;margin:0 16px 12px;padding:11px 15px;border-radius:14px;
+    background:linear-gradient(120deg,rgba(109,79,255,.16),rgba(14,167,204,.16));border:1px solid var(--border);
+    font-size:13.5px;font-weight:600;color:var(--text);cursor:pointer;transition:transform .15s;line-height:1.4;}
+  .motive:active{transform:scale(.99);}
+  .motive .mi{font-size:17px;flex-shrink:0;}
+
+  /* ===== Invitación app hermana (Protocolos de Servicio · turquesa) ===== */
+  .sister{display:flex;align-items:center;gap:13px;margin:24px 16px 0;padding:15px 16px;border-radius:18px;text-decoration:none;
+    background:linear-gradient(120deg,rgba(45,212,191,.16),rgba(45,212,191,.05));border:1px solid rgba(45,212,191,.5);
+    color:var(--text);transition:transform .15s;}
+  .sister:active{transform:scale(.99);}
+  .sister-ic{font-size:26px;flex-shrink:0;width:48px;height:48px;border-radius:14px;display:grid;place-items:center;
+    background:linear-gradient(135deg,#2dd4bf,#14b8a6);box-shadow:0 6px 18px rgba(45,212,191,.45);}
+  .sister-tx{display:flex;flex-direction:column;gap:3px;font-size:13px;line-height:1.35;min-width:0;}
+  .sister-tx b.t{font-size:14.5px;font-weight:700;}
+  .sister-tx .d{color:var(--soft);}
+  .sister-tx .go{color:#14b8a6;font-weight:700;}
+
+  /* ===== Day chips ===== */
+  .days{display:grid;grid-template-columns:repeat(auto-fill,minmax(124px,1fr));gap:9px;padding:2px 16px 14px;}
+  .day{position:relative;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:12px 13px;
+    display:flex;flex-direction:column;gap:7px;transition:all .2s;box-shadow:var(--shadow);}
+  .day .check{position:absolute;top:9px;right:9px;width:20px;height:20px;border-radius:50%;background:#37d39b;color:#04140d;display:grid;place-items:center;font-size:12px;font-weight:800;box-shadow:0 2px 8px rgba(55,211,155,.5);}
+  .day:active{transform:scale(.97);}
+  .day.on{background:linear-gradient(140deg,var(--accent),var(--accent2));border-color:transparent;box-shadow:var(--shadow-lg);}
+  .day.done{border-color:var(--accent);}
+  .day .dn{font-family:'Sora';font-weight:700;font-size:14.5px;color:var(--text);}
+  .day.on .dn,.day.on .dt{color:#fff;}
+  .day .dt{font-size:11px;color:var(--soft);line-height:1.25;min-height:28px;}
+  .dots{display:flex;gap:4px;margin-top:1px;}
+  .dot{width:7px;height:7px;border-radius:99px;background:var(--dotEmpty);}
+  .dot.f{background:var(--accent);}
+  .day.on .dot{background:rgba(255,255,255,.35);}
+  .day.on .dot.f{background:#fff;}
+
+  /* ===== Tabs ===== */
+  .tabs{display:flex;gap:8px;padding:0 16px 6px;}
+  .tab{flex:1;padding:11px;border-radius:12px;font-weight:600;font-size:14px;background:var(--surface2);color:var(--soft);transition:all .2s;border:1px solid var(--border);}
+  .tab.on{background:var(--text);color:var(--bg1);border-color:transparent;}
+
+  /* ===== Content ===== */
+  main{padding:14px 16px 0;}
+  .sech{display:flex;align-items:baseline;gap:11px;margin-bottom:14px;flex-wrap:wrap;}
+  .sech h2{font-size:21px;font-weight:800;letter-spacing:-.3px;}
+  .sech .tag{font-size:13px;color:var(--accent2);font-weight:700;}
+  .list{display:flex;flex-direction:column;gap:13px;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px 18px;box-shadow:var(--shadow);transition:border-color .2s, box-shadow .2s;position:relative;}
+  .card.learned{border-color:var(--accent);box-shadow:0 6px 22px rgba(109,79,255,.18);}
+  .numbadge{position:absolute;top:14px;right:14px;font-family:'Sora';font-weight:800;font-size:11px;color:#fff;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));width:24px;height:24px;border-radius:8px;display:grid;place-items:center;}
+  .ttext{font-family:'Sora';font-weight:700;font-size:18.5px;line-height:1.32;color:var(--target);padding-right:30px;}
+  .pron{font-size:12.5px;color:var(--pron);font-style:italic;margin:6px 0 8px;}
+  .pron b{font-style:normal;font-weight:600;opacity:.8;}
+  .es{font-size:14.5px;color:var(--es);margin-bottom:13px;line-height:1.4;}
+  .row{display:flex;gap:8px;margin-bottom:10px;}
+  .sbtn{flex:1;border:1px solid var(--accent);color:var(--accent);font-weight:600;font-size:12.5px;padding:7px 10px;border-radius:99px;transition:all .15s;}
+  .sbtn:active{transform:scale(.96);}
+  .sbtn.on{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;}
+  .lbtn{width:100%;padding:10px;border-radius:11px;border:1px solid var(--border);background:var(--surface2);color:var(--soft);font-weight:600;font-size:13.5px;transition:all .2s;}
+  .lbtn.on{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;}
+
+  /* ===== Flashcards ===== */
+  .flash{min-height:128px;border-radius:18px;padding:22px 20px;background:var(--surface);border:1px solid var(--border);
+    box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:center;gap:9px;transition:all .25s;}
+  .flash.back{background:linear-gradient(140deg,var(--accent),var(--accent2));border-color:transparent;}
+  .fhint{font-size:10.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--soft);font-weight:700;}
+  .fes{font-family:'Sora';font-size:18.5px;font-weight:700;color:var(--target);}
+  .ftap{font-size:11.5px;color:var(--soft);}
+  .ften{font-family:'Sora';font-size:19px;font-weight:700;color:#fff;line-height:1.3;}
+  .flash.back .fpron{color:rgba(255,255,255,.85);font-size:12.5px;font-style:italic;margin-top:-2px;}
+  .fbtn{align-self:flex-start;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;font-weight:600;font-size:12.5px;padding:7px 15px;border-radius:99px;}
+
+  /* ===== Search ===== */
+  .search{display:block;width:100%;margin-bottom:14px;padding:12px 15px;border-radius:13px;font-size:14px;font-family:inherit;
+    background:var(--surface);border:1px solid var(--border);color:var(--text);outline:none;}
+  .search:focus{border-color:var(--accent);}
+
+  /* ===== Local groups ===== */
+  .grp{margin-bottom:22px;}
+  .grp h3{font-size:15px;font-weight:700;margin-bottom:10px;color:var(--text);}
+
+  /* ===== Footer ===== */
+  footer{text-align:center;font-size:12.5px;color:var(--soft);padding:28px 16px 0;line-height:1.6;}
+  footer .by{font-size:11px;opacity:.75;margin-top:6px;display:block;}
+
+  .warn{margin:0 16px 12px;padding:10px 14px;border-radius:12px;background:rgba(240,161,58,.15);border:1px solid rgba(240,161,58,.6);color:#cf8a2a;font-size:12.5px;font-weight:600;line-height:1.5;}
+
+  /* ===== Splash ===== */
+  #splash{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:24px;
+    background:radial-gradient(900px 600px at 30% 15%,#241a4a 0%,#140f26 55%,#0a0714 100%);}
+  #splash.hide{opacity:0;pointer-events:none;transition:opacity .6s ease;}
+  .sp-card{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;max-width:340px;width:100%;}
+  .sp-logo{width:104px;height:104px;border-radius:30px;display:grid;place-items:center;
+    background:linear-gradient(135deg,#8b6bff,#3ccdf0);box-shadow:0 18px 55px rgba(139,107,255,.5);}
+  .sp-title{font-family:'Sora';font-weight:800;font-size:33px;color:#fff;letter-spacing:-.5px;line-height:1.05;}
+  .sp-words{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:-2px 0 2px;}
+  .sp-words span{font-family:'Sora';font-weight:700;font-size:14px;color:#cfc2ff;opacity:0;transform:translateY(8px);
+    animation:rise .6s ease forwards;}
+  .sp-words span:nth-child(1){animation-delay:.15s;} .sp-words span:nth-child(2){animation-delay:.4s;} .sp-words span:nth-child(3){animation-delay:.65s;}
+  .sp-words i{color:#7c6ab5;font-style:normal;}
+  @keyframes rise{to{opacity:1;transform:translateY(0);}}
+  .sp-sub{font-size:14px;color:#b6a9e0;}
+  .sp-by{font-size:11.5px;color:#7e72a8;margin-top:-6px;}
+  .sp-langs{display:flex;flex-direction:column;gap:10px;width:100%;margin-top:6px;}
+  .sp-lang{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:16px;width:100%;text-align:left;
+    background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.13);transition:all .2s;}
+  .sp-lang:active{transform:scale(.98);}
+  .sp-lang:hover{border-color:#8b6bff;background:rgba(139,107,255,.16);}
+  .sp-lang .fl{font-size:27px;}
+  .sp-lang .nm{display:block;font-weight:700;font-size:16px;color:#fff;}
+  .sp-lang .ds{display:block;font-size:12px;color:#a99ed0;margin-top:2px;}
+
+  /* ===== Celebration ===== */
+  #cel{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:24px;
+    background:rgba(10,7,20,.74);backdrop-filter:blur(3px);}
+  #cel.show{display:flex;}
+  .cel-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:30px 26px;max-width:340px;width:100%;
+    text-align:center;box-shadow:var(--shadow-lg);position:relative;z-index:2;animation:pop .4s cubic-bezier(.2,1.3,.5,1);}
+  @keyframes pop{from{transform:scale(.8);opacity:0;}to{transform:scale(1);opacity:1;}}
+  .cel-emoji{font-size:54px;}
+  .cel-card h2{font-size:25px;font-weight:800;margin:8px 0 4px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+  .cel-card p{font-size:14.5px;color:var(--es);line-height:1.5;margin-bottom:6px;}
+  .cel-card .pc{font-size:13px;color:var(--soft);margin-bottom:18px;}
+  .cel-btn{padding:13px 40px;border-radius:99px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:16px;box-shadow:0 10px 28px rgba(109,79,255,.4);}
+  .cel-btn.alt{display:block;width:100%;margin-top:10px;padding:11px 20px;background:transparent;border:1.5px solid var(--accent);color:var(--accent);box-shadow:none;font-size:14.5px;}
+  .cel-btn.sister-btn{display:block;width:100%;margin-top:10px;padding:11px 20px;text-decoration:none;background:linear-gradient(135deg,#2dd4bf,#14b8a6);color:#04241f;box-shadow:0 10px 26px rgba(45,212,191,.4);font-size:14.5px;}
+  .confetti{position:fixed;top:-12px;width:10px;height:14px;z-index:61;pointer-events:none;border-radius:2px;animation:fall linear forwards;}
+  @keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.2;}}
+
+  /* ===== Quiz / Evaluación ===== */
+  .q-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:22px 20px;box-shadow:var(--shadow);}
+  .q-ask{font-size:13px;color:var(--soft);font-weight:600;margin-bottom:6px;}
+  .q-es{font-family:'Sora';font-weight:700;font-size:22px;color:var(--target);line-height:1.3;margin-bottom:18px;}
+  .q-opts{display:flex;flex-direction:column;gap:10px;}
+  .q-opt{display:flex;align-items:center;gap:12px;text-align:left;width:100%;padding:14px 16px;border-radius:14px;border:1.5px solid var(--border);background:var(--surface2);color:var(--target);font-size:16px;font-weight:600;font-family:'Sora';transition:all .15s;}
+  .q-opt .ltr{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--bg2);color:var(--soft);font-size:13px;flex-shrink:0;}
+  .q-opt:active{transform:scale(.98);}
+  .q-opt.ok{border-color:#37d39b;background:rgba(55,211,155,.16);}
+  .q-opt.ok .ltr{background:#37d39b;color:#04140d;}
+  .q-opt.bad{border-color:#ff5c5c;background:rgba(255,92,92,.14);}
+  .q-opt.bad .ltr{background:#ff5c5c;color:#fff;}
+  .q-opt[disabled]{cursor:default;}
+  .q-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;}
+  .q-next{padding:11px 22px;border-radius:99px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:15px;}
+  .q-spk{border:1px solid var(--accent);color:var(--accent);font-weight:600;font-size:13px;padding:9px 16px;border-radius:99px;}
+  .q-score{font-size:13px;color:var(--soft);font-weight:600;}
+
+  /* ===== Mi Avance ===== */
+  .ring-wrap{display:flex;justify-content:center;margin:4px 0 14px;}
+  .ring{width:152px;height:152px;border-radius:50%;display:grid;place-items:center;}
+  .ring .hole{width:118px;height:118px;border-radius:50%;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}
+  .ring .pct{font-family:'Sora';font-weight:800;font-size:34px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1;}
+  .ring .lbl{font-size:10.5px;color:var(--soft);text-transform:uppercase;letter-spacing:.5px;}
+  .av-list{display:flex;flex-direction:column;gap:12px;}
+  .av-row{background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:13px 15px;box-shadow:var(--shadow);}
+  .av-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;font-weight:600;font-size:14.5px;}
+  .av-top .v{font-family:'Sora';font-weight:700;font-size:14px;color:var(--soft);}
+  .av-bar{height:9px;border-radius:99px;background:var(--track);overflow:hidden;}
+  .av-fill{height:100%;border-radius:99px;transition:width .5s;}
+
+  @media(max-width:480px){
+    .brand h1{font-size:18px;} .brand .sub{font-size:10px;white-space:nowrap;}
+    .logo{width:40px;height:40px;} .streak{padding:5px 10px;} .streak .n{font-size:18px;}
+    .icon-btn{width:35px;height:35px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="root"></div>
+
+<div id="splash">
+  <div class="sp-card">
+    <div class="sp-logo" id="spLogo"></div>
+    <div class="sp-title">Garzón Bilingüe</div>
+    <div class="sp-words"><span>Escucha</span><span><i>·</i> Practica</span><span><i>·</i> Atiende</span></div>
+    <div class="sp-sub">Elige el idioma que quieres aprender</div>
+    <div class="sp-by">por Jaime Ricardo Peñaloza</div>
+    <div class="sp-langs" id="spLangs"></div>
+  </div>
+</div>
+
+<div id="cel">
+  <div class="cel-card">
+    <div class="cel-emoji" id="celEmoji">🎉</div>
+    <h2 id="celTitle">¡Felicidades!</h2>
+    <p id="celMsg"></p>
+    <div class="pc" id="celPc"></div>
+    <button class="cel-btn" id="celBtn">Continuar</button>
+    <a class="cel-btn sister-btn" id="celSister" href="https://protocolos-servicio.vercel.app" target="_blank" rel="noopener" style="display:none">📋 Probar Protocolos de Servicio</a>
+    <button class="cel-btn alt" id="celAlt" style="display:none">🌐 Probar otro idioma</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ============================================================
+   GARZÓN BILINGÜE — app vanilla de un solo archivo (sin build)
+   Datos + lógica + render. Tres idiomas: en / pt / zh.
+   ============================================================ */
+
+// SVG emblema (garzón + burbuja de habla)
+const LOGO_SVG = (s) => `<svg width="${s}" height="${s}" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="20" cy="10" r="6" fill="#fff"/>
+  <path d="M12 28 Q12 20 20 20 Q28 20 28 28 L28 36 L12 36 Z" fill="#fff"/>
+  <path d="M18 20 L20 23 L22 20 L20 22 Z" fill="#6d4fff"/>
+  <path d="M28 24 Q33 22 35 24" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <ellipse cx="35" cy="23" rx="4" ry="1.5" fill="#fff"/>
+  <rect x="24" y="2" width="14" height="9" rx="3" fill="#fff" opacity=".92"/>
+  <path d="M26 11 L24 14 L29 11 Z" fill="#fff" opacity=".92"/>
+  <circle cx="28" cy="6.5" r="1.2" fill="#6d4fff"/><circle cx="31" cy="6.5" r="1.2" fill="#6d4fff"/><circle cx="34" cy="6.5" r="1.2" fill="#6d4fff"/>
+</svg>`;
+
+const DATA = {};
+
+// ── INGLÉS ──────────────────────────────────────────────────
+DATA.en = {
+  meta:{ flag:"🇬🇧", name:"Inglés", subtitle:"Servicio de mesas · 30 días · 5 frases al día",
+    pickLabel:"Inglés", pickSub:"English for waiters",
+    pronLabel:"IPA", voiceLang:"en-US", voiceMatch:/en[-_]US/i, voiceFallback:/^en/i },
+  curriculum:[
+    {day:1,theme:"Recibir al cliente",phrases:[
+      {en:"Good evening, welcome! Do you have a reservation?",es:"Buenas noches, ¡bienvenido! ¿Tiene reserva?",ipa:"ɡʊd ˈiːvnɪŋ ˈwɛlkəm duː juː hæv ə ˌrɛzərˈveɪʃən"},
+      {en:"A table for two? Right this way, please.",es:"¿Mesa para dos? Por aquí, por favor.",ipa:"ə ˈteɪbəl fɔːr tuː raɪt ðɪs weɪ pliːz"},
+      {en:"Can I take your coat?",es:"¿Le tomo el abrigo?",ipa:"kæn aɪ teɪk jɔːr koʊt"},
+      {en:"Would you prefer a table inside or on the terrace?",es:"¿Prefiere una mesa adentro o en la terraza?",ipa:"wʊd juː prɪˈfɜːr ə ˈteɪbəl ɪnˈsaɪd ɔːr ɒn ðə ˈtɛrəs"},
+      {en:"I'll be your server tonight.",es:"Seré su mesero/a esta noche.",ipa:"aɪl biː jɔːr ˈsɜːrvər təˈnaɪt"}]},
+    {day:2,theme:"Tomar el pedido",phrases:[
+      {en:"Are you ready to order, or do you need a few more minutes?",es:"¿Están listos para ordenar o necesitan unos minutos más?",ipa:"ɑːr juː ˈrɛdi tuː ˈɔːrdər ɔːr duː juː niːd ə fjuː mɔːr ˈmɪnɪts"},
+      {en:"Can I start you off with something to drink?",es:"¿Empezamos con algo de tomar?",ipa:"kæn aɪ stɑːrt juː ɒf wɪð ˈsʌmθɪŋ tuː drɪŋk"},
+      {en:"How would you like your steak cooked?",es:"¿Cómo desea su carne?",ipa:"haʊ wʊd juː laɪk jɔːr steɪk kʊkt"},
+      {en:"Would you like to hear today's specials?",es:"¿Le gustaría conocer las sugerencias del día?",ipa:"wʊd juː laɪk tuː hɪər təˈdeɪz ˈspɛʃəlz"},
+      {en:"Excellent choice. I'll bring that right out.",es:"Excelente elección. Se lo traigo enseguida.",ipa:"ˈɛksələnt tʃɔɪs aɪl brɪŋ ðæt raɪt aʊt"}]},
+    {day:3,theme:"Describir platos",phrases:[
+      {en:"It's a grilled salmon served with seasonal vegetables.",es:"Es salmón a la parrilla con verduras de temporada.",ipa:"ɪts ə ɡrɪld ˈsæmən sɜːrvd wɪð ˈsiːzənəl ˈvɛdʒtəbəlz"},
+      {en:"This dish is mildly spicy.",es:"Este plato es ligeramente picante.",ipa:"ðɪs dɪʃ ɪz ˈmaɪldli ˈspaɪsi"},
+      {en:"The sauce is made in house.",es:"La salsa es de elaboración propia.",ipa:"ðə sɔːs ɪz meɪd ɪn haʊs"},
+      {en:"It comes with a side of mashed potatoes.",es:"Viene con una guarnición de puré de papas.",ipa:"ɪt kʌmz wɪð ə saɪd ɒv mæʃt pəˈteɪtoʊz"},
+      {en:"It pairs really well with a red wine.",es:"Marida muy bien con un vino tinto.",ipa:"ɪt pɛərz ˈrɪli wɛl wɪð ə rɛd waɪn"}]},
+    {day:4,theme:"Alergias y dietas",phrases:[
+      {en:"Do you have any food allergies or dietary restrictions?",es:"¿Tiene alguna alergia o restricción alimentaria?",ipa:"duː juː hæv ˈɛni fuːd ˈælərdʒiz ɔːr ˈdaɪətɛri rɪˈstrɪkʃənz"},
+      {en:"This dish is gluten-free.",es:"Este plato no contiene gluten.",ipa:"ðɪs dɪʃ ɪz ˈɡluːtən friː"},
+      {en:"We can prepare it without nuts.",es:"Podemos prepararlo sin frutos secos.",ipa:"wiː kæn prɪˈpɛər ɪt wɪˈðaʊt nʌts"},
+      {en:"Is this suitable for vegetarians?",es:"¿Esto es apto para vegetarianos?",ipa:"ɪz ðɪs ˈsuːtəbəl fɔːr ˌvɛdʒəˈtɛəriənz"},
+      {en:"Let me check with the kitchen for you.",es:"Permítame consultarlo con la cocina.",ipa:"lɛt miː tʃɛk wɪð ðə ˈkɪtʃən fɔːr juː"}]},
+    {day:5,theme:"Durante la comida",phrases:[
+      {en:"How is everything tasting?",es:"¿Qué tal está todo?",ipa:"haʊ ɪz ˈɛvriθɪŋ ˈteɪstɪŋ"},
+      {en:"Can I get you anything else?",es:"¿Desea algo más?",ipa:"kæn aɪ ɡɛt juː ˈɛniθɪŋ ɛls"},
+      {en:"Let me refill your water.",es:"Le relleno el agua.",ipa:"lɛt miː ˈriːfɪl jɔːr ˈwɔːtər"},
+      {en:"I'll clear these plates for you.",es:"Le retiro estos platos.",ipa:"aɪl klɪər ðiːz pleɪts fɔːr juː"},
+      {en:"Take your time, there's no rush.",es:"Tómese su tiempo, no hay apuro.",ipa:"teɪk jɔːr taɪm ðɛərz noʊ rʌʃ"}]},
+    {day:6,theme:"Resolver problemas",phrases:[
+      {en:"I'm so sorry about that. Let me fix it right away.",es:"Lamento mucho eso. Permítame solucionarlo enseguida.",ipa:"aɪm soʊ ˈsɒri əˈbaʊt ðæt lɛt miː fɪks ɪt raɪt əˈweɪ"},
+      {en:"I'll bring you a fresh one.",es:"Le traigo uno nuevo.",ipa:"aɪl brɪŋ juː ə frɛʃ wʌn"},
+      {en:"Of course, I'll take that off the bill.",es:"Por supuesto, lo descuento de la cuenta.",ipa:"ɒv kɔːrs aɪl teɪk ðæt ɒf ðə bɪl"},
+      {en:"Thank you for letting me know.",es:"Gracias por avisarme.",ipa:"θæŋk juː fɔːr ˈlɛtɪŋ miː noʊ"},
+      {en:"Is there anything I can do to make it right?",es:"¿Hay algo que pueda hacer para compensarlo?",ipa:"ɪz ðɛər ˈɛniθɪŋ aɪ kæn duː tuː meɪk ɪt raɪt"}]},
+    {day:7,theme:"La cuenta",phrases:[
+      {en:"Would you like the bill all together or separately?",es:"¿La cuenta junta o por separado?",ipa:"wʊd juː laɪk ðə bɪl ɔːl təˈɡɛðər ɔːr ˈsɛprətli"},
+      {en:"How would you like to pay?",es:"¿Cómo desea pagar?",ipa:"haʊ wʊd juː laɪk tuː peɪ"},
+      {en:"We accept cash and card.",es:"Aceptamos efectivo y tarjeta.",ipa:"wiː əkˈsɛpt kæʃ ænd kɑːrd"},
+      {en:"The tip is not included.",es:"La propina no está incluida.",ipa:"ðə tɪp ɪz nɒt ɪnˈkluːdɪd"},
+      {en:"Thank you, have a great night!",es:"Gracias, ¡que tenga buena noche!",ipa:"θæŋk juː hæv ə ɡreɪt naɪt"}]},
+    {day:8,theme:"En la cocina",phrases:[
+      {en:"Order up! Table five.",es:"¡Listo para servir! Mesa cinco.",ipa:"ˈɔːrdər ʌp ˈteɪbəl faɪv"},
+      {en:"We're out of the salmon.",es:"Se nos acabó el salmón.",ipa:"wɪr aʊt ɒv ðə ˈsæmən"},
+      {en:"Can you fire the appetizers?",es:"¿Puedes mandar las entradas?",ipa:"kæn juː ˈfaɪər ðiː ˈæpɪtaɪzərz"},
+      {en:"This needs to go out hot.",es:"Esto tiene que salir caliente.",ipa:"ðɪs niːdz tuː ɡoʊ aʊt hɒt"},
+      {en:"Behind you, hot pan!",es:"¡Detrás de ti, sartén caliente!",ipa:"bɪˈhaɪnd juː hɒt pæn"}]},
+    {day:9,theme:"En el bar",phrases:[
+      {en:"What can I get started for you?",es:"¿Qué le preparo?",ipa:"wɒt kæn aɪ ɡɛt ˈstɑːrtɪd fɔːr juː"},
+      {en:"Would you like that on the rocks or neat?",es:"¿Lo desea con hielo o solo?",ipa:"wʊd juː laɪk ðæt ɒn ðə rɒks ɔːr niːt"},
+      {en:"Can I see some ID, please?",es:"¿Me muestra una identificación, por favor?",ipa:"kæn aɪ siː sʌm ˌaɪˈdiː pliːz"},
+      {en:"Last call for drinks.",es:"Último llamado para pedir bebidas.",ipa:"lɑːst kɔːl fɔːr drɪŋks"},
+      {en:"This one's on the house.",es:"Esta va por la casa.",ipa:"ðɪs wʌnz ɒn ðə haʊs"}]},
+    {day:10,theme:"Recomendar",phrases:[
+      {en:"If I may suggest, the lamb is excellent today.",es:"Si me permite sugerir, el cordero está excelente hoy.",ipa:"ɪf aɪ meɪ səˈdʒɛst ðə læm ɪz ˈɛksələnt təˈdeɪ"},
+      {en:"It's one of our most popular dishes.",es:"Es uno de nuestros platos más populares.",ipa:"ɪts wʌn ɒv ˈaʊər moʊst ˈpɒpjələr ˈdɪʃɪz"},
+      {en:"For dessert, I'd recommend the cheesecake.",es:"De postre, le recomiendo el cheesecake.",ipa:"fɔːr dɪˈzɜːrt aɪd ˌrɛkəˈmɛnd ðə ˈtʃiːzkeɪk"},
+      {en:"It's light, perfect after a big meal.",es:"Es ligero, perfecto tras una comida abundante.",ipa:"ɪts laɪt ˈpɜːrfɪkt ˈɑːftər ə bɪɡ miːl"},
+      {en:"Trust me, you won't be disappointed.",es:"Confíe en mí, no se va a decepcionar.",ipa:"trʌst miː juː woʊnt biː ˌdɪsəˈpɔɪntɪd"}]},
+    {day:11,theme:"Reservas por teléfono",phrases:[
+      {en:"Thank you for calling, how may I help you?",es:"Gracias por llamar, ¿en qué puedo ayudarle?",ipa:"θæŋk juː fɔːr ˈkɔːlɪŋ haʊ meɪ aɪ hɛlp juː"},
+      {en:"For what date and time?",es:"¿Para qué fecha y hora?",ipa:"fɔːr wɒt deɪt ænd taɪm"},
+      {en:"How many people will be in your party?",es:"¿Para cuántas personas?",ipa:"haʊ ˈmɛni ˈpiːpəl wɪl biː ɪn jɔːr ˈpɑːrti"},
+      {en:"Could I have a name for the reservation?",es:"¿Me da un nombre para la reserva?",ipa:"kʊd aɪ hæv ə neɪm fɔːr ðə ˌrɛzərˈveɪʃən"},
+      {en:"We look forward to seeing you.",es:"Lo esperamos con gusto.",ipa:"wiː lʊk ˈfɔːrwərd tuː ˈsiːɪŋ juː"}]},
+    {day:12,theme:"Vinos y maridaje",phrases:[
+      {en:"Would you like to see the wine list?",es:"¿Desea ver la carta de vinos?",ipa:"wʊd juː laɪk tuː siː ðə waɪn lɪst"},
+      {en:"This is a dry, full-bodied red.",es:"Es un tinto seco y con cuerpo.",ipa:"ðɪs ɪz ə draɪ ˈfʊlˈbɒdid rɛd"},
+      {en:"May I pour you a taste first?",es:"¿Le sirvo una cata primero?",ipa:"meɪ aɪ pɔːr juː ə teɪst fɜːrst"},
+      {en:"It has notes of cherry and oak.",es:"Tiene notas de cereza y roble.",ipa:"ɪt hæz noʊts ɒv ˈtʃɛri ænd oʊk"},
+      {en:"Shall I leave the bottle on the table?",es:"¿Dejo la botella en la mesa?",ipa:"ʃæl aɪ liːv ðə ˈbɒtəl ɒn ðə ˈteɪbəl"}]},
+    {day:13,theme:"Despedida y fidelizar",phrases:[
+      {en:"I hope you enjoyed your meal.",es:"Espero que haya disfrutado su comida.",ipa:"aɪ hoʊp juː ɪnˈdʒɔɪd jɔːr miːl"},
+      {en:"Please come back and see us soon.",es:"Por favor, vuelva a vernos pronto.",ipa:"pliːz kʌm bæk ænd siː ʌs suːn"},
+      {en:"Here's our card if you'd like to book again.",es:"Aquí tiene nuestra tarjeta si desea reservar de nuevo.",ipa:"hɪrz ˈaʊər kɑːrd ɪf juːd laɪk tuː bʊk əˈɡɛn"},
+      {en:"It was a pleasure serving you.",es:"Fue un placer atenderle.",ipa:"ɪt wɒz ə ˈplɛʒər ˈsɜːrvɪŋ juː"},
+      {en:"Drive safely, good night!",es:"Maneje con cuidado, ¡buenas noches!",ipa:"draɪv ˈseɪfli ɡʊd naɪt"}]},
+    {day:14,theme:"Frases de equipo",phrases:[
+      {en:"I've got table seven covered.",es:"Yo me encargo de la mesa siete.",ipa:"aɪv ɡɒt ˈteɪbəl ˈsɛvən ˈkʌvərd"},
+      {en:"Can you give me a hand running food?",es:"¿Me das una mano sacando los platos?",ipa:"kæn juː ɡɪv miː ə hænd ˈrʌnɪŋ fuːd"},
+      {en:"We're slammed tonight.",es:"Estamos a tope esta noche.",ipa:"wɪr slæmd təˈnaɪt"},
+      {en:"Let's reset this table for the next guests.",es:"Preparemos esta mesa para los próximos clientes.",ipa:"lɛts ˌriːˈsɛt ðɪs ˈteɪbəl fɔːr ðə nɛkst ɡɛsts"},
+      {en:"Great work today, team.",es:"Buen trabajo hoy, equipo.",ipa:"ɡreɪt wɜːrk təˈdeɪ tiːm"}]},
+    {day:15,theme:"Sentar a los comensales",phrases:[
+      {en:"Your table is ready, please follow me.",es:"Su mesa está lista, sígame por favor.",ipa:"jɔːr ˈteɪbəl ɪz ˈrɛdi pliːz ˈfɒloʊ miː"},
+      {en:"Would this table be alright for you?",es:"¿Esta mesa le parece bien?",ipa:"wʊd ðɪs ˈteɪbəl biː ɔːlˈraɪt fɔːr juː"},
+      {en:"Please, have a seat.",es:"Por favor, tome asiento.",ipa:"pliːz hæv ə siːt"},
+      {en:"Can I bring a high chair for the little one?",es:"¿Le traigo una sillita para el pequeño?",ipa:"kæn aɪ brɪŋ ə haɪ tʃɛər fɔːr ðə ˈlɪtəl wʌn"},
+      {en:"Here are your menus. I'll give you a moment.",es:"Aquí tienen las cartas. Les doy un momento.",ipa:"hɪər ɑːr jɔːr ˈmɛnjuːz aɪl ɡɪv juː ə ˈmoʊmənt"}]},
+    {day:16,theme:"Presentar la carta",phrases:[
+      {en:"Have you dined with us before?",es:"¿Nos ha visitado antes?",ipa:"hæv juː daɪnd wɪð ʌs bɪˈfɔːr"},
+      {en:"Our menu is divided into starters, mains and desserts.",es:"Nuestra carta se divide en entradas, principales y postres.",ipa:"ˈaʊər ˈmɛnjuː ɪz dɪˈvaɪdɪd ˈɪntuː ˈstɑːrtərz meɪnz ænd dɪˈzɜːrts"},
+      {en:"The dishes marked here are our chef's signatures.",es:"Los platos marcados son las especialidades del chef.",ipa:"ðə ˈdɪʃɪz mɑːrkt hɪər ɑːr ˈaʊər ʃɛfs ˈsɪɡnətʃərz"},
+      {en:"Everything is freshly prepared, so it may take a little time.",es:"Todo se prepara al momento, puede tomar un poco de tiempo.",ipa:"ˈɛvriθɪŋ ɪz ˈfrɛʃli prɪˈpɛərd soʊ ɪt meɪ teɪk ə ˈlɪtəl taɪm"},
+      {en:"Please let me know if you have any questions.",es:"Avíseme si tiene alguna pregunta.",ipa:"pliːz lɛt miː noʊ ɪf juː hæv ˈɛni ˈkwɛstʃənz"}]},
+    {day:17,theme:"Sugerir bebidas en mesa",phrases:[
+      {en:"Can I bring you some water while you decide? Still or sparkling?",es:"¿Le traigo agua mientras decide? ¿Sin gas o con gas?",ipa:"kæn aɪ brɪŋ juː sʌm ˈwɔːtər waɪl juː dɪˈsaɪd stɪl ɔːr ˈspɑːrklɪŋ"},
+      {en:"Would you care for a drink before your meal?",es:"¿Desea una bebida antes de la comida?",ipa:"wʊd juː kɛər fɔːr ə drɪŋk bɪˈfɔːr jɔːr miːl"},
+      {en:"We have a nice house wine by the glass.",es:"Tenemos un buen vino de la casa por copa.",ipa:"wiː hæv ə naɪs haʊs waɪn baɪ ðə ɡlɑːs"},
+      {en:"Can I get those drinks started for you?",es:"¿Le voy preparando esas bebidas?",ipa:"kæn aɪ ɡɛt ðoʊz drɪŋks ˈstɑːrtɪd fɔːr juː"},
+      {en:"I'll be right back with your drinks.",es:"Vuelvo enseguida con sus bebidas.",ipa:"aɪl biː raɪt bæk wɪð jɔːr drɪŋks"}]},
+    {day:18,theme:"Anotar el pedido con detalle",phrases:[
+      {en:"And for your starter?",es:"¿Y de entrada?",ipa:"ænd fɔːr jɔːr ˈstɑːrtər"},
+      {en:"Would you like that as a starter or a main?",es:"¿Lo desea como entrada o como plato principal?",ipa:"wʊd juː laɪk ðæt æz ə ˈstɑːrtər ɔːr ə meɪn"},
+      {en:"Any sides with that?",es:"¿Alguna guarnición con eso?",ipa:"ˈɛni saɪdz wɪð ðæt"},
+      {en:"Let me read that back to you.",es:"Permítame repetirle el pedido.",ipa:"lɛt miː riːd ðæt bæk tuː juː"},
+      {en:"Would you like everything brought out together?",es:"¿Desea que traigamos todo junto?",ipa:"wʊd juː laɪk ˈɛvriθɪŋ brɔːt aʊt təˈɡɛðər"}]},
+    {day:19,theme:"Modificar y personalizar",phrases:[
+      {en:"Of course, I can leave the onions off.",es:"Por supuesto, puedo dejarlo sin cebolla.",ipa:"ɒv kɔːrs aɪ kæn liːv ðiː ˈʌnjənz ɒf"},
+      {en:"Would you like the dressing on the side?",es:"¿Desea el aderezo aparte?",ipa:"wʊd juː laɪk ðə ˈdrɛsɪŋ ɒn ðə saɪd"},
+      {en:"We can make that a smaller portion for the child.",es:"Podemos hacerlo en una porción más pequeña para el niño.",ipa:"wiː kæn meɪk ðæt ə ˈsmɔːlər ˈpɔːrʃən fɔːr ðə tʃaɪld"},
+      {en:"Let me check if the kitchen can do that.",es:"Déjeme ver si la cocina puede hacerlo.",ipa:"lɛt miː tʃɛk ɪf ðə ˈkɪtʃən kæn duː ðæt"},
+      {en:"Absolutely, no problem at all.",es:"Claro que sí, ningún problema.",ipa:"ˈæbsəluːtli noʊ ˈprɒbləm æt ɔːl"}]},
+    {day:20,theme:"Servir los platos en mesa",phrases:[
+      {en:"Here you are. Careful, the plate is hot.",es:"Aquí tiene. Cuidado, el plato está caliente.",ipa:"hɪər juː ɑːr ˈkɛərfəl ðə pleɪt ɪz hɒt"},
+      {en:"Who ordered the grilled chicken?",es:"¿Quién pidió el pollo a la parrilla?",ipa:"huː ˈɔːrdərd ðə ɡrɪld ˈtʃɪkɪn"},
+      {en:"Can I grind some fresh pepper on that?",es:"¿Le pongo pimienta recién molida?",ipa:"kæn aɪ ɡraɪnd sʌm frɛʃ ˈpɛpər ɒn ðæt"},
+      {en:"Enjoy your meal!",es:"¡Que disfrute su comida!",ipa:"ɪnˈdʒɔɪ jɔːr miːl"},
+      {en:"I'll bring the rest of your order in just a moment.",es:"Le traigo el resto del pedido en un momento.",ipa:"aɪl brɪŋ ðə rɛst ɒv jɔːr ˈɔːrdər ɪn dʒʌst ə ˈmoʊmənt"}]},
+    {day:21,theme:"Atención durante la comida",phrases:[
+      {en:"Is everything to your liking?",es:"¿Está todo a su gusto?",ipa:"ɪz ˈɛvriθɪŋ tuː jɔːr ˈlaɪkɪŋ"},
+      {en:"Would you like some more bread?",es:"¿Desea más pan?",ipa:"wʊd juː laɪk sʌm mɔːr brɛd"},
+      {en:"Shall I bring another round of drinks?",es:"¿Le traigo otra ronda de bebidas?",ipa:"ʃæl aɪ brɪŋ əˈnʌðər raʊnd ɒv drɪŋks"},
+      {en:"May I clear this for you?",es:"¿Le retiro esto?",ipa:"meɪ aɪ klɪər ðɪs fɔːr juː"},
+      {en:"Just wave me over if you need anything.",es:"Hágame una seña si necesita algo.",ipa:"dʒʌst weɪv miː ˈoʊvər ɪf juː niːd ˈɛniθɪŋ"}]},
+    {day:22,theme:"Manejar mesas grandes",phrases:[
+      {en:"Are you all together, or separate checks?",es:"¿Van todos juntos o cuentas separadas?",ipa:"ɑːr juː ɔːl təˈɡɛðər ɔːr ˈsɛprət tʃɛks"},
+      {en:"I'll take the orders one by one, please.",es:"Tomaré los pedidos uno por uno, por favor.",ipa:"aɪl teɪk ðiː ˈɔːrdərz wʌn baɪ wʌn pliːz"},
+      {en:"Let me pull up another chair for you.",es:"Le acerco otra silla.",ipa:"lɛt miː pʊl ʌp əˈnʌðər tʃɛər fɔːr juː"},
+      {en:"I'll bring the children's plates out first.",es:"Sacaré primero los platos de los niños.",ipa:"aɪl brɪŋ ðə ˈtʃɪldrənz pleɪts aʊt fɜːrst"},
+      {en:"Don't worry, I'll keep track of who had what.",es:"No se preocupe, llevaré la cuenta de quién pidió qué.",ipa:"doʊnt ˈwʌri aɪl kiːp træk ɒv huː hæd wɒt"}]},
+    {day:23,theme:"Ofrecer postre y café",phrases:[
+      {en:"Would you care to see the dessert menu?",es:"¿Desea ver la carta de postres?",ipa:"wʊd juː kɛər tuː siː ðə dɪˈzɜːrt ˈmɛnjuː"},
+      {en:"Can I tempt you with something sweet?",es:"¿Le ofrezco algo dulce?",ipa:"kæn aɪ tɛmpt juː wɪð ˈsʌmθɪŋ swiːt"},
+      {en:"Would you like coffee or tea with that?",es:"¿Desea café o té con eso?",ipa:"wʊd juː laɪk ˈkɒfi ɔːr tiː wɪð ðæt"},
+      {en:"The desserts are perfect for sharing.",es:"Los postres son perfectos para compartir.",ipa:"ðə dɪˈzɜːrts ɑːr ˈpɜːrfɪkt fɔːr ˈʃɛərɪŋ"},
+      {en:"How about a coffee to finish?",es:"¿Qué tal un café para terminar?",ipa:"haʊ əˈbaʊt ə ˈkɒfi tuː ˈfɪnɪʃ"}]},
+    {day:24,theme:"Lidiar con esperas",phrases:[
+      {en:"Thank you for your patience, it won't be long.",es:"Gracias por su paciencia, no tardará mucho.",ipa:"θæŋk juː fɔːr jɔːr ˈpeɪʃəns ɪt woʊnt biː lɒŋ"},
+      {en:"Your food is just being plated now.",es:"Su comida se está emplatando ahora mismo.",ipa:"jɔːr fuːd ɪz dʒʌst ˈbiːɪŋ ˈpleɪtɪd naʊ"},
+      {en:"I'm so sorry for the wait.",es:"Lamento mucho la espera.",ipa:"aɪm soʊ ˈsɒri fɔːr ðə weɪt"},
+      {en:"Can I bring you some bread in the meantime?",es:"¿Le traigo algo de pan mientras tanto?",ipa:"kæn aɪ brɪŋ juː sʌm brɛd ɪn ðə ˈmiːntaɪm"},
+      {en:"Let me check on that for you right away.",es:"Déjeme verificarlo enseguida.",ipa:"lɛt miː tʃɛk ɒn ðæt fɔːr juː raɪt əˈweɪ"}]},
+    {day:25,theme:"Quejas en mesa con tacto",phrases:[
+      {en:"I'm very sorry, let me make this right for you.",es:"Lo siento mucho, déjeme arreglarlo.",ipa:"aɪm ˈvɛri ˈsɒri lɛt miː meɪk ðɪs raɪt fɔːr juː"},
+      {en:"Would you like me to bring you something else instead?",es:"¿Desea que le traiga otra cosa en su lugar?",ipa:"wʊd juː laɪk miː tuː brɪŋ juː ˈsʌmθɪŋ ɛls ɪnˈstɛd"},
+      {en:"I completely understand, and I apologize.",es:"Lo entiendo perfectamente, y le pido disculpas.",ipa:"aɪ kəmˈpliːtli ˌʌndərˈstænd ænd aɪ əˈpɒlədʒaɪz"},
+      {en:"I'll speak with my manager right away.",es:"Hablaré con mi encargado enseguida.",ipa:"aɪl spiːk wɪð maɪ ˈmænɪdʒər raɪt əˈweɪ"},
+      {en:"Please accept this with our apologies.",es:"Por favor, acepte esto con nuestras disculpas.",ipa:"pliːz əkˈsɛpt ðɪs wɪð ˈaʊər əˈpɒlədʒiz"}]},
+    {day:26,theme:"Comensales con apuro",phrases:[
+      {en:"Are you in a hurry? I can speed things up.",es:"¿Tiene prisa? Puedo agilizarlo.",ipa:"ɑːr juː ɪn ə ˈhʌri aɪ kæn spiːd θɪŋz ʌp"},
+      {en:"I'd recommend a dish that comes out quickly.",es:"Le recomendaría un plato que sale rápido.",ipa:"aɪd ˌrɛkəˈmɛnd ə dɪʃ ðæt kʌmz aʊt ˈkwɪkli"},
+      {en:"I'll bring your bill with the food to save time.",es:"Le traeré la cuenta con la comida para ahorrar tiempo.",ipa:"aɪl brɪŋ jɔːr bɪl wɪð ðə fuːd tuː seɪv taɪm"},
+      {en:"No problem, I'll have you out in time.",es:"Sin problema, lo dejaré listo a tiempo.",ipa:"noʊ ˈprɒbləm aɪl hæv juː aʊt ɪn taɪm"},
+      {en:"Would you like that to go instead?",es:"¿Lo prefiere para llevar?",ipa:"wʊd juː laɪk ðæt tuː ɡoʊ ɪnˈstɛd"}]},
+    {day:27,theme:"Ocasiones especiales en mesa",phrases:[
+      {en:"Are you celebrating something special tonight?",es:"¿Celebran algo especial esta noche?",ipa:"ɑːr juː ˈsɛləbreɪtɪŋ ˈsʌmθɪŋ ˈspɛʃəl təˈnaɪt"},
+      {en:"Happy birthday! This dessert is on us.",es:"¡Feliz cumpleaños! Este postre va por la casa.",ipa:"ˈhæpi ˈbɜːrθdeɪ ðɪs dɪˈzɜːrt ɪz ɒn ʌs"},
+      {en:"Would you like me to bring it out with a candle?",es:"¿Desea que lo saque con una vela?",ipa:"wʊd juː laɪk miː tuː brɪŋ ɪt aʊt wɪð ə ˈkændəl"},
+      {en:"Congratulations to you both!",es:"¡Felicitaciones a ambos!",ipa:"kənˌɡrætʃəˈleɪʃənz tuː juː boʊθ"},
+      {en:"Let me know if there's anything I can do to make it memorable.",es:"Avíseme si puedo hacer algo para que sea memorable.",ipa:"lɛt miː noʊ ɪf ðɛərz ˈɛniθɪŋ aɪ kæn duː tuː meɪk ɪt ˈmɛmərəbəl"}]},
+    {day:28,theme:"Cerrar la cuenta en mesa",phrases:[
+      {en:"Whenever you're ready, there's no rush.",es:"Cuando guste, no hay prisa.",ipa:"wɛnˈɛvər jʊr ˈrɛdi ðɛərz noʊ rʌʃ"},
+      {en:"Here is your bill. I'll take it whenever you're set.",es:"Aquí tiene la cuenta. La retiro cuando esté listo.",ipa:"hɪər ɪz jɔːr bɪl aɪl teɪk ɪt wɛnˈɛvər jʊr sɛt"},
+      {en:"Would you like the receipt?",es:"¿Desea el comprobante?",ipa:"wʊd juː laɪk ðə rɪˈsiːt"},
+      {en:"I'll be right back with your change.",es:"Vuelvo enseguida con su vuelto.",ipa:"aɪl biː raɪt bæk wɪð jɔːr tʃeɪndʒ"},
+      {en:"Take your time, no hurry at all.",es:"Tómese su tiempo, sin ningún apuro.",ipa:"teɪk jɔːr taɪm noʊ ˈhʌri æt ɔːl"}]},
+    {day:29,theme:"Frases de cortesía clave",phrases:[
+      {en:"My pleasure.",es:"Es un placer.",ipa:"maɪ ˈplɛʒər"},
+      {en:"Right away, sir / madam.",es:"Enseguida, señor / señora.",ipa:"raɪt əˈweɪ sɜːr ˈmædəm"},
+      {en:"I'll be with you in just a moment.",es:"Estaré con usted en un momento.",ipa:"aɪl biː wɪð juː ɪn dʒʌst ə ˈmoʊmənt"},
+      {en:"Is there anything else I can get for you?",es:"¿Hay algo más que pueda traerle?",ipa:"ɪz ðɛər ˈɛniθɪŋ ɛls aɪ kæn ɡɛt fɔːr juː"},
+      {en:"You're very welcome.",es:"De nada, con mucho gusto.",ipa:"jʊr ˈvɛri ˈwɛlkəm"}]},
+    {day:30,theme:"Despedir al comensal",phrases:[
+      {en:"Thank you for joining us tonight.",es:"Gracias por acompañarnos esta noche.",ipa:"θæŋk juː fɔːr ˈdʒɔɪnɪŋ ʌs təˈnaɪt"},
+      {en:"I hope to see you again soon.",es:"Espero verle de nuevo pronto.",ipa:"aɪ hoʊp tuː siː juː əˈɡɛn suːn"},
+      {en:"Mind the step on your way out.",es:"Cuidado con el escalón a la salida.",ipa:"maɪnd ðə stɛp ɒn jɔːr weɪ aʊt"},
+      {en:"It was lovely having you with us.",es:"Fue un gusto tenerle con nosotros.",ipa:"ɪt wɒz ˈlʌvli ˈhævɪŋ juː wɪð ʌs"},
+      {en:"Have a wonderful evening!",es:"¡Que tenga una excelente noche!",ipa:"hæv ə ˈwʌndərfəl ˈiːvnɪŋ"}]}
+  ],
+  words:[
+    {en:"reservation",es:"reserva",ipa:"ˌrɛzərˈveɪʃən"},{en:"appetizer",es:"entrada / aperitivo",ipa:"ˈæpɪtaɪzər"},
+    {en:"main course",es:"plato principal",ipa:"meɪn kɔːrs"},{en:"dessert",es:"postre",ipa:"dɪˈzɜːrt"},
+    {en:"beverage",es:"bebida",ipa:"ˈbɛvərɪdʒ"},{en:"menu",es:"carta / menú",ipa:"ˈmɛnjuː"},
+    {en:"bill / check",es:"cuenta",ipa:"bɪl / tʃɛk"},{en:"tip",es:"propina",ipa:"tɪp"},
+    {en:"waiter",es:"mesero / garzón",ipa:"ˈweɪtər"},{en:"host",es:"anfitrión / recepcionista",ipa:"hoʊst"},
+    {en:"chef",es:"chef / cocinero",ipa:"ʃɛf"},{en:"kitchen",es:"cocina",ipa:"ˈkɪtʃən"},
+    {en:"table",es:"mesa",ipa:"ˈteɪbəl"},{en:"booth",es:"reservado / cabina",ipa:"buːθ"},
+    {en:"terrace",es:"terraza",ipa:"ˈtɛrəs"},{en:"bar",es:"barra / bar",ipa:"bɑːr"},
+    {en:"wine list",es:"carta de vinos",ipa:"waɪn lɪst"},{en:"glass",es:"copa / vaso",ipa:"ɡlɑːs"},
+    {en:"bottle",es:"botella",ipa:"ˈbɒtəl"},{en:"carafe",es:"jarra",ipa:"kəˈræf"},
+    {en:"steak",es:"filete / bife",ipa:"steɪk"},{en:"salmon",es:"salmón",ipa:"ˈsæmən"},
+    {en:"chicken",es:"pollo",ipa:"ˈtʃɪkɪn"},{en:"lamb",es:"cordero",ipa:"læm"},
+    {en:"seafood",es:"mariscos",ipa:"ˈsiːfuːd"},{en:"vegetables",es:"verduras",ipa:"ˈvɛdʒtəbəlz"},
+    {en:"salad",es:"ensalada",ipa:"ˈsæləd"},{en:"soup",es:"sopa",ipa:"suːp"},
+    {en:"bread",es:"pan",ipa:"brɛd"},{en:"butter",es:"mantequilla",ipa:"ˈbʌtər"},
+    {en:"sauce",es:"salsa",ipa:"sɔːs"},{en:"dressing",es:"aderezo",ipa:"ˈdrɛsɪŋ"},
+    {en:"seasoning",es:"condimento",ipa:"ˈsiːzənɪŋ"},{en:"pepper",es:"pimienta",ipa:"ˈpɛpər"},
+    {en:"salt",es:"sal",ipa:"sɔːlt"},{en:"oil",es:"aceite",ipa:"ɔɪl"},
+    {en:"vinegar",es:"vinagre",ipa:"ˈvɪnɪɡər"},{en:"garlic",es:"ajo",ipa:"ˈɡɑːrlɪk"},
+    {en:"onion",es:"cebolla",ipa:"ˈʌnjən"},{en:"mushroom",es:"champiñón",ipa:"ˈmʌʃruːm"},
+    {en:"rare",es:"vuelta y vuelta",ipa:"rɛr"},{en:"medium",es:"al punto",ipa:"ˈmiːdiəm"},
+    {en:"well done",es:"bien cocido / bien hecho",ipa:"wɛl dʌn"},{en:"grilled",es:"a la parrilla",ipa:"ɡrɪld"},
+    {en:"fried",es:"frito",ipa:"fraɪd"},{en:"baked",es:"al horno",ipa:"beɪkt"},
+    {en:"steamed",es:"al vapor",ipa:"stiːmd"},{en:"roasted",es:"asado",ipa:"ˈroʊstɪd"},
+    {en:"fresh",es:"fresco",ipa:"frɛʃ"},{en:"seasonal",es:"de temporada",ipa:"ˈsiːzənəl"},
+    {en:"organic",es:"orgánico",ipa:"ɔːrˈɡænɪk"},{en:"homemade",es:"casero",ipa:"ˈhoʊmmeɪd"},
+    {en:"gluten-free",es:"sin gluten",ipa:"ˈɡluːtən friː"},{en:"vegan",es:"vegano",ipa:"ˈviːɡən"},
+    {en:"vegetarian",es:"vegetariano",ipa:"ˌvɛdʒəˈtɛəriən"},{en:"dairy-free",es:"sin lácteos",ipa:"ˈdɛri friː"},
+    {en:"allergy",es:"alergia",ipa:"ˈælərdʒi"},{en:"nuts",es:"frutos secos",ipa:"nʌts"},
+    {en:"shellfish",es:"mariscos de concha",ipa:"ˈʃɛlfɪʃ"},{en:"spicy",es:"picante",ipa:"ˈspaɪsi"},
+    {en:"mild",es:"suave / no picante",ipa:"maɪld"},{en:"sweet",es:"dulce",ipa:"swiːt"},
+    {en:"sour",es:"ácido",ipa:"ˈsaʊər"},{en:"bitter",es:"amargo",ipa:"ˈbɪtər"},
+    {en:"portion",es:"porción",ipa:"ˈpɔːrʃən"},{en:"side dish",es:"guarnición",ipa:"saɪd dɪʃ"},
+    {en:"platter",es:"bandeja / fuente",ipa:"ˈplætər"},{en:"tasting menu",es:"menú degustación",ipa:"ˈteɪstɪŋ ˈmɛnjuː"},
+    {en:"special",es:"especial / sugerencia del día",ipa:"ˈspɛʃəl"},{en:"pairing",es:"maridaje",ipa:"ˈpɛərɪŋ"},
+    {en:"sparkling water",es:"agua con gas",ipa:"ˈspɑːrklɪŋ ˈwɔːtər"},{en:"still water",es:"agua sin gas",ipa:"stɪl ˈwɔːtər"},
+    {en:"house wine",es:"vino de la casa",ipa:"haʊs waɪn"},{en:"red wine",es:"vino tinto",ipa:"rɛd waɪn"},
+    {en:"white wine",es:"vino blanco",ipa:"waɪt waɪn"},{en:"rosé",es:"vino rosado",ipa:"roʊˈzeɪ"},
+    {en:"draft beer",es:"cerveza de barril",ipa:"dræft bɪr"},{en:"cocktail",es:"cóctel",ipa:"ˈkɒkteɪl"},
+    {en:"on the rocks",es:"con hielo",ipa:"ɒn ðə rɒks"},{en:"neat",es:"solo / sin hielo",ipa:"niːt"},
+    {en:"espresso",es:"espresso",ipa:"ɛˈsprɛsoʊ"},{en:"cappuccino",es:"capuchino",ipa:"ˌkæpʊˈtʃiːnoʊ"},
+    {en:"receipt",es:"boleta / comprobante",ipa:"rɪˈsiːt"},{en:"cash",es:"efectivo",ipa:"kæʃ"},
+    {en:"credit card",es:"tarjeta de crédito",ipa:"ˈkrɛdɪt kɑːrd"},{en:"change",es:"vuelto",ipa:"tʃeɪndʒ"},
+    {en:"complimentary",es:"cortesía de la casa",ipa:"ˌkɒmplɪˈmɛntəri"},{en:"takeaway",es:"para llevar",ipa:"ˈteɪkəweɪ"},
+    {en:"refill",es:"rellenar el vaso",ipa:"ˈriːfɪl"},{en:"high chair",es:"silla para bebé",ipa:"haɪ tʃɛr"},
+    {en:"manager",es:"encargado / gerente",ipa:"ˈmænɪdʒər"},{en:"complaint",es:"queja / reclamo",ipa:"kəmˈpleɪnt"},
+    {en:"feedback",es:"opinión / comentario",ipa:"ˈfiːdbæk"},{en:"reservation book",es:"libro de reservas",ipa:"ˌrɛzərˈveɪʃən bʊk"}
+  ],
+  local:[
+    {title:"🚻 Indicaciones",phrases:[
+      {en:"The restrooms are at the back on the left.",es:"Los baños están al fondo a la izquierda.",ipa:"ðə ˈrɛstruːmz ɑːr æt ðə bæk ɒn ðə lɛft"},
+      {en:"The exit is straight ahead.",es:"La salida está derecho al frente.",ipa:"ðiː ˈɛksɪt ɪz streɪt əˈhɛd"},
+      {en:"The entrance is on the right.",es:"La entrada está a la derecha.",ipa:"ðiː ˈɛntrəns ɪz ɒn ðə raɪt"},
+      {en:"The terrace is through that door.",es:"La terraza es por esa puerta.",ipa:"ðə ˈtɛrəs ɪz θruː ðæt dɔːr"},
+      {en:"The elevator is next to the bar.",es:"El ascensor está al lado del bar.",ipa:"ðiː ˈɛlɪveɪtər ɪz nɛkst tuː ðə bɑːr"},
+      {en:"The parking is in the basement.",es:"El estacionamiento está en el sótano.",ipa:"ðə ˈpɑːrkɪŋ ɪz ɪn ðə ˈbeɪsmənt"},
+      {en:"The coat check is near the entrance.",es:"El guardarropa está cerca de la entrada.",ipa:"ðə koʊt tʃɛk ɪz nɪər ðiː ˈɛntrəns"}]},
+    {title:"🗺️ Direcciones",phrases:[
+      {en:"Turn right.",es:"Gire a la derecha.",ipa:"tɜːrn raɪt"},
+      {en:"Turn left.",es:"Gire a la izquierda.",ipa:"tɜːrn lɛft"},
+      {en:"Go straight ahead.",es:"Siga derecho.",ipa:"ɡoʊ streɪt əˈhɛd"},
+      {en:"It's at the end of the hallway.",es:"Está al final del pasillo.",ipa:"ɪts æt ðiː ɛnd ɒv ðə ˈhɔːlweɪ"},
+      {en:"Go up the stairs.",es:"Suba las escaleras.",ipa:"ɡoʊ ʌp ðə stɛrz"},
+      {en:"Go down to the lower level.",es:"Baje al nivel inferior.",ipa:"ɡoʊ daʊn tuː ðə ˈloʊər ˈlɛvəl"},
+      {en:"It's just around the corner.",es:"Está justo a la vuelta.",ipa:"ɪts dʒʌst əˈraʊnd ðə ˈkɔːrnər"},
+      {en:"Follow me, I'll show you.",es:"Sígame, yo le indico.",ipa:"ˈfɒloʊ miː aɪl ʃoʊ juː"}]},
+    {title:"🚨 Emergencias",phrases:[
+      {en:"The emergency exit is over there.",es:"La salida de emergencia está por allá.",ipa:"ðiː ɪˈmɜːrdʒənsi ˈɛksɪt ɪz ˈoʊvər ðɛr"},
+      {en:"Please stay calm.",es:"Por favor mantenga la calma.",ipa:"pliːz steɪ kɑːm"},
+      {en:"I'll call the manager right away.",es:"Llamo al encargado enseguida.",ipa:"aɪl kɔːl ðə ˈmænɪdʒər raɪt əˈweɪ"},
+      {en:"Is anyone hurt?",es:"¿Alguien resultó herido?",ipa:"ɪz ˈɛniwʌn hɜːrt"},
+      {en:"Do you need medical assistance?",es:"¿Necesita asistencia médica?",ipa:"duː juː niːd ˈmɛdɪkəl əˈsɪstəns"},
+      {en:"Please use the emergency exit.",es:"Por favor use la salida de emergencia.",ipa:"pliːz juːz ðiː ɪˈmɜːrdʒənsi ˈɛksɪt"}]}
+  ]
+};
+// ── PORTUGUÉS ───────────────────────────────────────────────
+DATA.pt = {
+  meta:{ flag:"🇧🇷", name:"Portugués", subtitle:"Serviço de mesas · 30 dias · 5 frases por dia",
+    pickLabel:"Portugués", pickSub:"Português para garçons",
+    pronLabel:"Pronúncia", voiceLang:"pt-BR", voiceMatch:/pt[-_]BR/i, voiceFallback:/^pt/i },
+  curriculum:[
+    {day:1,theme:"Receber o cliente",phrases:[
+      {pt:"Boa noite, seja bem-vindo! O senhor tem reserva?",es:"Buenas noches, ¡bienvenido! ¿Tiene reserva?",pron:"BOA NOI-chi, SEja bẽ-VIN-du! u se-NYOR tẽ he-ZER-va?"},
+      {pt:"Mesa para dois? Por aqui, por favor.",es:"Mesa para dos. Por aquí, por favor.",pron:"MEza PA-ra DOIS? por a-KI, por fa-VOR"},
+      {pt:"Posso pegar o seu casaco?",es:"¿Le tomo el abrigo?",pron:"PO-su pe-GAR u seu ka-ZA-ku?"},
+      {pt:"O senhor prefere mesa interna ou na varanda?",es:"¿Prefiere mesa adentro o en la terraza?",pron:"u se-NYOR pre-FE-ri MEza in-TER-na OU na va-RAN-da?"},
+      {pt:"Serei o seu garçom esta noite.",es:"Seré su mesero esta noche.",pron:"se-REI u seu gar-SÕ ES-ta NOI-chi"}]},
+    {day:2,theme:"Anotar o pedido",phrases:[
+      {pt:"O senhor já está pronto para pedir, ou precisa de mais alguns minutos?",es:"¿Listo para ordenar o necesita más minutos?",pron:"u se-NYOR já es-TÁ PRON-tu PA-ra pe-DIR?"},
+      {pt:"Posso trazer alguma bebida para começar?",es:"¿Empezamos con algo de tomar?",pron:"PO-su tra-ZER al-GU-ma be-BI-da PA-ra ko-me-SAR?"},
+      {pt:"Como o senhor prefere o bife?",es:"¿Cómo desea su carne?",pron:"KO-mu u se-NYOR pre-FE-ri u BI-fi?"},
+      {pt:"Gostaria de ouvir o prato especial do dia?",es:"¿Le gustaría conocer las sugerencias del día?",pron:"gos-ta-RI-a de ou-VIR u PRA-tu es-pe-SIÁL du JI-a?"},
+      {pt:"Ótima escolha. Trago já!",es:"Excelente elección. Se lo traigo enseguida.",pron:"O-chi-ma es-KO-lya. TRA-gu JÁ!"}]},
+    {day:3,theme:"Descrever os pratos",phrases:[
+      {pt:"É um salmão grelhado com legumes da estação.",es:"Es salmón a la parrilla con verduras de estación.",pron:"É ũ sal-MÃO gre-LYA-du kõ le-GU-mis da es-ta-SÃO"},
+      {pt:"Este prato é levemente apimentado.",es:"Este plato es ligeramente picante.",pron:"ES-chi PRA-tu É le-ve-MEN-chi a-pi-men-TA-du"},
+      {pt:"O molho é caseiro.",es:"La salsa es de elaboración propia.",pron:"u MO-lyu É ka-ZEI-ru"},
+      {pt:"Vem acompanhado de purê de batatas.",es:"Viene con guarnición de puré de papas.",pron:"vẽ a-kõ-pa-NYA-du de pu-RÊ de ba-TA-tas"},
+      {pt:"Harmoniza muito bem com vinho tinto.",es:"Marida muy bien con un vino tinto.",pron:"ar-mo-NI-za MUI-tu bẽ kõ VI-nyu TIN-tu"}]},
+    {day:4,theme:"Alergias e dietas",phrases:[
+      {pt:"O senhor tem alguma alergia ou restrição alimentar?",es:"¿Tiene alguna alergia o restricción alimentaria?",pron:"u se-NYOR tẽ al-GU-ma a-ler-JI-a ou hes-tri-SÃO a-li-men-TAR?"},
+      {pt:"Este prato é sem glúten.",es:"Este plato es libre de gluten.",pron:"ES-chi PRA-tu É sẽ GLU-tẽ"},
+      {pt:"Podemos preparar sem castanhas.",es:"Podemos prepararlo sin frutos secos.",pron:"po-DE-mus pre-pa-RAR sẽ kas-TA-nyas"},
+      {pt:"Esse prato é adequado para vegetarianos?",es:"¿Esto es apto para vegetarianos?",pron:"E-si PRA-tu É a-de-KWA-du PA-ra ve-je-ta-ri-A-nus?"},
+      {pt:"Deixe-me verificar com a cozinha.",es:"Permítame consultarlo con la cocina.",pron:"DEI-shi-mi ve-ri-fi-KAR kõ a ku-ZI-nya"}]},
+    {day:5,theme:"Durante a refeição",phrases:[
+      {pt:"Como está tudo?",es:"¿Qué tal está todo?",pron:"KO-mu es-TÁ TU-du?"},
+      {pt:"Posso trazer mais alguma coisa?",es:"¿Desea algo más?",pron:"PO-su tra-ZER MAIS al-GU-ma KOI-za?"},
+      {pt:"Deixe-me completar a sua água.",es:"Le relleno el agua.",pron:"DEI-shi-mi kõ-ple-TAR a SUA Á-gwa"},
+      {pt:"Vou retirar esses pratos.",es:"Le retiro estos platos.",pron:"VO he-chi-RAR E-sis PRA-tus"},
+      {pt:"Sem pressa, pode ficar à vontade.",es:"Tómese su tiempo, no hay apuro.",pron:"sẽ PRE-sa, PO-di fi-KAR à võ-TA-di"}]},
+    {day:6,theme:"Resolver problemas",phrases:[
+      {pt:"Mil desculpas. Vou resolver isso agora.",es:"Lamento mucho eso. Permítame solucionarlo.",pron:"MIL des-KUL-pas. VO he-sol-VER I-su a-GO-ra"},
+      {pt:"Vou trazer um novo.",es:"Le traigo uno nuevo.",pron:"VO tra-ZER ũ NO-vu"},
+      {pt:"Claro, vou retirar da conta.",es:"Por supuesto, lo descuento de la cuenta.",pron:"KLA-ru, VO he-chi-RAR da KÕ-ta"},
+      {pt:"Obrigado por me avisar.",es:"Gracias por avisarme.",pron:"o-bri-GA-du por mi a-vi-ZAR"},
+      {pt:"Há algo que eu possa fazer para compensar?",es:"¿Hay algo que pueda hacer para compensarlo?",pron:"Á AL-gu ki EU PO-sa fa-ZER PA-ra kõ-pẽ-SAR?"}]},
+    {day:7,theme:"A conta",phrases:[
+      {pt:"A conta será tudo junto ou separada?",es:"¿La cuenta junta o por separado?",pron:"a KÕ-ta se-RÁ TU-du JUN-tu ou se-pa-RA-da?"},
+      {pt:"Como o senhor deseja pagar?",es:"¿Cómo desea pagar?",pron:"KO-mu u se-NYOR de-ZE-ja pa-GAR?"},
+      {pt:"Aceitamos dinheiro e cartão.",es:"Aceptamos efectivo y tarjeta.",pron:"a-sei-TA-mus di-NYEI-ru i kar-TÃO"},
+      {pt:"A gorjeta não está incluída.",es:"La propina no está incluida.",pron:"a gor-JE-ta NÃO es-TÁ in-klwi-DA"},
+      {pt:"Obrigado, boa noite!",es:"¡Gracias, que tenga buena noche!",pron:"o-bri-GA-du, BOA NOI-chi!"}]},
+    {day:8,theme:"Na cozinha",phrases:[
+      {pt:"Pedido pronto! Mesa cinco.",es:"¡Listo para servir! Mesa cinco.",pron:"pe-DI-du PRON-tu! ME-za SIN-ku"},
+      {pt:"Acabou o salmão.",es:"Se nos acabó el salmón.",pron:"a-ka-BOU u sal-MÃO"},
+      {pt:"Pode mandar as entradas?",es:"¿Puedes mandar las entradas?",pron:"PO-di mãn-DAR as ẽ-TRA-das?"},
+      {pt:"Esse prato tem que sair quente.",es:"Esto tiene que salir caliente.",pron:"E-si PRA-tu tẽ ki sa-IR KEN-chi"},
+      {pt:"Atenção, frigideira quente!",es:"¡Sartén caliente, cuidado!",pron:"a-tẽ-SÃO, fri-ji-DEI-ra KEN-chi!"}]},
+    {day:9,theme:"No bar",phrases:[
+      {pt:"O que posso preparar para o senhor?",es:"¿Qué le preparo?",pron:"u ki PO-su pre-pa-RAR PA-ra u se-NYOR?"},
+      {pt:"Prefere com gelo ou puro?",es:"¿Lo desea con hielo o solo?",pron:"pre-FE-ri kõ JE-lu OU PU-ru?"},
+      {pt:"Posso ver uma identidade, por favor?",es:"¿Me muestra una identificación?",pron:"PO-su ver U-ma i-dẽ-chi-DA-di, por fa-VOR?"},
+      {pt:"Última chamada para bebidas.",es:"Última ronda de tragos.",pron:"UL-chi-ma sha-MA-da PA-ra be-BI-das"},
+      {pt:"Esta é por conta da casa.",es:"Esta va por la casa.",pron:"ES-ta É por KÕ-ta da KA-za"}]},
+    {day:10,theme:"Recomendar",phrases:[
+      {pt:"Se me permite sugerir, o cordeiro está ótimo hoje.",es:"El cordero está excelente hoy, si me permite sugerir.",pron:"si mi per-MI-chi su-je-RIR, u kor-DEI-ru es-TÁ O-chi-mu O-ji"},
+      {pt:"É um dos nossos pratos mais pedidos.",es:"Es uno de nuestros platos más populares.",pron:"É ũ dus NO-sos PRA-tus MAIS pe-DI-dus"},
+      {pt:"De sobremesa, recomendo o cheesecake.",es:"De postre, le recomiendo el cheesecake.",pron:"di so-bre-ME-za, he-ko-MEN-du u cheesecake"},
+      {pt:"É leve, perfeito após uma refeição farta.",es:"Es ligero, perfecto tras una comida abundante.",pron:"É LE-vi, per-FEI-tu a-PÓS U-ma he-fei-SÃO FAR-ta"},
+      {pt:"Pode confiar, não vai se arrepender.",es:"Confíe en mí, no se va a decepcionar.",pron:"PO-di kõ-fi-AR, NÃO vai si a-he-pẽ-DER"}]},
+    {day:11,theme:"Reservas por telefone",phrases:[
+      {pt:"Obrigado por ligar, como posso ajudar?",es:"Gracias por llamar, ¿en qué puedo ayudarle?",pron:"o-bri-GA-du por li-GAR, KO-mu PO-su a-ju-DAR?"},
+      {pt:"Para qual data e horário?",es:"¿Para qué fecha y hora?",pron:"PA-ra KWÁL DA-ta i o-RÁ-riu?"},
+      {pt:"Para quantas pessoas?",es:"¿Para cuántas personas?",pron:"PA-ra KWÃN-tas pe-SO-as?"},
+      {pt:"Qual nome para a reserva?",es:"¿Me da un nombre para la reserva?",pron:"KWÁL NO-mi PA-ra a he-ZER-va?"},
+      {pt:"Aguardamos a sua visita.",es:"Lo esperamos con gusto.",pron:"a-gwar-DA-mus a SUA vi-ZI-ta"}]},
+    {day:12,theme:"Vinhos e harmonização",phrases:[
+      {pt:"Deseja ver a carta de vinhos?",es:"¿Desea ver la carta de vinos?",pron:"de-ZE-ja ver a KAR-ta de VI-nyus?"},
+      {pt:"É um tinto seco e encorpado.",es:"Es un tinto seco y con cuerpo.",pron:"É ũ TIN-tu SE-ku i ẽ-kor-PA-du"},
+      {pt:"Posso servir uma degustação primeiro?",es:"¿Le sirvo una cata primero?",pron:"PO-su ser-VIR U-ma de-gus-ta-SÃO pri-MEI-ru?"},
+      {pt:"Tem notas de cereja e carvalho.",es:"Tiene notas de cereza y roble.",pron:"tẽ NO-tas de se-RE-ja i kar-VA-lyu"},
+      {pt:"Deixo a garrafa na mesa?",es:"¿Dejo la botella en la mesa?",pron:"DEI-shu a ga-RA-fa na ME-za?"}]},
+    {day:13,theme:"Despedida e fidelização",phrases:[
+      {pt:"Espero que tenha gostado da refeição.",es:"Espero que haya disfrutado su comida.",pron:"es-PE-ru ki TE-nya gos-TA-du da he-fei-SÃO"},
+      {pt:"Por favor, volte sempre.",es:"Por favor, vuelva a vernos pronto.",pron:"por fa-VOR, VOL-chi SEM-pri"},
+      {pt:"Aqui está o nosso cartão para reservas.",es:"Aquí tiene nuestra tarjeta si desea reservar.",pron:"a-KI es-TÁ u no-su kar-TÃO PA-ra he-ZER-vas"},
+      {pt:"Foi um prazer atendê-lo.",es:"Fue un placer atenderle.",pron:"FOI ũ pra-ZER a-tẽ-DÊ-lu"},
+      {pt:"Dirija com cuidado, boa noite!",es:"Maneje con cuidado, ¡buenas noches!",pron:"di-RI-ja kõ kwi-DA-du, BOA NOI-chi!"}]},
+    {day:14,theme:"Frases de equipe",phrases:[
+      {pt:"Eu fico com a mesa sete.",es:"Yo me encargo de la mesa siete.",pron:"EU FI-ku kõ a ME-za SE-chi"},
+      {pt:"Pode me dar uma mão para levar os pratos?",es:"¿Me das una mano sacando los platos?",pron:"PO-di mi DAR U-ma MÃO PA-ra le-VAR us PRA-tus?"},
+      {pt:"Estamos cheios esta noite.",es:"Estamos a tope esta noche.",pron:"es-TA-mus SHEI-us ES-ta NOI-chi"},
+      {pt:"Vamos arrumar esta mesa para os próximos clientes.",es:"Preparemos esta mesa para los próximos clientes.",pron:"VA-mus a-hu-MAR ES-ta ME-za PA-ra us PRO-si-mus kli-EN-chis"},
+      {pt:"Bom trabalho hoje, equipe!",es:"Buen trabajo hoy, equipo.",pron:"BÕ tra-BA-lyu O-ji, e-KI-pi!"}]},
+    {day:15,theme:"Sentar os clientes",phrases:[
+      {pt:"Sua mesa está pronta, por favor me siga.",es:"Su mesa está lista, sígame por favor.",pron:"SUA ME-za es-TÁ PRON-ta, por fa-VOR mi SI-ga"},
+      {pt:"Esta mesa está bem para o senhor?",es:"¿Esta mesa le parece bien?",pron:"ES-ta ME-za es-TÁ BẼ PA-ra u se-NYOR?"},
+      {pt:"Por favor, tome assento.",es:"Por favor, tome asiento.",pron:"por fa-VOR, TO-mi a-SEN-tu"},
+      {pt:"Posso trazer uma cadeirinha para a criança?",es:"¿Le traigo una sillita para el pequeño?",pron:"PO-su tra-ZER U-ma ka-dei-RI-nya PA-ra a kri-ÃN-sa?"},
+      {pt:"Aqui estão os cardápios. Dou um momento.",es:"Aquí tienen las cartas. Les doy un momento.",pron:"a-KI es-TÃO us kar-DÁ-pius. DOU ũ mo-MEN-tu"}]},
+    {day:16,theme:"Apresentar o cardápio",phrases:[
+      {pt:"O senhor já nos visitou antes?",es:"¿Nos ha visitado antes?",pron:"u se-NYOR já nus vi-zi-TOU AN-chis?"},
+      {pt:"O cardápio é dividido em entradas, pratos principais e sobremesas.",es:"Nuestra carta se divide en entradas, principales y postres.",pron:"u kar-DÁ-piu É di-vi-DI-du ẽ ẽ-TRA-das"},
+      {pt:"Os pratos marcados são as assinaturas do chef.",es:"Los platos marcados son los del chef.",pron:"us PRA-tus mar-KA-dus SÃO as a-si-na-TU-ras du shef"},
+      {pt:"Tudo é preparado na hora, pode demorar um pouco.",es:"Todo se prepara al momento, puede tomar un poco de tiempo.",pron:"TU-du É pre-pa-RA-du na O-ra"},
+      {pt:"Qualquer dúvida, é só chamar.",es:"Avíseme si tiene alguna pregunta.",pron:"kwál-QUER DÚ-vi-da, É SÓ sha-MAR"}]},
+    {day:17,theme:"Sugerir bebidas",phrases:[
+      {pt:"Posso trazer água enquanto decide? Com gás ou sem gás?",es:"¿Le traigo agua mientras decide? ¿Sin gas o con gas?",pron:"PO-su tra-ZER Á-gwa ẽ-KWÃN-tu de-SI-di?"},
+      {pt:"Deseja uma bebida antes de comer?",es:"¿Desea una bebida antes de la comida?",pron:"de-ZE-ja U-ma be-BI-da AN-chis de ko-MER?"},
+      {pt:"Temos um bom vinho da casa por taça.",es:"Tenemos un buen vino de la casa por copa.",pron:"TE-mus ũ BÕ VI-nyu da KA-za por TA-sa"},
+      {pt:"Posso já pedir as bebidas?",es:"¿Le voy preparando esas bebidas?",pron:"PO-su já pe-DIR as be-BI-das?"},
+      {pt:"Já volto com as bebidas.",es:"Vuelvo enseguida con sus bebidas.",pron:"JÁ VOL-tu kõ as be-BI-das"}]},
+    {day:18,theme:"Detalhar o pedido",phrases:[
+      {pt:"E de entrada?",es:"¿Y de entrada?",pron:"i di ẽ-TRA-da?"},
+      {pt:"Prefere como entrada ou prato principal?",es:"¿Lo desea de entrada o de principal?",pron:"pre-FE-ri ko-MU ẽ-TRA-da OU PRA-tu prin-si-PÁL?"},
+      {pt:"Algum acompanhamento?",es:"¿Alguna guarnición con eso?",pron:"al-GÜM a-kõ-pa-NYA-men-tu?"},
+      {pt:"Deixe-me repetir o pedido.",es:"Permítame repetirle el pedido.",pron:"DEI-shi-mi he-pe-TIR u pe-DI-du"},
+      {pt:"Deseja que tudo seja servido junto?",es:"¿Desea que traigamos todo junto?",pron:"de-ZE-ja ki TU-du SE-ja ser-VI-du JUN-tu?"}]},
+    {day:19,theme:"Modificar e personalizar",phrases:[
+      {pt:"Claro, posso deixar sem cebola.",es:"Por supuesto, puedo dejarlo sin cebolla.",pron:"KLA-ru, PO-su dei-SHAR sẽ se-BO-la"},
+      {pt:"Prefere o molho separado?",es:"¿Desea el aderezo aparte?",pron:"pre-FE-ri u MO-lyu se-pa-RA-du?"},
+      {pt:"Podemos fazer uma porção menor para a criança.",es:"Podemos hacerlo en porción más pequeña para el niño.",pron:"po-DE-mus fa-ZER U-ma por-SÃO me-NOR PA-ra a kri-ÃN-sa"},
+      {pt:"Deixe-me verificar com a cozinha.",es:"Déjeme ver si la cocina puede hacerlo.",pron:"DEI-shi-mi ve-ri-fi-KAR kõ a ku-ZI-nya"},
+      {pt:"Com certeza, sem problema algum.",es:"Claro que sí, ningún problema.",pron:"kõ ser-TE-za, sẽ pro-BLE-ma al-GÜM"}]},
+    {day:20,theme:"Servir os pratos",phrases:[
+      {pt:"Aqui está. Cuidado, o prato está quente.",es:"Aquí tiene. Cuidado, el plato está caliente.",pron:"a-KI es-TÁ. kwi-DA-du, u PRA-tu es-TÁ KEN-chi"},
+      {pt:"Quem pediu o frango grelhado?",es:"¿Quién pidió el pollo a la parrilla?",pron:"kẽ pe-DIU u FRÃN-gu gre-LYA-du?"},
+      {pt:"Posso moer um pouco de pimenta?",es:"¿Le pongo pimienta recién molida?",pron:"PO-su mo-ER ũ PO-ku de pi-MEN-ta?"},
+      {pt:"Bom apetite!",es:"¡Que disfrute su comida!",pron:"BÕ a-pe-CHI-chi!"},
+      {pt:"Trago o restante do pedido em um instante.",es:"Le traigo el resto del pedido en un momento.",pron:"TRA-gu u hes-TÃN-chi du pe-DI-du ẽ ũ ins-TÃN-chi"}]},
+    {day:21,theme:"Atenção durante a refeição",phrases:[
+      {pt:"Está tudo do agrado do senhor?",es:"¿Está todo a su gusto?",pron:"es-TÁ TU-du du a-GRA-du du se-NYOR?"},
+      {pt:"Gostaria de mais pão?",es:"¿Desea más pan?",pron:"gos-ta-RI-a di MAIS PÃO?"},
+      {pt:"Posso trazer mais bebidas?",es:"¿Le traigo otra ronda de bebidas?",pron:"PO-su tra-ZER MAIS be-BI-das?"},
+      {pt:"Posso retirar isso?",es:"¿Le retiro esto?",pron:"PO-su he-chi-RAR I-su?"},
+      {pt:"Me chame se precisar de algo.",es:"Hágame una seña si necesita algo.",pron:"mi SHA-mi si pre-si-ZAR di AL-gu"}]},
+    {day:22,theme:"Mesas grandes",phrases:[
+      {pt:"Vão todos juntos ou contas separadas?",es:"¿Van todos juntos o cuentas separadas?",pron:"VÃO TO-dus JUN-tus OU KÕ-tas se-pa-RA-das?"},
+      {pt:"Vou anotar os pedidos um a um.",es:"Tomaré los pedidos uno por uno.",pron:"VO a-no-TAR us pe-DI-dus ũ a ũ"},
+      {pt:"Vou buscar mais uma cadeira.",es:"Le acerco otra silla.",pron:"VO bus-KAR MAIS U-ma ka-DEI-ra"},
+      {pt:"Vou servir primeiro os pratos das crianças.",es:"Sacaré primero los platos de los niños.",pron:"VO ser-VIR pri-MEI-ru us PRA-tus das kri-ÃN-sas"},
+      {pt:"Não se preocupe, vou controlar os pedidos.",es:"No se preocupe, llevaré la cuenta de quién pidió qué.",pron:"NÃO si pre-o-KU-pi, VO kõ-tro-LAR us pe-DI-dus"}]},
+    {day:23,theme:"Oferecer sobremesa e café",phrases:[
+      {pt:"Gostaria de ver o cardápio de sobremesas?",es:"¿Desea ver la carta de postres?",pron:"gos-ta-RI-a de ver u kar-DÁ-piu de so-bre-ME-zas?"},
+      {pt:"Posso te tentar com algo doce?",es:"¿Le tiento con algo dulce?",pron:"PO-su chi tẽ-TAR kõ AL-gu DO-si?"},
+      {pt:"Vai querer café ou chá?",es:"¿Desea café o té con eso?",pron:"vai ke-RER ka-FÉ OU SHÁ?"},
+      {pt:"As sobremesas são ótimas para compartilhar.",es:"Los postres son perfectos para compartir.",pron:"as so-bre-ME-zas SÃO O-chi-mas PA-ra kõ-par-chi-LYAR"},
+      {pt:"Que tal um café para finalizar?",es:"¿Qué tal un café para terminar?",pron:"ki TAL ũ ka-FÉ PA-ra fi-na-li-ZAR?"}]},
+    {day:24,theme:"Lidar com esperas",phrases:[
+      {pt:"Obrigado pela paciência, não vai demorar.",es:"Gracias por su paciencia, no tardará mucho.",pron:"o-bri-GA-du PE-la pa-si-ÊN-sia, NÃO vai de-mo-RAR"},
+      {pt:"Seu prato já está sendo finalizado.",es:"Su comida se está emplatando ahora mismo.",pron:"seu PRA-tu JÁ es-TÁ SEN-du fi-na-li-ZA-du"},
+      {pt:"Mil desculpas pela demora.",es:"Lamento mucho la espera.",pron:"MIL des-KUL-pas PE-la de-MO-ra"},
+      {pt:"Posso trazer um pão enquanto espera?",es:"¿Le traigo algo de pan mientras tanto?",pron:"PO-su tra-ZER ũ PÃO ẽ-KWÃN-tu es-PE-ra?"},
+      {pt:"Já vou verificar para o senhor.",es:"Déjeme verificarlo enseguida.",pron:"JÁ VO ve-ri-fi-KAR PA-ra u se-NYOR"}]},
+    {day:25,theme:"Reclamações com tato",phrases:[
+      {pt:"Lamento muito, vou resolver.",es:"Lo siento mucho, déjeme arreglarlo.",pron:"la-MEN-tu MUI-tu, VO he-sol-VER"},
+      {pt:"Gostaria que eu trouxesse outra coisa?",es:"¿Desea que le traiga otra cosa en su lugar?",pron:"gos-ta-RI-a ki EU trou-SE-si OU-tra KOI-za?"},
+      {pt:"Compreendo completamente, e peço desculpas.",es:"Lo entiendo perfectamente, y le pido disculpas.",pron:"kõ-pre-ÊN-du kõ-ple-ta-MEN-chi, i PE-su des-KUL-pas"},
+      {pt:"Vou chamar o gerente imediatamente.",es:"Hablaré con mi encargado enseguida.",pron:"VO sha-MAR u je-REN-chi i-me-dia-ta-MEN-chi"},
+      {pt:"Por favor, aceite isso com nossas desculpas.",es:"Por favor, acepte esto con nuestras disculpas.",pron:"por fa-VOR, a-SEI-chi I-su kõ NO-sas des-KUL-pas"}]},
+    {day:26,theme:"Clientes com pressa",phrases:[
+      {pt:"Está com pressa? Posso agilizar.",es:"¿Tiene prisa? Puedo agilizarlo.",pron:"es-TÁ kõ PRE-sa? PO-su a-ji-li-ZAR"},
+      {pt:"Recomendo um prato que sai rápido.",es:"Le recomendaría un plato que sale rápido.",pron:"he-ko-MEN-du ũ PRA-tu ki SAI RÁ-pi-du"},
+      {pt:"Trago a conta junto com a comida.",es:"Le traeré la cuenta con la comida para ahorrar tiempo.",pron:"TRA-gu a KÕ-ta JUN-tu kõ a ko-MI-da"},
+      {pt:"Sem problema, o senhor sai na hora.",es:"Sin problema, lo dejaré listo a tiempo.",pron:"sẽ pro-BLE-ma, u se-NYOR SAI na O-ra"},
+      {pt:"Prefere para viagem?",es:"¿Lo prefiere para llevar?",pron:"pre-FE-ri PA-ra via-JẼ?"}]},
+    {day:27,theme:"Ocasiões especiais",phrases:[
+      {pt:"Está comemorando algo especial esta noite?",es:"¿Celebran algo especial esta noche?",pron:"es-TÁ ko-me-mo-RAN-du AL-gu es-pe-SIÁL ES-ta NOI-chi?"},
+      {pt:"Feliz aniversário! Esta sobremesa é por conta da casa.",es:"¡Feliz cumpleaños! Este postre va por la casa.",pron:"fe-LIS a-ni-ver-SÁ-riu! ES-ta so-bre-ME-za É por KÕ-ta da KA-za"},
+      {pt:"Gostaria que eu trouxesse com uma velinha?",es:"¿Desea que lo saque con una vela?",pron:"gos-ta-RI-a ki EU trou-SE-si kõ U-ma ve-LI-nya?"},
+      {pt:"Parabéns para vocês!",es:"¡Felicitaciones a ambos!",pron:"pa-ra-BẼNS PA-ra vo-SÊS!"},
+      {pt:"Me avise se quiser fazer desta noite algo especial.",es:"Avíseme si puedo hacer algo para que sea memorable.",pron:"mi a-VI-zi si ki-ZER fa-ZER des-ta NOI-chi AL-gu es-pe-SIÁL"}]},
+    {day:28,theme:"Fechar a conta",phrases:[
+      {pt:"Quando quiser, não há pressa.",es:"Cuando guste, no hay prisa.",pron:"KWÃN-du ki-ZER, NÃO Á PRE-sa"},
+      {pt:"Aqui está a conta. Pego quando estiver pronto.",es:"Aquí tiene la cuenta. La retiro cuando esté listo.",pron:"a-KI es-TÁ a KÕ-ta. PE-gu KWÃN-du es-chi-VER PRON-tu"},
+      {pt:"Gostaria do comprovante?",es:"¿Desea el comprobante?",pron:"gos-ta-RI-a du kõ-pro-VÃN-chi?"},
+      {pt:"Já volto com o troco.",es:"Vuelvo enseguida con su vuelto.",pron:"JÁ VOL-tu kõ u TRO-ku"},
+      {pt:"Pode ficar à vontade, sem pressa.",es:"Tómese su tiempo, sin ningún apuro.",pron:"PO-di fi-KAR à võ-TA-di, sẽ PRE-sa"}]},
+    {day:29,theme:"Frases de cortesia",phrases:[
+      {pt:"Com prazer.",es:"Es un placer.",pron:"kõ pra-ZER"},
+      {pt:"Imediatamente, senhor / senhora.",es:"Enseguida, señor / señora.",pron:"i-me-dia-ta-MEN-chi, se-NYOR / se-NYO-ra"},
+      {pt:"Já estou com o senhor em um momento.",es:"Estaré con usted en un momento.",pron:"JÁ es-TOU kõ u se-NYOR ẽ ũ mo-MEN-tu"},
+      {pt:"Há algo mais que eu possa trazer?",es:"¿Hay algo más que pueda traerle?",pron:"Á AL-gu MAIS ki EU PO-sa tra-ZER?"},
+      {pt:"De nada, com muito prazer.",es:"De nada, con mucho gusto.",pron:"di NA-da, kõ MUI-tu pra-ZER"}]},
+    {day:30,theme:"Despedir o cliente",phrases:[
+      {pt:"Obrigado por nos visitar esta noite.",es:"Gracias por acompañarnos esta noche.",pron:"o-bri-GA-du por nus vi-zi-TAR ES-ta NOI-chi"},
+      {pt:"Espero vê-lo novamente em breve.",es:"Espero verle pronto de nuevo.",pron:"es-PE-ru VÊ-lu no-va-MEN-chi ẽ BRE-vi"},
+      {pt:"Cuidado com o degrau na saída.",es:"Cuidado con el escalón a la salida.",pron:"kwi-DA-du kõ u de-GRÁu na sa-I-da"},
+      {pt:"Foi um prazer tê-lo conosco.",es:"Fue un gusto tenerle con nosotros.",pron:"FOI ũ pra-ZER TÊ-lu ko-NOS-ku"},
+      {pt:"Tenha uma ótima noite!",es:"¡Que tenga una excelente noche!",pron:"TE-nya U-ma O-chi-ma NOI-chi!"}]}
+  ],
+  words:[
+    {pt:"reserva",es:"reserva",pron:"he-ZER-va"},{pt:"entrada",es:"entrada / aperitivo",pron:"ẽ-TRA-da"},
+    {pt:"prato principal",es:"plato principal",pron:"PRA-tu prin-si-PÁL"},{pt:"sobremesa",es:"postre",pron:"so-bre-ME-za"},
+    {pt:"bebida",es:"bebida",pron:"be-BI-da"},{pt:"cardápio / menu",es:"carta / menú",pron:"kar-DÁ-piu"},
+    {pt:"conta",es:"cuenta",pron:"KÕ-ta"},{pt:"gorjeta",es:"propina",pron:"gor-JE-ta"},
+    {pt:"garçom",es:"mesero / garzón",pron:"gar-SÕ"},{pt:"recepcionista",es:"recepcionista / anfitrión",pron:"he-sep-sio-NIS-ta"},
+    {pt:"chef / cozinheiro",es:"chef / cocinero",pron:"shef / ko-zi-NYEI-ru"},{pt:"cozinha",es:"cocina",pron:"ko-ZI-nya"},
+    {pt:"mesa",es:"mesa",pron:"ME-za"},{pt:"reservado",es:"reservado / cabina",pron:"he-zer-VA-du"},
+    {pt:"varanda / terraço",es:"terraza",pron:"va-RÃN-da"},{pt:"bar",es:"barra / bar",pron:"BAR"},
+    {pt:"carta de vinhos",es:"carta de vinos",pron:"KAR-ta de VI-nyus"},{pt:"taça / copo",es:"copa / vaso",pron:"TA-sa"},
+    {pt:"garrafa",es:"botella",pron:"ga-RA-fa"},{pt:"jarra",es:"jarra",pron:"JA-ha"},
+    {pt:"bife",es:"filete / bife",pron:"BI-fi"},{pt:"salmão",es:"salmón",pron:"sal-MÃO"},
+    {pt:"frango",es:"pollo",pron:"FRÃN-gu"},{pt:"cordeiro",es:"cordero",pron:"kor-DEI-ru"},
+    {pt:"frutos do mar",es:"mariscos",pron:"FRU-tus du MAR"},{pt:"legumes / verduras",es:"verduras",pron:"le-GU-mis"},
+    {pt:"salada",es:"ensalada",pron:"sa-LA-da"},{pt:"sopa",es:"sopa",pron:"SO-pa"},
+    {pt:"pão",es:"pan",pron:"PÃO"},{pt:"manteiga",es:"mantequilla",pron:"mãn-TEI-ga"},
+    {pt:"molho",es:"salsa",pron:"MO-lyu"},{pt:"tempero",es:"condimento",pron:"tẽ-PE-ru"},
+    {pt:"pimenta",es:"pimienta",pron:"pi-MEN-ta"},{pt:"sal",es:"sal",pron:"SAL"},
+    {pt:"azeite",es:"aceite de oliva",pron:"a-ZEI-chi"},{pt:"vinagre",es:"vinagre",pron:"vi-NA-gri"},
+    {pt:"alho",es:"ajo",pron:"A-lyu"},{pt:"cebola",es:"cebolla",pron:"se-BO-la"},
+    {pt:"cogumelo",es:"champiñón",pron:"ko-gu-ME-lu"},{pt:"mal passado",es:"vuelta y vuelta",pron:"MAL pa-SA-du"},
+    {pt:"ao ponto",es:"al punto",pron:"ao PÕ-tu"},{pt:"bem passado",es:"bien cocido",pron:"BẼ pa-SA-du"},
+    {pt:"grelhado",es:"a la parrilla",pron:"gre-LYA-du"},{pt:"frito",es:"frito",pron:"FRI-tu"},
+    {pt:"assado no forno",es:"al horno",pron:"a-SA-du nu FOR-nu"},{pt:"cozido no vapor",es:"al vapor",pron:"ko-ZI-du nu va-POR"},
+    {pt:"assado",es:"asado",pron:"a-SA-du"},{pt:"fresco",es:"fresco",pron:"FRES-ku"},
+    {pt:"da estação",es:"de temporada",pron:"da es-ta-SÃO"},{pt:"orgânico",es:"orgánico",pron:"or-GÃ-ni-ku"},
+    {pt:"caseiro",es:"casero",pron:"ka-ZEI-ru"},{pt:"sem glúten",es:"sin gluten",pron:"sẽ GLU-tẽ"},
+    {pt:"vegano",es:"vegano",pron:"ve-GÃ-nu"},{pt:"vegetariano",es:"vegetariano",pron:"ve-je-ta-ri-Ã-nu"},
+    {pt:"sem lactose",es:"sin lácteos",pron:"sẽ lak-TO-zi"},{pt:"alergia",es:"alergia",pron:"a-ler-JI-a"},
+    {pt:"castanhas / nozes",es:"frutos secos",pron:"kas-TA-nyas"},{pt:"crustáceos",es:"mariscos de concha",pron:"krus-TÁ-seos"},
+    {pt:"picante",es:"picante",pron:"pi-KÃN-chi"},{pt:"suave",es:"suave / no picante",pron:"SUA-vi"},
+    {pt:"doce",es:"dulce",pron:"DO-si"},{pt:"ácido / azedo",es:"ácido",pron:"Á-si-du"},
+    {pt:"amargo",es:"amargo",pron:"a-MAR-gu"},{pt:"porção",es:"porción",pron:"por-SÃO"},
+    {pt:"acompanhamento",es:"guarnición",pron:"a-kõ-pa-nya-MẼN-tu"},{pt:"travessa",es:"bandeja / fuente",pron:"tra-VE-sa"},
+    {pt:"menu degustação",es:"menú degustación",pron:"ME-nu de-gus-ta-SÃO"},{pt:"sugestão do dia",es:"sugerencia del día",pron:"su-jes-TÃO du JI-a"},
+    {pt:"harmonização",es:"maridaje",pron:"ar-mo-ni-za-SÃO"},{pt:"água com gás",es:"agua con gas",pron:"Á-gwa kõ GÁS"},
+    {pt:"água sem gás",es:"agua sin gas",pron:"Á-gwa sẽ GÁS"},{pt:"vinho da casa",es:"vino de la casa",pron:"VI-nyu da KA-za"},
+    {pt:"vinho tinto",es:"vino tinto",pron:"VI-nyu TIN-tu"},{pt:"vinho branco",es:"vino blanco",pron:"VI-nyu BRÃN-ku"},
+    {pt:"vinho rosé",es:"vino rosado",pron:"VI-nyu ro-ZÊ"},{pt:"chope / barril",es:"cerveza de barril",pron:"SHO-pi"},
+    {pt:"drinque / coquetel",es:"cóctel",pron:"DRIN-ki"},{pt:"com gelo",es:"con hielo",pron:"kõ JE-lu"},
+    {pt:"puro / sem gelo",es:"solo / sin hielo",pron:"PU-ru"},{pt:"café espresso",es:"café espresso",pron:"ka-FÉ es-PRE-su"},
+    {pt:"cappuccino",es:"capuchino",pron:"ka-pu-CHI-nu"},{pt:"nota fiscal",es:"boleta / comprobante",pron:"NO-ta fis-KÁL"},
+    {pt:"dinheiro",es:"efectivo",pron:"di-NYEI-ru"},{pt:"cartão de crédito",es:"tarjeta de crédito",pron:"kar-TÃO de KRÉ-di-tu"},
+    {pt:"troco",es:"vuelto",pron:"TRO-ku"},{pt:"cortesia da casa",es:"cortesía de la casa",pron:"kor-te-ZI-a da KA-za"},
+    {pt:"para viagem",es:"para llevar",pron:"PA-ra via-JẼ"},{pt:"completar / repetir",es:"rellenar / repetir",pron:"kõ-ple-TAR"},
+    {pt:"cadeirinha de bebê",es:"silla para bebé",pron:"ka-dei-RI-nya de be-BÊ"},{pt:"gerente",es:"encargado / gerente",pron:"je-REN-chi"},
+    {pt:"reclamação",es:"queja / reclamo",pron:"he-kla-ma-SÃO"},{pt:"avaliação",es:"opinión / comentario",pron:"a-va-lia-SÃO"},
+    {pt:"livro de reservas",es:"libro de reservas",pron:"LI-vru de he-ZER-vas"},{pt:"buffet",es:"bufé",pron:"bu-FÊ"},
+    {pt:"couvert",es:"cubierto / pan de entrada",pron:"ku-VER"},{pt:"copa",es:"copa de servicio",pron:"KO-pa"}
+  ],
+  local:[
+    {title:"🚻 Indicações",phrases:[
+      {pt:"Os banheiros ficam ao fundo à esquerda.",es:"Los baños están al fondo a la izquierda.",pron:"us ba-NYEI-rus FI-kãm ao FÜN-du à es-KUER-da"},
+      {pt:"A saída é em frente.",es:"La salida está derecho al frente.",pron:"a sa-I-da É ẽ FRẼN-chi"},
+      {pt:"A entrada fica à direita.",es:"La entrada está a la derecha.",pron:"a ẽ-TRA-da FI-ka à di-REI-ta"},
+      {pt:"A varanda é por aquela porta.",es:"La terraza es por esa puerta.",pron:"a va-RÃN-da É por a-KE-la POR-ta"},
+      {pt:"O elevador fica ao lado do bar.",es:"El ascensor está al lado del bar.",pron:"u e-le-va-DOR FI-ka ao LA-du du BAR"},
+      {pt:"O estacionamento fica no subsolo.",es:"El estacionamiento está en el sótano.",pron:"u es-ta-sio-na-MẼN-tu FI-ka nu sub-SO-lu"},
+      {pt:"O guarda-volumes fica perto da entrada.",es:"El guardarropa está cerca de la entrada.",pron:"u GWAR-da VO-lu-mis FI-ka PER-tu da ẽ-TRA-da"}]},
+    {title:"🗺️ Direções",phrases:[
+      {pt:"Vire à direita.",es:"Gire a la derecha.",pron:"VI-ri à di-REI-ta"},
+      {pt:"Vire à esquerda.",es:"Gire a la izquierda.",pron:"VI-ri à es-KUER-da"},
+      {pt:"Siga em frente.",es:"Siga derecho.",pron:"SI-ga ẽ FRẼN-chi"},
+      {pt:"É no final do corredor.",es:"Está al final del pasillo.",pron:"É nu fi-NÁL du ko-he-DOR"},
+      {pt:"Suba as escadas.",es:"Suba las escaleras.",pron:"SU-ba as es-KA-das"},
+      {pt:"Desça para o andar inferior.",es:"Baje al nivel inferior.",pron:"DES-sa PA-ra u ãn-DAR in-fe-ri-OR"},
+      {pt:"É logo ali na esquina.",es:"Está justo a la vuelta.",pron:"É LO-gu a-LI na es-KI-na"},
+      {pt:"Me siga, eu te mostro.",es:"Sígame, yo le indico.",pron:"mi SI-ga, eu chi MOS-tru"}]},
+    {title:"🚨 Emergências",phrases:[
+      {pt:"A saída de emergência é por ali.",es:"La salida de emergencia está por allá.",pron:"a sa-I-da di e-mer-JÊN-sia É por a-LI"},
+      {pt:"Por favor, mantenha a calma.",es:"Por favor mantenga la calma.",pron:"por fa-VOR, mãn-TE-nya a KÁL-ma"},
+      {pt:"Vou chamar o gerente agora.",es:"Llamo al encargado enseguida.",pron:"VO sha-MAR u je-RẼN-chi a-GO-ra"},
+      {pt:"Alguém se machucou?",es:"¿Alguien resultó herido?",pron:"al-GẼ si ma-shu-KOU?"},
+      {pt:"Precisa de assistência médica?",es:"¿Necesita asistencia médica?",pron:"pre-SI-za di a-sis-TÊN-sia MÉ-di-ka?"},
+      {pt:"Por favor, use a saída de emergência.",es:"Por favor use la salida de emergencia.",pron:"por fa-VOR, U-zi a sa-I-da di e-mer-JÊN-sia"}]}
+  ]
+};
+// ── CHINO ───────────────────────────────────────────────────
+DATA.zh = {
+  meta:{ flag:"🇨🇳", name:"Chino", subtitle:"中文服务员课程 · 30天 · 每天5句",
+    pickLabel:"Chino", pickSub:"中文服务员用语",
+    pronLabel:"Pinyin", voiceLang:"zh-CN", voiceMatch:/zh[-_]CN/i, voiceFallback:/^zh/i },
+  curriculum:[
+    {day:1,theme:"接待客人",phrases:[
+      {zh:"晚上好，欢迎光临！请问您有预订吗？",es:"Buenas noches, ¡bienvenido! ¿Tiene reserva?",pron:"Wǎnshang hǎo, huānyíng guānglín! Qǐngwèn nín yǒu yùdìng ma?"},
+      {zh:"两位？请跟我来。",es:"Mesa para dos. Por aquí.",pron:"Liǎng wèi? Qǐng gēn wǒ lái."},
+      {zh:"我可以帮您拿外套吗？",es:"¿Le tomo el abrigo?",pron:"Wǒ kěyǐ bāng nín ná wàitào ma?"},
+      {zh:"您想坐室内还是露台？",es:"¿Prefiere mesa adentro o en la terraza?",pron:"Nín xiǎng zuò shìnèi háishi lùtái?"},
+      {zh:"今晚我是您的服务员。",es:"Seré su mesero esta noche.",pron:"Jīnwǎn wǒ shì nín de fúwùyuán."}]},
+    {day:2,theme:"记录点单",phrases:[
+      {zh:"您准备好点菜了吗，还是需要再看一会儿？",es:"¿Listo para ordenar o necesita más minutos?",pron:"Nín zhǔnbèi hǎo diǎncài le ma, háishi xūyào zài kàn yīhuìr?"},
+      {zh:"我先给您点饮料好吗？",es:"¿Empezamos con algo de tomar?",pron:"Wǒ xiān gěi nín diǎn yǐnliào hǎo ma?"},
+      {zh:"您的牛排要几分熟？",es:"¿Cómo desea su carne?",pron:"Nín de niúpái yào jǐ fēn shú?"},
+      {zh:"您要听一下今日特别推荐吗？",es:"¿Le gustaría conocer las sugerencias del día?",pron:"Nín yào tīng yīxià jīnrì tèbié tuījiàn ma?"},
+      {zh:"好的，马上为您准备。",es:"Excelente elección. Se lo traigo enseguida.",pron:"Hǎo de, mǎshàng wèi nín zhǔnbèi."}]},
+    {day:3,theme:"介绍菜品",phrases:[
+      {zh:"这是烤三文鱼配时令蔬菜。",es:"Es salmón a la parrilla con verduras de estación.",pron:"Zhè shì kǎo sānwényú pèi shílìng shūcài."},
+      {zh:"这道菜有点微辣。",es:"Este plato es ligeramente picante.",pron:"Zhè dào cài yǒudiǎn wēilà."},
+      {zh:"酱汁是我们自制的。",es:"La salsa es de elaboración propia.",pron:"Jiàngzhī shì wǒmen zìzhì de."},
+      {zh:"附带土豆泥。",es:"Viene con guarnición de puré de papas.",pron:"Fùdài tǔdòu ní."},
+      {zh:"搭配红葡萄酒非常好。",es:"Marida muy bien con un vino tinto.",pron:"Dāpèi hóng pútáojiǔ fēicháng hǎo."}]},
+    {day:4,theme:"过敏与饮食限制",phrases:[
+      {zh:"请问您有食物过敏或饮食限制吗？",es:"¿Tiene alguna alergia o restricción alimentaria?",pron:"Qǐngwèn nín yǒu shíwù guòmǐn huò yǐnshí xiànzhì ma?"},
+      {zh:"这道菜不含麸质。",es:"Este plato es libre de gluten.",pron:"Zhè dào cài bù hán fūzhì."},
+      {zh:"我们可以不加坚果。",es:"Podemos prepararlo sin frutos secos.",pron:"Wǒmen kěyǐ bù jiā jiānguǒ."},
+      {zh:"这道菜适合素食者吗？",es:"¿Esto es apto para vegetarianos?",pron:"Zhè dào cài shìhé sùshí zhě ma?"},
+      {zh:"让我去厨房确认一下。",es:"Permítame consultarlo con la cocina.",pron:"Ràng wǒ qù chúfáng quèrèn yīxià."}]},
+    {day:5,theme:"用餐中关怀",phrases:[
+      {zh:"请问一切都还好吗？",es:"¿Qué tal está todo?",pron:"Qǐngwèn yīqiè dōu hǎo ma?"},
+      {zh:"还需要什么吗？",es:"¿Desea algo más?",pron:"Hái xūyào shénme ma?"},
+      {zh:"我来给您加水。",es:"Le relleno el agua.",pron:"Wǒ lái gěi nín jiā shuǐ."},
+      {zh:"我来收一下盘子。",es:"Le retiro estos platos.",pron:"Wǒ lái shōu yīxià pánzi."},
+      {zh:"请慢用，不着急。",es:"Tómese su tiempo, no hay apuro.",pron:"Qǐng màn yòng, bù zháojí."}]},
+    {day:6,theme:"处理问题",phrases:[
+      {zh:"非常抱歉，我马上来处理。",es:"Lamento mucho eso. Permítame solucionarlo enseguida.",pron:"Fēicháng bàoqiàn, wǒ mǎshàng lái chǔlǐ."},
+      {zh:"我给您重新换一份。",es:"Le traigo uno nuevo.",pron:"Wǒ gěi nín chóngxīn huàn yī fèn."},
+      {zh:"当然，我从账单上去掉。",es:"Por supuesto, lo descuento de la cuenta.",pron:"Dāngrán, wǒ cóng zhàngdān shàng qùdiào."},
+      {zh:"谢谢您告诉我。",es:"Gracias por avisarme.",pron:"Xièxiè nín gàosù wǒ."},
+      {zh:"有什么我能做的来弥补吗？",es:"¿Hay algo que pueda hacer para compensarlo?",pron:"Yǒu shénme wǒ néng zuò de lái míbǔ ma?"}]},
+    {day:7,theme:"结账",phrases:[
+      {zh:"账单一起结还是分开结？",es:"¿La cuenta junta o por separado?",pron:"Zhàngdān yīqǐ jié háishi fēnkāi jié?"},
+      {zh:"您想怎么付款？",es:"¿Cómo desea pagar?",pron:"Nín xiǎng zěnme fùkuǎn?"},
+      {zh:"我们接受现金和刷卡。",es:"Aceptamos efectivo y tarjeta.",pron:"Wǒmen jiēshòu xiànjīn hé shuākǎ."},
+      {zh:"小费不包含在内。",es:"La propina no está incluida.",pron:"Xiǎofèi bù bāohán zài nèi."},
+      {zh:"谢谢，祝您晚安！",es:"¡Gracias, que tenga buena noche!",pron:"Xièxiè, zhù nín wǎn'ān!"}]},
+    {day:8,theme:"厨房用语",phrases:[
+      {zh:"五号桌上菜！",es:"¡Listo para servir! Mesa cinco.",pron:"Wǔ hào zhuō shàng cài!"},
+      {zh:"三文鱼卖完了。",es:"Se nos acabó el salmón.",pron:"Sānwényú mài wán le."},
+      {zh:"可以开始做前菜吗？",es:"¿Puedes mandar las entradas?",pron:"Kěyǐ kāishǐ zuò qiáncài ma?"},
+      {zh:"这道菜要趁热上。",es:"Esto tiene que salir caliente.",pron:"Zhè dào cài yào chènrè shàng."},
+      {zh:"注意，热锅！",es:"¡Sartén caliente, cuidado!",pron:"Zhùyì, rè guō!"}]},
+    {day:9,theme:"在吧台",phrases:[
+      {zh:"您想喝什么？",es:"¿Qué le preparo?",pron:"Nín xiǎng hē shénme?"},
+      {zh:"您要加冰还是纯饮？",es:"¿Lo desea con hielo o solo?",pron:"Nín yào jiā bīng háishi chún yǐn?"},
+      {zh:"请出示您的证件。",es:"¿Me muestra una identificación?",pron:"Qǐng chūshì nín de zhèngjiàn."},
+      {zh:"最后点单时间到了。",es:"Última ronda de tragos.",pron:"Zuìhòu diǎndān shíjiān dào le."},
+      {zh:"这杯是我们请客的。",es:"Esta va por la casa.",pron:"Zhè bēi shì wǒmen qǐngkè de."}]},
+    {day:10,theme:"推荐菜品",phrases:[
+      {zh:"如果您不介意，今天的羊肉非常棒。",es:"El cordero está excelente hoy, si me permite sugerir.",pron:"Rúguǒ nín bù jièyì, jīntiān de yángròu fēicháng bàng."},
+      {zh:"这是我们最受欢迎的菜之一。",es:"Es uno de nuestros platos más populares.",pron:"Zhè shì wǒmen zuì shòu huānyíng de cài zhī yī."},
+      {zh:"甜点我推荐芝士蛋糕。",es:"De postre, le recomiendo el cheesecake.",pron:"Tiándiǎn wǒ tuījiàn zhīshì dàngāo."},
+      {zh:"很清淡，大餐后的完美选择。",es:"Es ligero, perfecto tras una comida abundante.",pron:"Hěn qīngdàn, dàcān hòu de wánměi xuǎnzé."},
+      {zh:"相信我，您不会失望的。",es:"Confíe en mí, no se va a decepcionar.",pron:"Xiāngxìn wǒ, nín bù huì shīwàng de."}]},
+    {day:11,theme:"电话预订",phrases:[
+      {zh:"感谢您的来电，请问有什么可以帮您？",es:"Gracias por llamar, ¿en qué puedo ayudarle?",pron:"Gǎnxiè nín de láidiàn, qǐngwèn yǒu shénme kěyǐ bāng nín?"},
+      {zh:"请问是哪天哪个时间？",es:"¿Para qué fecha y hora?",pron:"Qǐngwèn shì nǎ tiān nǎ gè shíjiān?"},
+      {zh:"请问几位用餐？",es:"¿Para cuántas personas?",pron:"Qǐngwèn jǐ wèi yòngcān?"},
+      {zh:"请问预订的姓名？",es:"¿Me da un nombre para la reserva?",pron:"Qǐngwèn yùdìng de xìngmíng?"},
+      {zh:"期待您的光临。",es:"Lo esperamos con gusto.",pron:"Qīdài nín de guānglín."}]},
+    {day:12,theme:"葡萄酒与搭配",phrases:[
+      {zh:"您想看一下酒水单吗？",es:"¿Desea ver la carta de vinos?",pron:"Nín xiǎng kàn yīxià jiǔshuǐ dān ma?"},
+      {zh:"这是一款干型、醇厚的红葡萄酒。",es:"Es un tinto seco y con cuerpo.",pron:"Zhè shì yī kuǎn gān xíng, chúnhòu de hóng pútáojiǔ."},
+      {zh:"我先给您倒一点试试？",es:"¿Le sirvo una cata primero?",pron:"Wǒ xiān gěi nín dào yīdiǎn shì shì?"},
+      {zh:"有樱桃和橡木的香气。",es:"Tiene notas de cereza y roble.",pron:"Yǒu yīngtáo hé xiàngmù de xiānqì."},
+      {zh:"要把酒瓶放在桌上吗？",es:"¿Dejo la botella en la mesa?",pron:"Yào bǎ jiǔpíng fàng zài zhuō shàng ma?"}]},
+    {day:13,theme:"送别与留客",phrases:[
+      {zh:"希望您喜欢这顿饭。",es:"Espero que haya disfrutado su comida.",pron:"Xīwàng nín xǐhuān zhè dùn fàn."},
+      {zh:"希望您下次再来。",es:"Por favor, vuelva a vernos pronto.",pron:"Xīwàng nín xià cì zài lái."},
+      {zh:"这是我们的名片，方便下次预订。",es:"Aquí tiene nuestra tarjeta si desea reservar.",pron:"Zhè shì wǒmen de míngpiàn, fāngbiàn xià cì yùdìng."},
+      {zh:"很高兴为您服务。",es:"Fue un placer atenderle.",pron:"Hěn gāoxìng wèi nín fúwù."},
+      {zh:"请小心，一路平安，晚安！",es:"¡Maneje con cuidado, buenas noches!",pron:"Qǐng xiǎoxīn, yīlù píng'ān, wǎn'ān!"}]},
+    {day:14,theme:"团队协作",phrases:[
+      {zh:"七号桌我来负责。",es:"Yo me encargo de la mesa siete.",pron:"Qī hào zhuō wǒ lái fùzé."},
+      {zh:"能帮我一起上菜吗？",es:"¿Me das una mano sacando los platos?",pron:"Néng bāng wǒ yīqǐ shàng cài ma?"},
+      {zh:"今晚非常忙。",es:"Estamos a tope esta noche.",pron:"Jīnwǎn fēicháng máng."},
+      {zh:"我们来把这张桌子重新布置好。",es:"Preparemos esta mesa para los próximos clientes.",pron:"Wǒmen lái bǎ zhè zhāng zhuōzi chóngxīn bùzhì hǎo."},
+      {zh:"今天大家辛苦了！",es:"Buen trabajo hoy, equipo.",pron:"Jīntiān dàjiā xīnkǔ le!"}]},
+    {day:15,theme:"引导入座",phrases:[
+      {zh:"您的座位准备好了，请跟我来。",es:"Su mesa está lista, sígame por favor.",pron:"Nín de zuòwèi zhǔnbèi hǎo le, qǐng gēn wǒ lái."},
+      {zh:"这张桌子可以吗？",es:"¿Esta mesa le parece bien?",pron:"Zhè zhāng zhuōzi kěyǐ ma?"},
+      {zh:"请坐。",es:"Por favor, tome asiento.",pron:"Qǐng zuò."},
+      {zh:"需要给小朋友拿儿童椅吗？",es:"¿Le traigo una sillita para el pequeño?",pron:"Xūyào gěi xiǎopéngyǒu ná értóng yǐ ma?"},
+      {zh:"这是菜单，我先给您一点时间。",es:"Aquí tienen las cartas. Les doy un momento.",pron:"Zhè shì càidān, wǒ xiān gěi nín yīdiǎn shíjiān."}]},
+    {day:16,theme:"介绍菜单",phrases:[
+      {zh:"您以前来过我们这里吗？",es:"¿Nos ha visitado antes?",pron:"Nín yǐqián lái guò wǒmen zhèlǐ ma?"},
+      {zh:"菜单分为前菜、主菜和甜点。",es:"Nuestra carta se divide en entradas, principales y postres.",pron:"Càidān fēn wéi qiáncài, zhǔcài hé tiándiǎn."},
+      {zh:"标注的菜品是主厨的招牌菜。",es:"Los platos marcados son los del chef.",pron:"Biāozhù de càipǐn shì zhǔchú de zhāopái cài."},
+      {zh:"所有菜品现点现做，需要稍等片刻。",es:"Todo se prepara al momento, puede tomar un poco de tiempo.",pron:"Suǒyǒu càipǐn xiàndiǎn xiànzuò, xūyào shāo děng piànkè."},
+      {zh:"如有任何疑问请告诉我。",es:"Avíseme si tiene alguna pregunta.",pron:"Rú yǒu rènhé yíwèn qǐng gàosù wǒ."}]},
+    {day:17,theme:"推荐饮料",phrases:[
+      {zh:"我先给您拿水，要气泡水还是普通水？",es:"¿Le traigo agua mientras decide? ¿Sin gas o con gas?",pron:"Wǒ xiān gěi nín ná shuǐ, yào qìpào shuǐ háishi pǔtōng shuǐ?"},
+      {zh:"饭前想喝点什么吗？",es:"¿Desea una bebida antes de la comida?",pron:"Fànqián xiǎng hē diǎn shénme ma?"},
+      {zh:"我们有不错的本店葡萄酒，可以按杯点。",es:"Tenemos un buen vino de la casa por copa.",pron:"Wǒmen yǒu bùcuò de běndiàn pútáojiǔ, kěyǐ àn bēi diǎn."},
+      {zh:"我可以先帮您点饮料吗？",es:"¿Le voy preparando esas bebidas?",pron:"Wǒ kěyǐ xiān bāng nín diǎn yǐnliào ma?"},
+      {zh:"我马上把饮料端过来。",es:"Vuelvo enseguida con sus bebidas.",pron:"Wǒ mǎshàng bǎ yǐnliào duān guòlái."}]},
+    {day:18,theme:"详细记录点单",phrases:[
+      {zh:"前菜点什么？",es:"¿Y de entrada?",pron:"Qiáncài diǎn shénme?"},
+      {zh:"这个要作为前菜还是主菜？",es:"¿Lo desea de entrada o de principal?",pron:"Zhège yào zuòwéi qiáncài háishi zhǔcài?"},
+      {zh:"需要配菜吗？",es:"¿Alguna guarnición con eso?",pron:"Xūyào pèicài ma?"},
+      {zh:"我来确认一下您的点单。",es:"Permítame repetirle el pedido.",pron:"Wǒ lái quèrèn yīxià nín de diǎndān."},
+      {zh:"您要所有菜一起上还是分开上？",es:"¿Desea que traigamos todo junto?",pron:"Nín yào suǒyǒu cài yīqǐ shàng háishi fēnkāi shàng?"}]},
+    {day:19,theme:"修改与个性化",phrases:[
+      {zh:"当然，可以不放洋葱。",es:"Por supuesto, puedo dejarlo sin cebolla.",pron:"Dāngrán, kěyǐ bù fàng yángcōng."},
+      {zh:"要把酱汁放在旁边吗？",es:"¿Desea el aderezo aparte?",pron:"Yào bǎ jiàngzhī fàng zài pángbiān ma?"},
+      {zh:"我们可以给小朋友做小份的。",es:"Podemos hacerlo en porción más pequeña para el niño.",pron:"Wǒmen kěyǐ gěi xiǎopéngyǒu zuò xiǎo fèn de."},
+      {zh:"我去厨房问一下。",es:"Déjeme ver si la cocina puede hacerlo.",pron:"Wǒ qù chúfáng wèn yīxià."},
+      {zh:"完全没问题。",es:"Claro que sí, ningún problema.",pron:"Wánquán méi wèntí."}]},
+    {day:20,theme:"上菜服务",phrases:[
+      {zh:"这是您的菜，盘子很烫请小心。",es:"Aquí tiene. Cuidado, el plato está caliente.",pron:"Zhè shì nín de cài, pánzi hěn tàng qǐng xiǎoxīn."},
+      {zh:"谁点的烤鸡？",es:"¿Quién pidió el pollo a la parrilla?",pron:"Shéi diǎn de kǎo jī?"},
+      {zh:"我来给您研磨一些黑胡椒？",es:"¿Le pongo pimienta recién molida?",pron:"Wǒ lái gěi nín yánmó yīxiē hēi hújiāo?"},
+      {zh:"请慢用！",es:"¡Que disfrute su comida!",pron:"Qǐng màn yòng!"},
+      {zh:"其余的菜马上就来。",es:"Le traigo el resto del pedido en un momento.",pron:"Qíyú de cài mǎshàng jiù lái."}]},
+    {day:21,theme:"用餐中服务",phrases:[
+      {zh:"请问一切都合您的口味吗？",es:"¿Está todo a su gusto?",pron:"Qǐngwèn yīqiè dōu hé nín de kǒuwèi ma?"},
+      {zh:"还需要面包吗？",es:"¿Desea más pan?",pron:"Hái xūyào miànbāo ma?"},
+      {zh:"要再来一轮饮料吗？",es:"¿Le traigo otra ronda de bebidas?",pron:"Yào zài lái yī lún yǐnliào ma?"},
+      {zh:"我可以撤盘子吗？",es:"¿Le retiro esto?",pron:"Wǒ kěyǐ chè pánzi ma?"},
+      {zh:"有需要请招手。",es:"Hágame una seña si necesita algo.",pron:"Yǒu xūyào qǐng zhāoshǒu."}]},
+    {day:22,theme:"大型桌服务",phrases:[
+      {zh:"是一起结账还是分开结？",es:"¿Van todos juntos o cuentas separadas?",pron:"Shì yīqǐ jiézhàng háishi fēnkāi jié?"},
+      {zh:"我来依次记录大家的点单。",es:"Tomaré los pedidos uno por uno.",pron:"Wǒ lái yīcì jìlù dàjiā de diǎndān."},
+      {zh:"我去再拿一把椅子。",es:"Le acerco otra silla.",pron:"Wǒ qù zài ná yī bǎ yǐzi."},
+      {zh:"我先给小朋友上菜。",es:"Sacaré primero los platos de los niños.",pron:"Wǒ xiān gěi xiǎopéngyǒu shàng cài."},
+      {zh:"放心，我会记住每个人点的菜。",es:"No se preocupe, llevaré la cuenta de quién pidió qué.",pron:"Fàngxīn, wǒ huì jìzhù měi gè rén diǎn de cài."}]},
+    {day:23,theme:"推荐甜点与咖啡",phrases:[
+      {zh:"您想看一下甜点单吗？",es:"¿Desea ver la carta de postres?",pron:"Nín xiǎng kàn yīxià tiándiǎn dān ma?"},
+      {zh:"来点甜的如何？",es:"¿Le tiento con algo dulce?",pron:"Lái diǎn tián de rúhé?"},
+      {zh:"要来杯咖啡或茶吗？",es:"¿Desea café o té con eso?",pron:"Yào lái bēi kāfēi huò chá ma?"},
+      {zh:"甜点非常适合一起分享。",es:"Los postres son perfectos para compartir.",pron:"Tiándiǎn fēicháng shìhé yīqǐ fēnxiǎng."},
+      {zh:"来杯咖啡收尾怎么样？",es:"¿Qué tal un café para terminar?",pron:"Lái bēi kāfēi shōuwěi zěnmeyàng?"}]},
+    {day:24,theme:"处理等待",phrases:[
+      {zh:"感谢您的耐心，马上就好。",es:"Gracias por su paciencia, no tardará mucho.",pron:"Gǎnxiè nín de nàixīn, mǎshàng jiù hǎo."},
+      {zh:"您的菜正在摆盘。",es:"Su comida se está emplatando ahora mismo.",pron:"Nín de cài zhèngzài bǎi pán."},
+      {zh:"非常抱歉让您久等了。",es:"Lamento mucho la espera.",pron:"Fēicháng bàoqiàn ràng nín jiǔ děng le."},
+      {zh:"等待期间需要先上面包吗？",es:"¿Le traigo algo de pan mientras tanto?",pron:"Děngdài qījiān xūyào xiān shàng miànbāo ma?"},
+      {zh:"我马上去查一下。",es:"Déjeme verificarlo enseguida.",pron:"Wǒ mǎshàng qù chá yīxià."}]},
+    {day:25,theme:"妥善处理投诉",phrases:[
+      {zh:"非常抱歉，我来解决。",es:"Lo siento mucho, déjeme arreglarlo.",pron:"Fēicháng bàoqiàn, wǒ lái jiějué."},
+      {zh:"需要我给您换一道菜吗？",es:"¿Desea que le traiga otra cosa en su lugar?",pron:"Xūyào wǒ gěi nín huàn yī dào cài ma?"},
+      {zh:"我完全理解，非常抱歉。",es:"Lo entiendo perfectamente, y le pido disculpas.",pron:"Wǒ wánquán lǐjiě, fēicháng bàoqiàn."},
+      {zh:"我马上去叫经理。",es:"Hablaré con mi encargado enseguida.",pron:"Wǒ mǎshàng qù jiào jīnglǐ."},
+      {zh:"请接受我们的道歉。",es:"Por favor, acepte esto con nuestras disculpas.",pron:"Qǐng jiēshòu wǒmen de dàoqiàn."}]},
+    {day:26,theme:"赶时间的客人",phrases:[
+      {zh:"您赶时间吗？我可以为您加快。",es:"¿Tiene prisa? Puedo agilizarlo.",pron:"Nín gǎn shíjiān ma? Wǒ kěyǐ wèi nín jiākuài."},
+      {zh:"我推荐一道出菜快的菜。",es:"Le recomendaría un plato que sale rápido.",pron:"Wǒ tuījiàn yī dào chūcài kuài de cài."},
+      {zh:"我可以和菜一起把账单送来。",es:"Le traeré la cuenta con la comida para ahorrar tiempo.",pron:"Wǒ kěyǐ hé cài yīqǐ bǎ zhàngdān sòng lái."},
+      {zh:"没问题，您一定能准时走。",es:"Sin problema, lo dejaré listo a tiempo.",pron:"Méi wèntí, nín yīdìng néng zhǔnshí zǒu."},
+      {zh:"要打包带走吗？",es:"¿Lo prefiere para llevar?",pron:"Yào dǎbāo dài zǒu ma?"}]},
+    {day:27,theme:"特别场合",phrases:[
+      {zh:"今晚是在庆祝什么特别的事吗？",es:"¿Celebran algo especial esta noche?",pron:"Jīnwǎn shì zài qìngzhù shénme tèbié de shì ma?"},
+      {zh:"生日快乐！这份甜点是我们送的。",es:"¡Feliz cumpleaños! Este postre va por la casa.",pron:"Shēngrì kuàilè! Zhè fèn tiándiǎn shì wǒmen sòng de."},
+      {zh:"要插上蜡烛一起送上来吗？",es:"¿Desea que lo saque con una vela?",pron:"Yào chā shàng làzhú yīqǐ sòng shàng lái ma?"},
+      {zh:"恭喜你们两位！",es:"¡Felicitaciones a ambos!",pron:"Gōngxǐ nǐmen liǎng wèi!"},
+      {zh:"如果需要我为您做特别安排，请告诉我。",es:"Avíseme si puedo hacer algo para que sea memorable.",pron:"Rúguǒ xūyào wǒ wèi nín zuò tèbié ānpái, qǐng gàosù wǒ."}]},
+    {day:28,theme:"结账离桌",phrases:[
+      {zh:"不着急，您慢慢来。",es:"Cuando guste, no hay prisa.",pron:"Bù zháojí, nín màn màn lái."},
+      {zh:"这是账单，您准备好了随时可以结。",es:"Aquí tiene la cuenta. La retiro cuando esté listo.",pron:"Zhè shì zhàngdān, nín zhǔnbèi hǎo le suíshí kěyǐ jié."},
+      {zh:"需要发票吗？",es:"¿Desea el comprobante?",pron:"Xūyào fāpiào ma?"},
+      {zh:"我去给您找零。",es:"Vuelvo enseguida con su vuelto.",pron:"Wǒ qù gěi nín zhǎolíng."},
+      {zh:"请慢走，不着急。",es:"Tómese su tiempo, sin ningún apuro.",pron:"Qǐng màn zǒu, bù zháojí."}]},
+    {day:29,theme:"礼貌用语",phrases:[
+      {zh:"不客气。",es:"Es un placer.",pron:"Bù kèqì."},
+      {zh:"马上就来，先生 / 女士。",es:"Enseguida, señor / señora.",pron:"Mǎshàng jiù lái, xiānsheng / nǚshì."},
+      {zh:"我马上过来。",es:"Estaré con usted en un momento.",pron:"Wǒ mǎshàng guò lái."},
+      {zh:"还有什么需要吗？",es:"¿Hay algo más que pueda traerle?",pron:"Hái yǒu shénme xūyào ma?"},
+      {zh:"不客气，随时为您服务。",es:"De nada, con mucho gusto.",pron:"Bù kèqì, suíshí wèi nín fúwù."}]},
+    {day:30,theme:"送别客人",phrases:[
+      {zh:"感谢今晚光临。",es:"Gracias por acompañarnos esta noche.",pron:"Gǎnxiè jīnwǎn guānglín."},
+      {zh:"希望您不久再来。",es:"Espero verle pronto de nuevo.",pron:"Xīwàng nín bùjiǔ zài lái."},
+      {zh:"出门请注意台阶。",es:"Cuidado con el escalón a la salida.",pron:"Chūmén qǐng zhùyì táijiē."},
+      {zh:"非常高兴您能来。",es:"Fue un gusto tenerle con nosotros.",pron:"Fēicháng gāoxìng nín néng lái."},
+      {zh:"祝您有个美好的夜晚！",es:"¡Que tenga una excelente noche!",pron:"Zhù nín yǒu gè měihǎo de yèwǎn!"}]}
+  ],
+  words:[
+    {zh:"预订",es:"reserva",pron:"yùdìng"},{zh:"前菜 / 开胃菜",es:"entrada / aperitivo",pron:"qiáncài"},
+    {zh:"主菜",es:"plato principal",pron:"zhǔcài"},{zh:"甜点",es:"postre",pron:"tiándiǎn"},
+    {zh:"饮料",es:"bebida",pron:"yǐnliào"},{zh:"菜单",es:"carta / menú",pron:"càidān"},
+    {zh:"账单",es:"cuenta",pron:"zhàngdān"},{zh:"小费",es:"propina",pron:"xiǎofèi"},
+    {zh:"服务员",es:"mesero / garzón",pron:"fúwùyuán"},{zh:"领位员",es:"recepcionista / anfitrión",pron:"lǐngwèiyuán"},
+    {zh:"主厨 / 厨师长",es:"chef / cocinero",pron:"zhǔchú"},{zh:"厨房",es:"cocina",pron:"chúfáng"},
+    {zh:"餐桌",es:"mesa",pron:"cānzhuō"},{zh:"包厢",es:"reservado / cabina",pron:"bāoxiāng"},
+    {zh:"露台",es:"terraza",pron:"lùtái"},{zh:"吧台",es:"barra / bar",pron:"bātái"},
+    {zh:"酒单",es:"carta de vinos",pron:"jiǔ dān"},{zh:"酒杯",es:"copa / vaso",pron:"jiǔbēi"},
+    {zh:"酒瓶",es:"botella",pron:"jiǔpíng"},{zh:"水壶",es:"jarra",pron:"shuǐhú"},
+    {zh:"牛排",es:"filete / bife",pron:"niúpái"},{zh:"三文鱼",es:"salmón",pron:"sānwényú"},
+    {zh:"鸡肉",es:"pollo",pron:"jīròu"},{zh:"羊肉",es:"cordero",pron:"yángròu"},
+    {zh:"海鲜",es:"mariscos",pron:"hǎixiān"},{zh:"蔬菜",es:"verduras",pron:"shūcài"},
+    {zh:"沙拉",es:"ensalada",pron:"shālā"},{zh:"汤",es:"sopa",pron:"tāng"},
+    {zh:"面包",es:"pan",pron:"miànbāo"},{zh:"黄油",es:"mantequilla",pron:"huángyóu"},
+    {zh:"酱汁",es:"salsa",pron:"jiàngzhī"},{zh:"调料",es:"condimento",pron:"tiáoliào"},
+    {zh:"黑胡椒",es:"pimienta",pron:"hēi hújiāo"},{zh:"盐",es:"sal",pron:"yán"},
+    {zh:"油",es:"aceite",pron:"yóu"},{zh:"醋",es:"vinagre",pron:"cù"},
+    {zh:"大蒜",es:"ajo",pron:"dàsuàn"},{zh:"洋葱",es:"cebolla",pron:"yángcōng"},
+    {zh:"蘑菇",es:"champiñón",pron:"mógu"},{zh:"三分熟",es:"vuelta y vuelta",pron:"sān fēn shú"},
+    {zh:"五分熟",es:"al punto",pron:"wǔ fēn shú"},{zh:"全熟",es:"bien cocido",pron:"quán shú"},
+    {zh:"炙烤 / 烤",es:"a la parrilla",pron:"zhìkǎo"},{zh:"炸",es:"frito",pron:"zhá"},
+    {zh:"烘烤",es:"al horno",pron:"hōngkǎo"},{zh:"蒸",es:"al vapor",pron:"zhēng"},
+    {zh:"烤",es:"asado",pron:"kǎo"},{zh:"新鲜",es:"fresco",pron:"xīnxiān"},
+    {zh:"时令",es:"de temporada",pron:"shílìng"},{zh:"有机",es:"orgánico",pron:"yǒujī"},
+    {zh:"自制 / 手工",es:"casero",pron:"zìzhì"},{zh:"无麸质",es:"sin gluten",pron:"wú fūzhì"},
+    {zh:"纯素",es:"vegano",pron:"chúnsù"},{zh:"素食",es:"vegetariano",pron:"sùshí"},
+    {zh:"无乳制品",es:"sin lácteos",pron:"wú rǔ zhìpǐn"},{zh:"过敏",es:"alergia",pron:"guòmǐn"},
+    {zh:"坚果",es:"frutos secos",pron:"jiānguǒ"},{zh:"贝类",es:"mariscos de concha",pron:"bèilèi"},
+    {zh:"辣",es:"picante",pron:"là"},{zh:"清淡 / 不辣",es:"suave / no picante",pron:"qīngdàn"},
+    {zh:"甜",es:"dulce",pron:"tián"},{zh:"酸",es:"ácido",pron:"suān"},
+    {zh:"苦",es:"amargo",pron:"kǔ"},{zh:"份量",es:"porción",pron:"fènliàng"},
+    {zh:"配菜",es:"guarnición",pron:"pèicài"},{zh:"拼盘",es:"bandeja / fuente",pron:"pīnpán"},
+    {zh:"品鉴套餐",es:"menú degustación",pron:"pǐnjiàn tàocān"},{zh:"今日特餐",es:"sugerencia del día",pron:"jīnrì tècān"},
+    {zh:"搭配",es:"maridaje",pron:"dāpèi"},{zh:"气泡水",es:"agua con gas",pron:"qìpào shuǐ"},
+    {zh:"矿泉水",es:"agua sin gas",pron:"kuàngquán shuǐ"},{zh:"本店葡萄酒",es:"vino de la casa",pron:"běndiàn pútáojiǔ"},
+    {zh:"红葡萄酒",es:"vino tinto",pron:"hóng pútáojiǔ"},{zh:"白葡萄酒",es:"vino blanco",pron:"bái pútáojiǔ"},
+    {zh:"桃红葡萄酒",es:"vino rosado",pron:"táohóng pútáojiǔ"},{zh:"生啤 / 扎啤",es:"cerveza de barril",pron:"shēngpí"},
+    {zh:"鸡尾酒",es:"cóctel",pron:"jīwěijiǔ"},{zh:"加冰",es:"con hielo",pron:"jiā bīng"},
+    {zh:"纯饮",es:"solo / sin hielo",pron:"chún yǐn"},{zh:"浓缩咖啡",es:"café espresso",pron:"nóngsùo kāfēi"},
+    {zh:"卡布奇诺",es:"capuchino",pron:"kǎbùqínuò"},{zh:"收据 / 发票",es:"boleta / comprobante",pron:"fāpiào"},
+    {zh:"现金",es:"efectivo",pron:"xiànjīn"},{zh:"信用卡",es:"tarjeta de crédito",pron:"xìnyòngkǎ"},
+    {zh:"找零",es:"vuelto",pron:"zhǎolíng"},{zh:"免费 / 赠送",es:"cortesía de la casa",pron:"miǎnfèi"},
+    {zh:"打包 / 外带",es:"para llevar",pron:"dǎbāo"},{zh:"续杯",es:"rellenar / repetir",pron:"xù bēi"},
+    {zh:"儿童椅",es:"silla para bebé",pron:"értóng yǐ"},{zh:"经理",es:"encargado / gerente",pron:"jīnglǐ"},
+    {zh:"投诉 / 意见",es:"queja / reclamo",pron:"tóusù"},{zh:"反馈 / 评价",es:"opinión / comentario",pron:"fǎnkuì"},
+    {zh:"预订记录",es:"libro de reservas",pron:"yùdìng jìlù"},{zh:"自助餐",es:"bufé",pron:"zìzhùcān"}
+  ],
+  local:[
+    {title:"🚻 指引",phrases:[
+      {zh:"洗手间在里面左边。",es:"Los baños están al fondo a la izquierda.",pron:"Xǐshǒujiān zài lǐmiàn zuǒbiān."},
+      {zh:"出口在正前方。",es:"La salida está derecho al frente.",pron:"Chūkǒu zài zhèng qiánfāng."},
+      {zh:"入口在右边。",es:"La entrada está a la derecha.",pron:"Rùkǒu zài yòubiān."},
+      {zh:"露台在那扇门里。",es:"La terraza es por esa puerta.",pron:"Lùtái zài nà shàn mén lǐ."},
+      {zh:"电梯在吧台旁边。",es:"El ascensor está al lado del bar.",pron:"Diàntī zài bātái pángbiān."},
+      {zh:"停车场在地下室。",es:"El estacionamiento está en el sótano.",pron:"Tíngchēchǎng zài dìxiàshì."},
+      {zh:"存衣处在入口附近。",es:"El guardarropa está cerca de la entrada.",pron:"Cún yī chù zài rùkǒu fùjìn."}]},
+    {title:"🗺️ 方向",phrases:[
+      {zh:"向右转。",es:"Gire a la derecha.",pron:"Xiàng yòu zhuǎn."},
+      {zh:"向左转。",es:"Gire a la izquierda.",pron:"Xiàng zuǒ zhuǎn."},
+      {zh:"直走。",es:"Siga derecho.",pron:"Zhí zǒu."},
+      {zh:"在走廊尽头。",es:"Está al final del pasillo.",pron:"Zài zǒuláng jìntóu."},
+      {zh:"上楼梯。",es:"Suba las escaleras.",pron:"Shàng lóutī."},
+      {zh:"下到低一层。",es:"Baje al nivel inferior.",pron:"Xià dào dī yī céng."},
+      {zh:"就在拐角处。",es:"Está justo a la vuelta.",pron:"Jiù zài guǎijiǎo chù."},
+      {zh:"请跟我来，我带您去。",es:"Sígame, yo le indico.",pron:"Qǐng gēn wǒ lái, wǒ dài nín qù."}]},
+    {title:"🚨 紧急情况",phrases:[
+      {zh:"紧急出口在那边。",es:"La salida de emergencia está por allá.",pron:"Jǐnjí chūkǒu zài nàbiān."},
+      {zh:"请保持冷静。",es:"Por favor mantenga la calma.",pron:"Qǐng bǎochí lěngjìng."},
+      {zh:"我马上叫经理来。",es:"Llamo al encargado enseguida.",pron:"Wǒ mǎshàng jiào jīnglǐ lái."},
+      {zh:"有人受伤了吗？",es:"¿Alguien resultó herido?",pron:"Yǒu rén shòushāng le ma?"},
+      {zh:"您需要医疗帮助吗？",es:"¿Necesita asistencia médica?",pron:"Nín xūyào yīliáo bāngzhù ma?"},
+      {zh:"请走紧急出口。",es:"Por favor use la salida de emergencia.",pron:"Qǐng zǒu jǐnjí chūkǒu."}]}
+  ]
+};
+// ============================================================
+//  ESTADO + PERSISTENCIA
+// ============================================================
+const LANGS = ["en","pt","zh"];
+const load = (k,d)=>{ try{ const v=localStorage.getItem(k); return v==null?d:JSON.parse(v); }catch{ return d; } };
+const save = (k,v)=>{ try{ localStorage.setItem(k,JSON.stringify(v)); }catch{} };
+
+const state = {
+  lang: (()=>{ const l=load("gbLang","en"); return LANGS.includes(l)?l:"en"; })(),
+  view: "curso",            // curso | dict | local
+  day: 1,
+  tab: "learn",             // learn | practice
+  dark: load("gbDark", true),
+  sound: load("gbSound", true),
+  progress: load("gbProgress", {}),   // clave: `${lang}-${day}-${idx}` -> true
+  dict: load("gbDict", {en:{},pt:{},zh:{}}), // dict[lang][idx] -> true
+  quizDone: load("gbQuiz", {en:{},pt:{},zh:{}}), // aciertos del quiz por idioma
+  quiz: null,               // estado de la evaluación en curso
+  flipped: {},              // idx -> true (practice)
+  search: "",
+  warn: "",
+  motive: Math.floor(Math.random()*1000),
+  installed: ((window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone===true)
+};
+LANGS.forEach(l=>{ if(!state.dict[l]) state.dict[l]={}; if(!state.quizDone[l]) state.quizDone[l]={}; });
+
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const D = ()=>DATA[state.lang];
+const dayObj = ()=>D().curriculum.find(d=>d.day===state.day);
+const tphrase = ph => ph[state.lang];                 // texto en idioma destino
+const tpron   = x  => x.ipa || x.pron || "";
+
+// ============================================================
+//  AUDIO (Web Audio + Web Speech)
+// ============================================================
+let actx=null;
+function ac(){ try{ actx = actx || new (window.AudioContext||window.webkitAudioContext)(); return actx; }catch{ return null; } }
+function tick(){
+  if(!state.sound) return; const c=ac(); if(!c) return;
+  try{ const o=c.createOscillator(),g=c.createGain(); o.connect(g);g.connect(c.destination);
+    o.type="sine"; o.frequency.value=880; g.gain.setValueAtTime(.08,c.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.08); o.start(); o.stop(c.currentTime+.09);
+  }catch{}
+}
+function bell(){
+  if(!state.sound) return; const c=ac(); if(!c) return;
+  try{[880,1108,1320].forEach((f,i)=>{const o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);
+    o.type="sine";o.frequency.setValueAtTime(f,c.currentTime+i*.07);g.gain.setValueAtTime(.3,c.currentTime+i*.07);
+    g.gain.exponentialRampToValueAtTime(.001,c.currentTime+i*.07+1.1);o.start(c.currentTime+i*.07);o.stop(c.currentTime+i*.07+1.2);});}catch{}
+}
+function fanfare(){
+  if(!state.sound) return; const c=ac(); if(!c) return;
+  try{
+    [[523,659,784],[587,740,880],[659,830,988],[784,988,1175]].forEach((ch,i)=>ch.forEach(f=>{
+      const o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.type="triangle";
+      const t=c.currentTime+i*.16;o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(.12,t);
+      g.gain.exponentialRampToValueAtTime(.001,t+.4);o.start(t);o.stop(t+.45);}));
+  }catch{}
+}
+function intro(){
+  if(!state.sound){ return; }
+  const c=ac(); if(!c) return;
+  try{
+    const mel=[{f:523,t:.05},{f:659,t:.28},{f:784,t:.5},{f:1047,t:.72},{f:880,t:1.0},{f:1047,t:1.2}];
+    mel.forEach(({f,t})=>{const o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.type="sine";
+      const tt=c.currentTime+t;o.frequency.setValueAtTime(f,tt);g.gain.setValueAtTime(0,tt);
+      g.gain.linearRampToValueAtTime(.2,tt+.04);g.gain.exponentialRampToValueAtTime(.001,tt+.45);o.start(tt);o.stop(tt+.5);});
+  }catch{}
+}
+
+let speakingKey=null;
+function speak(text, slow){
+  state.warn="";
+  const synth=window.speechSynthesis;
+  if(!synth || typeof SpeechSynthesisUtterance==="undefined"){ state.warn="Tu navegador no soporta voz. Prueba en Chrome o Edge."; renderWarn(); return; }
+  const m=D().meta;
+  const voices=synth.getVoices();
+  let v=null;
+  if(voices.length){
+    // sólo voces del idioma destino (exacta o por prefijo): NUNCA leer con voz de otro idioma
+    v = voices.find(x=>m.voiceMatch.test(x.lang)) || voices.find(x=>m.voiceFallback.test(x.lang)) || null;
+    if(!v){
+      state.warn="Tu dispositivo no tiene una voz en "+m.name+" instalada, por eso no se reproduce (para no leerlo con acento español). Instálala en los ajustes de tu teléfono → Idioma/Voz.";
+      renderWarn(); setTimeout(()=>{ state.warn=""; renderWarn(); }, 6500);
+      return;
+    }
+  }
+  synth.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  if(v) u.voice=v;
+  u.lang = v ? (v.lang||m.voiceLang) : m.voiceLang;
+  u.rate = slow?0.35:0.85;
+  const key = slow? text+"|s" : text;
+  u.onstart=()=>{ speakingKey=key; markSpeaking(); };
+  u.onend  =()=>{ speakingKey=null; markSpeaking(); };
+  u.onerror=(e)=>{ speakingKey=null; markSpeaking(); if(e.error!=="interrupted"){ state.warn="Audio no disponible. Prueba en Chrome."; renderWarn(); setTimeout(()=>{state.warn="";renderWarn();},3000);} };
+  synth.speak(u);
+}
+function markSpeaking(){
+  document.querySelectorAll("[data-skey]").forEach(b=>{
+    const on = b.getAttribute("data-skey")===speakingKey;
+    b.classList.toggle("on", on);
+    const lbl=b.getAttribute("data-lbl"); if(lbl){ b.textContent = on ? "◗ sonando…" : lbl; }
+  });
+}
+
+// ============================================================
+//  PROGRESO
+// ============================================================
+const pkey=(lang,day,idx)=>`${lang}-${day}-${idx}`;
+const dayDone=(day)=>D().curriculum.find(d=>d.day===day).phrases.filter((_,i)=>state.progress[pkey(state.lang,day,i)]).length;
+function courseStats(){
+  let done=0; const total=D().curriculum.length*5;
+  D().curriculum.forEach(d=>d.phrases.forEach((_,i)=>{ if(state.progress[pkey(state.lang,d.day,i)]) done++; }));
+  return {done,total,pct: total?Math.round(done/total*100):0};
+}
+function dictStats(){ const o=state.dict[state.lang]||{}; const done=Object.keys(o).filter(k=>o[k]).length; const total=D().words.length; return {done,total,pct: total?Math.round(done/total*100):0}; }
+function quizScore(){ const o=state.quizDone[state.lang]||{}; const done=Object.keys(o).filter(k=>o[k]).length; const total=D().words.length; return {done,total,pct: total?Math.round(done/total*100):0}; }
+function barColor(p){ return p>=67?"#37d39b":p>=34?"#ffb84d":"#ff5c5c"; }
+const mainTerm = t => String(t).split("/")[0].split("(")[0].trim();   // término principal para TTS
+function quizPool(){ const dn=state.quizDone[state.lang]||{}; return D().words.map((w,i)=>i).filter(i=>!dn[i]); }
+function startQuiz(){
+  const pool=quizPool();
+  if(!pool.length){ state.quiz={done:true}; return; }
+  state.quiz={ order:shuffle(pool), pos:0, answered:null, opts:[], wi:pool[0], done:false };
+  buildQ();
+}
+function buildQ(){ const q=state.quiz; q.wi=q.order[q.pos]; const correct=tphrase(D().words[q.wi]);
+  const pool=[...new Set(D().words.map(tphrase))].filter(t=>t!==correct);
+  q.opts=shuffle([correct, ...shuffle(pool).slice(0,3)]); q.answered=null; }
+function nextQ(){
+  const q=state.quiz; if(!q || q.done){ startQuiz(); render(); return; }
+  q.pos++;
+  if(q.pos>=q.order.length){
+    const pool=quizPool();                 // sólo las que aún no se aciertan (las falladas reaparecen, las correctas salen)
+    if(!pool.length){ state.quiz={done:true}; render(); return; }
+    q.order=shuffle(pool); q.pos=0;
+  }
+  buildQ(); render();
+}
+
+// ============================================================
+//  RENDER
+// ============================================================
+const root=()=>document.getElementById("root");
+
+function render(){
+  document.body.classList.toggle("dark", state.dark);
+  const m=D().meta; const st=courseStats();
+  let body="";
+  if(state.view==="curso") body=viewCurso();
+  else if(state.view==="dict") body=viewDict();
+  else if(state.view==="local") body=viewLocal();
+  else if(state.view==="quiz") body=viewQuiz();
+  else if(state.view==="avance") body=viewAvance();
+
+  root().innerHTML = `
+    <header>
+      <div class="brand">
+        <div class="logo">${LOGO_SVG(26)}</div>
+        <div>
+          <h1>Garzón Bilingüe <span style="font-size:15px">${m.flag}</span></h1>
+          <div class="sub">${esc(m.subtitle)}</div>
+        </div>
+      </div>
+      <div class="hbtns">
+        <button class="icon-btn" data-act="sound" title="Sonido">${state.sound?"🔊":"🔇"}</button>
+        <button class="icon-btn" data-act="dark" title="Tema">${state.dark?"☀":"☾"}</button>
+        <div class="streak"><div class="n">${st.done}</div><div class="l">frases<br>dominadas</div></div>
+      </div>
+    </header>
+
+    <div class="progress">
+      <div class="bar"><div class="fill" style="width:${st.pct}%"></div></div>
+      <span class="ptxt">${st.pct}% del curso</span>
+    </div>
+
+    <div class="motive" data-act="motive" title="Toca para otra frase">
+      <span class="mi">✨</span><span id="motiveText">${esc(MOTIVES[state.motive % MOTIVES.length])}</span>
+    </div>
+
+    <div class="warn" id="warnBox" style="${state.warn?'':'display:none'}">⚠ ${esc(state.warn)}</div>
+
+    <nav>
+      ${!state.installed?`<button class="navb install" data-act="install">📲 Instalar app</button>`:""}
+      <button class="navb ${state.view==='curso'?'on':''}" data-act="nav" data-view="curso">📖 Curso</button>
+      <button class="navb ${state.view==='dict'?'on':''}" data-act="nav" data-view="dict">📚 Diccionario</button>
+      <button class="navb ${state.view==='local'?'on':''}" data-act="nav" data-view="local">🏠 En el local</button>
+      <button class="navb ${state.view==='quiz'?'on':''}" data-act="nav" data-view="quiz">🧠 Evaluación</button>
+      <button class="navb ${state.view==='avance'?'on':''}" data-act="nav" data-view="avance">📊 Mi Avance</button>
+      <button class="navb" data-act="pickopen">🌐 Idioma</button>
+    </nav>
+
+    ${body}
+
+    <a class="sister" href="https://protocolos-servicio.vercel.app" target="_blank" rel="noopener">
+      <span class="sister-ic">📋</span>
+      <span class="sister-tx">
+        <b class="t">¿Listo para brillar en la sala? 🤝</b>
+        <span class="d">Lleva tu servicio al siguiente nivel con <b>Protocolos de Servicio</b> <span class="go">— ábrelo →</span></span>
+      </span>
+    </a>
+
+    <footer>
+      Toca <b>escuchar</b> para oír la pronunciación · practica en voz alta.
+      <span class="by">Creado por Jaime Ricardo Peñaloza</span>
+    </footer>`;
+  markSpeaking();
+}
+function renderWarn(){
+  const w=document.getElementById("warnBox"); if(!w) return;
+  if(state.warn){ w.style.display=""; w.innerHTML="⚠ "+esc(state.warn); } else { w.style.display="none"; }
+}
+
+function viewCurso(){
+  const d=dayObj();
+  const days=D().curriculum.map(dd=>{
+    const done=dayDone(dd.day), on=dd.day===state.day;
+    const dots=[0,1,2,3,4].map(i=>`<i class="dot ${state.progress[pkey(state.lang,dd.day,i)]?'f':''}"></i>`).join("");
+    return `<button class="day ${on?'on':''} ${done===5?'done':''}" data-act="day" data-day="${dd.day}">
+      ${done===5?'<span class="check">✓</span>':''}
+      <span class="dn">Día ${dd.day}</span><span class="dt">${esc(dd.theme)}</span><span class="dots">${dots}</span></button>`;
+  }).join("");
+
+  let content;
+  if(state.tab==="learn"){
+    content = `<div class="list">${d.phrases.map((ph,i)=>{
+      const learned=state.progress[pkey(state.lang,state.day,i)];
+      const t=tphrase(ph);
+      return `<div class="card ${learned?'learned':''}">
+        <div class="numbadge">${i+1}</div>
+        <div class="ttext">${esc(t)}</div>
+        <div class="pron"><b>${esc(D().meta.pronLabel)}:</b> ${esc(tpron(ph))}</div>
+        <div class="es">${esc(ph.es)}</div>
+        <div class="row">
+          ${sbtn(t,false,"◗ escuchar")}
+          ${sbtn(t,true,"🐢 despacio")}
+        </div>
+        <button class="lbtn ${learned?'on':''}" data-act="learn" data-idx="${i}">${learned?"✓ Dominada":"Marcar como aprendida"}</button>
+      </div>`;
+    }).join("")}</div>`;
+  } else {
+    content = `<div class="list">${d.phrases.map((ph,i)=>{
+      const flip=state.flipped[i]; const t=tphrase(ph);
+      if(!flip){
+        return `<div class="flash" data-act="flip" data-idx="${i}">
+          <span class="fhint">traduce al español →</span>
+          <div class="fes">${esc(t)}</div>
+          <span class="ftap">toca para revelar →</span></div>`;
       }
-      ::selection { background: #d4763a; color: #fff; }
-      ::-webkit-scrollbar { height: 6px; width: 6px; }
-      ::-webkit-scrollbar-thumb { background: #c9a98955; border-radius: 9px; }
-    </style>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-    <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker.register("/sw.js");
-        });
-      }
-    </script>
-  </body>
+      return `<div class="flash back" data-act="flip" data-idx="${i}">
+        <div class="ften">${esc(ph.es)}</div>
+        <div class="fpron">${esc(tpron(ph))}</div>
+        <div class="row" style="margin:6px 0 0">
+          <button class="fbtn" data-act="speak" data-idx="${i}" data-stop="1">◗ normal</button>
+          <button class="fbtn" data-act="speak" data-idx="${i}" data-slow="1" data-stop="1">🐢 lento</button>
+        </div></div>`;
+    }).join("")}</div>`;
+  }
+
+  return `
+    <div class="days">${days}</div>
+    <div class="tabs">
+      <button class="tab ${state.tab==='learn'?'on':''}" data-act="tab" data-tab="learn">Aprender</button>
+      <button class="tab ${state.tab==='practice'?'on':''}" data-act="tab" data-tab="practice">Practicar</button>
+    </div>
+    <main>
+      <div class="sech"><h2>Día ${d.day}</h2><span class="tag">${esc(d.theme)}</span></div>
+      ${content}
+    </main>`;
+}
+
+function sbtn(text,slow,label){
+  const key= slow? text+"|s" : text;
+  return `<button class="sbtn" data-act="speak" data-text="${esc(text)}" ${slow?'data-slow="1"':''} data-skey="${esc(key)}" data-lbl="${esc(label)}">${label}</button>`;
+}
+
+function viewDict(){
+  const words=D().words;
+  const q=state.search.trim().toLowerCase();
+  const items = words.map((w,idx)=>({w,idx})).filter(({w})=>{
+    if(!q) return true;
+    return tphrase(w).toLowerCase().includes(q) || w.es.toLowerCase().includes(q);
+  });
+  return `
+    <main>
+      <div class="sech"><h2>Diccionario</h2><span class="tag">${words.length} palabras clave</span></div>
+      <input class="search" id="searchBox" placeholder="🔍 Buscar..." value="${esc(state.search)}" />
+      <div class="list" id="dictList">${dictCards(items)}</div>
+    </main>`;
+}
+function dictCards(items){
+  return items.map(({w,idx})=>{
+    const learned=state.dict[state.lang][idx]; const t=tphrase(w);
+    return `<div class="card ${learned?'learned':''}" style="padding:14px 16px">
+      <div class="ttext" style="font-size:17px;padding-right:0">${esc(t)}</div>
+      <div class="pron"><b>${esc(D().meta.pronLabel)}:</b> ${esc(tpron(w))}</div>
+      <div class="es">${esc(w.es)}</div>
+      <div class="row">${sbtn(mainTerm(t),false,"◗ escuchar")}${sbtn(mainTerm(t),true,"🐢 despacio")}</div>
+      <button class="lbtn ${learned?'on':''}" data-act="dlearn" data-idx="${idx}">${learned?"✓ Aprendida":"Marcar como aprendida"}</button>
+    </div>`;
+  }).join("") || `<div style="color:var(--soft);text-align:center;padding:20px">Sin resultados</div>`;
+}
+
+function viewLocal(){
+  const groups=D().local.map((sec,si)=>{
+    const cards=sec.phrases.map((ph,i)=>{
+      const t=tphrase(ph);
+      return `<div class="card" style="padding:14px 16px">
+        <div class="ttext" style="font-size:16px;padding-right:0">${esc(t)}</div>
+        <div class="pron"><b>${esc(D().meta.pronLabel)}:</b> ${esc(tpron(ph))}</div>
+        <div class="es">${esc(ph.es)}</div>
+        <div class="row" style="margin-bottom:0">${sbtn(t,false,"◗ escuchar")}${sbtn(t,true,"🐢 despacio")}</div>
+      </div>`;
+    }).join("");
+    return `<div class="grp"><h3>${esc(sec.title)}</h3><div class="list">${cards}</div></div>`;
+  }).join("");
+  return `<main>
+    <div class="sech"><h2>En el local</h2><span class="tag">Indicaciones · Direcciones · Emergencias</span></div>
+    ${groups}</main>`;
+}
+
+function viewQuiz(){
+  if(!state.quiz) startQuiz();
+  const q=state.quiz;
+  if(q.done){
+    const sc=quizScore();
+    return `<main>
+      <div class="sech"><h2>Evaluación</h2><span class="tag">${sc.done}/${sc.total} · ${sc.pct}%</span></div>
+      <div class="q-card" style="text-align:center">
+        <div style="font-size:48px">🏅</div>
+        <div class="q-es" style="margin:8px 0 6px">¡Completaste la evaluación de ${esc(D().meta.name)}!</div>
+        <p style="color:var(--es);font-size:14px;margin-bottom:18px">Acertaste las ${sc.total} palabras. ¡Eres un crack! Repítela para ganar más seguridad.</p>
+        <button class="q-next" data-act="qrestart">↺ Volver a empezar</button>
+      </div></main>`;
+  }
+  const w=D().words[q.wi]; const correct=tphrase(w); const sc=quizScore();
+  const L=["A","B","C","D","E"];
+  const opts=q.opts.map((o,i)=>{
+    let cls="q-opt";
+    if(q.answered){ if(o===q.answered.correct) cls+=" ok"; else if(o===q.answered.chosen) cls+=" bad"; }
+    return `<button class="${cls}" data-act="ans" data-opt="${esc(o)}" ${q.answered?'disabled':''}><span class="ltr">${L[i]}</span><span>${esc(o)}</span></button>`;
+  }).join("");
+  const foot = q.answered
+    ? `<div class="q-foot"><button class="q-spk" data-act="speak" data-text="${esc(mainTerm(correct))}" data-skey="${esc(mainTerm(correct))}" data-lbl="🔊 oír">🔊 oír</button><button class="q-next" data-act="qnext">Siguiente →</button></div>`
+    : `<div class="q-foot"><span class="q-score">Toca la respuesta correcta</span></div>`;
+  return `<main>
+    <div class="sech"><h2>Evaluación</h2><span class="tag">${sc.done}/${sc.total} aciertos · ${sc.pct}%</span></div>
+    <div class="q-card">
+      <div class="q-ask">¿Cómo se dice en ${esc(D().meta.name)}?</div>
+      <div class="q-es">${esc(w.es)}</div>
+      <div class="q-opts">${opts}</div>
+      ${foot}
+    </div>
+    <div style="text-align:center;margin-top:14px"><button class="q-spk" data-act="qrestart">↺ Reiniciar evaluación</button></div>
+  </main>`;
+}
+
+function viewAvance(){
+  const c=courseStats(), dc=dictStats(), q=quizScore();
+  const totDone=c.done+dc.done+q.done, totTot=c.total+dc.total+q.total;
+  const pct= totTot?Math.round(totDone/totTot*100):0;
+  const daysFull=D().curriculum.filter(d=>dayDone(d.day)===5).length;
+  const row=(emoji,label,s,extra)=>`<div class="av-row"><div class="av-top"><span>${emoji} ${label}</span><span class="v">${s.pct}%</span></div>
+    <div class="av-bar"><div class="av-fill" style="width:${s.pct}%;background:${barColor(s.pct)}"></div></div>
+    <div style="font-size:12px;color:var(--soft);margin-top:7px">${extra}</div></div>`;
+  return `<main>
+    <div class="sech"><h2>Mi Avance</h2><span class="tag">${esc(D().meta.name)} ${D().meta.flag}</span></div>
+    <div class="card" style="text-align:center">
+      <div class="ring-wrap"><div class="ring" style="background:conic-gradient(var(--accent) ${pct*3.6}deg, var(--track) 0)"><div class="hole"><span class="pct">${pct}%</span><span class="lbl">del total</span></div></div></div>
+      <p style="color:var(--es);font-size:14px;margin:0">Has dominado <b>${totDone}</b> de <b>${totTot}</b> puntos del curso de ${esc(D().meta.name)}.</p>
+    </div>
+    <div class="av-list" style="margin-top:14px">
+      ${row("📖","Curso",c,daysFull+" de 30 días completos · "+c.done+"/"+c.total+" frases")}
+      ${row("📚","Diccionario",dc,dc.done+"/"+dc.total+" palabras aprendidas")}
+      ${row("🧠","Evaluación",q,q.done+"/"+q.total+" aciertos en el quiz")}
+    </div>
+  </main>`;
+}
+
+// ============================================================
+//  EVENTOS (delegación)
+// ============================================================
+document.addEventListener("click", (e)=>{
+  const el=e.target.closest("[data-act]"); if(!el) return;
+  const act=el.getAttribute("data-act");
+  if(el.getAttribute("data-stop")) e.stopPropagation();
+
+  if(act==="speak"){
+    if(el.hasAttribute("data-slow")&&!el.hasAttribute("data-text")){} // flash buttons handled below
+    let text=el.getAttribute("data-text");
+    if(text==null){ // viene de flashcard: por índice del día
+      const i=+el.getAttribute("data-idx"); text=tphrase(dayObj().phrases[i]);
+    }
+    speak(text, el.hasAttribute("data-slow"));
+    return;
+  }
+  if(act==="nav"){ state.view=el.getAttribute("data-view"); state.search=""; if(state.view==="quiz"&&!state.quiz) startQuiz(); tick(); render(); window.scrollTo(0,0); return; }
+  if(act==="day"){ state.day=+el.getAttribute("data-day"); state.flipped={}; state.tab="learn"; tick(); render(); return; }
+  if(act==="tab"){ state.tab=el.getAttribute("data-tab"); state.flipped={}; tick(); render(); return; }
+  if(act==="flip"){ const i=+el.getAttribute("data-idx"); state.flipped[i]=!state.flipped[i]; render(); return; }
+  if(act==="motive"){ nextMotive(); tick(); return; }
+  if(act==="dark"){ state.dark=!state.dark; save("gbDark",state.dark); render(); return; }
+  if(act==="sound"){ state.sound=!state.sound; save("gbSound",state.sound); render(); return; }
+  if(act==="install"){
+    if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.finally(()=>{ deferredPrompt=null; render(); }); }
+    else {
+      const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
+      state.warn = ios
+        ? "En iPhone/iPad: toca el botón Compartir y luego «Añadir a pantalla de inicio» para instalar la app."
+        : "Para instalar: abre el menú del navegador (⋮ o ⋯) y elige «Instalar app» / «Agregar a la pantalla de inicio».";
+      renderWarn(); setTimeout(()=>{ state.warn=""; renderWarn(); }, 8000);
+    }
+    return;
+  }
+  if(act==="pickopen"){ openSplash(); return; }
+  if(act==="learn"){
+    const i=+el.getAttribute("data-idx"); const k=pkey(state.lang,state.day,i);
+    const was=state.progress[k];
+    state.progress[k]=!was; if(!was) bell(); save("gbProgress",state.progress);
+    const before = was? null : dayDone(state.day);
+    render();
+    if(!was && before===5){ nextMotive(); celebrate(); }
+    return;
+  }
+  if(act==="dlearn"){
+    const i=+el.getAttribute("data-idx");
+    const was=state.dict[state.lang][i];
+    state.dict[state.lang][i]=!was; if(!was) bell(); save("gbDict",state.dict);
+    render();
+    return;
+  }
+  if(act==="ans"){
+    const q=state.quiz; if(!q||q.answered) return;
+    const chosen=el.getAttribute("data-opt");
+    const correct=tphrase(D().words[q.wi]);
+    q.answered={chosen,correct};
+    if(chosen===correct){ if(!state.quizDone[state.lang][q.wi]){ state.quizDone[state.lang][q.wi]=true; save("gbQuiz",state.quizDone); } bell(); }
+    else tick();
+    render();
+    return;
+  }
+  if(act==="qnext"){ nextQ(); return; }
+  if(act==="qrestart"){ state.quizDone[state.lang]={}; save("gbQuiz",state.quizDone); startQuiz(); render(); return; }
+});
+// búsqueda del diccionario (sin perder foco)
+document.addEventListener("input",(e)=>{
+  if(e.target&&e.target.id==="searchBox"){
+    state.search=e.target.value;
+    const list=document.getElementById("dictList");
+    if(list){
+      const q=state.search.trim().toLowerCase();
+      const items=D().words.map((w,idx)=>({w,idx})).filter(({w})=> !q || tphrase(w).toLowerCase().includes(q)||w.es.toLowerCase().includes(q));
+      list.innerHTML=dictCards(items); markSpeaking();
+    }
+  }
+});
+
+// ============================================================
+//  SPLASH (selector de idioma)
+// ============================================================
+const splash=()=>document.getElementById("splash");
+function buildSplash(){
+  document.getElementById("spLogo").innerHTML=LOGO_SVG(56);
+  document.getElementById("spLangs").innerHTML = LANGS.map(l=>{
+    const m=DATA[l].meta;
+    return `<button class="sp-lang" data-pick="${l}"><span class="fl">${m.flag}</span>
+      <span><span class="nm">${m.pickLabel}</span><span class="ds">${esc(m.pickSub)}</span></span></button>`;
+  }).join("");
+}
+function openSplash(){ splash().classList.remove("hide"); }
+document.addEventListener("click",(e)=>{
+  const b=e.target.closest("[data-pick]"); if(!b) return;
+  state.lang=b.getAttribute("data-pick"); save("gbLang",state.lang);
+  state.view="curso"; state.day=1; state.tab="learn"; state.flipped={}; state.search=""; state.quiz=null;
+  ac(); intro();
+  splash().classList.add("hide");
+  sessionStorage.setItem("gbSplash","1");
+  render();
+});
+
+// ============================================================
+//  CELEBRACIÓN
+// ============================================================
+// ── Frases del banner motivacional (rotan en la pantalla principal) ──
+const MOTIVES = [
+  "Cada palabra nueva es una propina más en tu bolsillo. 💸",
+  "Un garzón bilingüe nunca dice «no entendí». 😎",
+  "Hoy practicas, mañana atiendes turistas sin sudar. 🌍",
+  "El idioma no muerde… la propina sí llega. 🤑",
+  "Practica una frase y serás el favorito de la mesa 12. ⭐",
+  "Respira, sonríe y suelta el «welcome». Tú puedes. 💪",
+  "Mientras otros dudan, tú ya tomaste el pedido en inglés. 🚀",
+  "Pequeños pasos, grandes propinas. 🥂",
+  "Tu acento mejora con cada toque a «escuchar». 🔊",
+  "Atender en otro idioma = clientes felices = mejores turnos. 😄",
+  "Hoy una frase, mañana toda la carta. 📖",
+  "El mejor garzón no es el más rápido: es el que se hace entender. 🤝"
+];
+function updateMotive(){ const t=document.getElementById("motiveText"); if(t) t.textContent=MOTIVES[state.motive % MOTIVES.length]; }
+function nextMotive(){ state.motive=(state.motive+1)%MOTIVES.length; updateMotive(); }
+
+// ── Frases de celebración (cómicas/motivadoras por tramo de avance) ──
+const CEL = {
+  day:["¡Día completo! Tu inglés ya tiene más sazón que el plato del día. 😋",
+       "¡Otro día dominado! Los turistas te van a adorar. 🌍",
+       "¡Listo ese día! Vas camino a garzón estrella. ⭐"],
+  m25:["25% y subiendo. Ya pides «the bill» sin que te tiemble la voz. 💪",
+       "¡Un cuarto del camino! Pronto los gringos te pedirán a ti. 😎"],
+  m50:["¡Mitad del curso! De aquí al «welcome» con acento de película. 🎬",
+       "50%. Ya casi no necesitas señas para tomar el pedido. 🙌"],
+  m75:["75%. Tu currículum ya huele a propina internacional. 💸",
+       "¡Tres cuartos! Falta poco para jefe de sala. 👔"],
+  m90:["¡90%! Ya hablas tan bien que el chef te pide traducir la carta, el sommelier te consulta los maridajes y los clientes juran que estudiaste en Londres. Un último empujón y eres LEYENDA del servicio. 🏆🔥"]
+};
+const pickFun = a => a[Math.floor(Math.random()*a.length)];
+
+function celebrate(){
+  const st=courseStats();
+  const cel=document.getElementById("cel");
+  const alt=document.getElementById("celAlt");
+  const sis=document.getElementById("celSister");
+  let title="¡Felicidades!", emoji="🎉", msg;
+  if(st.pct>=100){
+    emoji="🏆"; title="¡Curso completo!";
+    msg="¡Completaste TODO el curso de "+D().meta.name+"! Eres un crack. 🌟 Anímate con otro idioma, prueba Protocolos de Servicio, o repite este para ganar más seguridad.";
+    alt.style.display=""; sis.style.display="";
+  } else {
+    alt.style.display="none"; sis.style.display="none";
+    if(st.pct>=90) { emoji="🔥"; msg=pickFun(CEL.m90); }
+    else if(st.pct>=75) msg=pickFun(CEL.m75);
+    else if(st.pct>=50) msg=pickFun(CEL.m50);
+    else if(st.pct>=25) msg=pickFun(CEL.m25);
+    else msg=pickFun(CEL.day);
+  }
+  document.getElementById("celEmoji").textContent=emoji;
+  document.getElementById("celTitle").textContent=title;
+  document.getElementById("celMsg").textContent=msg;
+  document.getElementById("celPc").textContent="Llevas "+st.pct+"% del curso de "+D().meta.name+".";
+  cel.classList.add("show");
+  fanfare(); confetti();
+  const safety=setTimeout(()=>cel.classList.remove("show"),18000);
+  document.getElementById("celBtn").onclick=()=>{ clearTimeout(safety); cel.classList.remove("show"); };
+  alt.onclick=()=>{ clearTimeout(safety); cel.classList.remove("show"); openSplash(); };
+}
+function confetti(){
+  const cols=["#8b6bff","#3ccdf0","#5ad1c4","#ffd166","#6ea8ff"];
+  for(let i=0;i<70;i++){
+    const c=document.createElement("div"); c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    c.style.background=cols[i%cols.length];
+    c.style.animationDuration=(2+Math.random()*2)+"s";
+    c.style.animationDelay=(Math.random()*.6)+"s";
+    c.style.transform="rotate("+Math.random()*360+"deg)";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4200);
+  }
+}
+
+// ============================================================
+//  ARRANQUE
+// ============================================================
+buildSplash();
+if(sessionStorage.getItem("gbSplash")==="1"){ splash().classList.add("hide"); }
+render();
+// rotación automática del banner motivacional (no interrumpe si hay celebración abierta)
+setInterval(()=>{ const cel=document.getElementById("cel"); if(!cel || !cel.classList.contains("show")) nextMotive(); }, 11000);
+// precarga de voces
+try{ window.speechSynthesis && (window.speechSynthesis.onvoiceschanged=()=>{}); window.speechSynthesis && window.speechSynthesis.getVoices(); }catch{}
+
+// Instalación PWA (botón "Instalar app")
+let deferredPrompt=null;
+window.addEventListener("beforeinstallprompt",(e)=>{ e.preventDefault(); deferredPrompt=e; if(!state.installed) render(); });
+window.addEventListener("appinstalled",()=>{ deferredPrompt=null; state.installed=true; render(); });
+
+// Service worker
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{ navigator.serviceWorker.register("/sw.js").catch(()=>{}); });
+}
+</script>
+</body>
 </html>
