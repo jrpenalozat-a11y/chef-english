@@ -146,7 +146,8 @@
       "Bash(curl -s -o /dev/null -w '%{http_code}' https://protocolos-servicio.vercel.app/)",
       "Bash(curl -s -o /dev/null -w '%{http_code}' https://protocolos-servicio.vercel.app/img/frances.jpg)",
       "Bash(curl -s -o /dev/null -w '%{http_code}' https://protocolos-servicio.vercel.app/img/directo.jpg)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(gh pr create --title 'Actualizar configuración local Claude: servidores dev para proyectos hermanos' --body ' *)"
     ]
   }
 }
