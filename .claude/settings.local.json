@@ -158,7 +158,9 @@
       "Bash(git -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\protocolos-servicio\" status -sb)",
       "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english' commit -m 'Curso: usos alternativos por frase \\(dias 1-5, en/pt/zh\\)' -m '- En la pestana Aprender, desplegable «Otras formas de decirlo» bajo cada frase *)",
       "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\protocolos-servicio' commit -m 'Quiz: cervezas con preguntas de tradicion/pais, IBU y fermentacion' -m '- 60 preguntas nuevas \\(20 cervezas x 3 atributos\\): pais, IBU aprox y tipo de fermentacion *)",
-      "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english' commit -m 'Curso: gamificacion de frases extra \\(marcador de escalada\\) + flujo de celebracion' -m '- Cada frase alternativa se puede marcar como aprendida \\(almacenamiento gbAlt\\) *)"
+      "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english' commit -m 'Curso: gamificacion de frases extra \\(marcador de escalada\\) + flujo de celebracion' -m '- Cada frase alternativa se puede marcar como aprendida \\(almacenamiento gbAlt\\) *)",
+      "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english' commit -m 'Curso: dia reforzado con insignia de cumbre en la grilla' -m '- Un dia que completa sus 5 frases dominadas Y todos sus desafios \\(extras\\) se marca como «reforzado» *)",
+      "Bash(git -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english\" push origin master)"
     ]
   }
 }

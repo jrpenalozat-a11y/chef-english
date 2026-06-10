@@ -115,6 +115,8 @@
   .day{position:relative;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:15px;padding:12px 13px;
     display:flex;flex-direction:column;gap:7px;transition:all .2s;box-shadow:var(--shadow);}
   .day .check{position:absolute;top:9px;right:9px;width:20px;height:20px;border-radius:50%;background:#37d39b;color:#04140d;display:grid;place-items:center;font-size:12px;font-weight:800;box-shadow:0 2px 8px rgba(55,211,155,.5);}
+  .day .peak-badge{position:absolute;top:6px;left:9px;font-size:15px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35));animation:peakPop .4s ease;}
+  @keyframes peakPop{0%{transform:scale(0) rotate(-20deg);}70%{transform:scale(1.25);}100%{transform:scale(1);}}
   .day:active{transform:scale(.97);}
   .day.on{background:linear-gradient(140deg,var(--accent),var(--accent2));border-color:transparent;box-shadow:var(--shadow-lg);}
   .day.done{border-color:var(--accent);}
@@ -1284,11 +1286,16 @@ const ALT = {
 function getAlts(i){ try{ return (ALT[state.lang] && ALT[state.lang][state.day] && ALT[state.lang][state.day][i]) || []; }catch(e){ return []; } }
 function altLearned(pi,ai){ return !!(state.alt[state.lang] && state.alt[state.lang][`${state.day}-${pi}-${ai}`]); }
 // progreso de "frases extra" (alternativas) del día actual
-function dayAltStats(){
-  const d=dayObj(); let total=0, done=0;
-  d.phrases.forEach((ph,pi)=>{ const alts=getAlts(pi); total+=alts.length; alts.forEach((a,ai)=>{ if(altLearned(pi,ai)) done++; }); });
+function dayAltStats(){ return dayAltStatsOf(state.day); }
+// progreso de frases extra de un día cualquiera (para la grilla)
+function dayAltStatsOf(day){
+  const lang=state.lang; let total=0, done=0;
+  const block = ALT[lang] && ALT[lang][day];
+  if(block){ block.forEach((arr,pi)=>{ if(!arr) return; total+=arr.length; arr.forEach((a,ai)=>{ if(state.alt[lang] && state.alt[lang][`${day}-${pi}-${ai}`]) done++; }); }); }
   return {done,total,pct: total?Math.round(done/total*100):0};
 }
+// día "reforzado": 5 frases dominadas + todos sus desafíos (extras) completos
+function dayReforzado(day){ if(dayDone(day)!==5) return false; const s=dayAltStatsOf(day); return s.total>0 && s.done===s.total; }
 // marcador de ESCALADA (solo si el día tiene frases extra)
 function climbMarker(){
   const {done,total,pct}=dayAltStats();
@@ -1500,10 +1507,11 @@ function viewCurso(){
   // ===== Pantalla 1: grilla de los 30 días =====
   if(!state.dayOpen){
     const days=D().curriculum.map(dd=>{
-      const done=dayDone(dd.day), on=dd.day===state.day;
+      const done=dayDone(dd.day), on=dd.day===state.day, ref=dayReforzado(dd.day);
       const dots=[0,1,2,3,4].map(i=>`<i class="dot ${state.progress[pkey(state.lang,dd.day,i)]?'f':''}"></i>`).join("");
-      return `<button class="day ${on?'on':''} ${done===5?'done':''}" data-act="day" data-day="${dd.day}">
+      return `<button class="day ${on?'on':''} ${done===5?'done':''} ${ref?'reforzado':''}" data-act="day" data-day="${dd.day}">
         ${done===5?'<span class="check">✓</span>':''}
+        ${ref?'<span class="peak-badge" title="¡Día dominado a fondo, cumbre conquistada!">🏔️</span>':''}
         <span class="dn">Día ${dd.day}</span><span class="dt">${esc(dd.theme)}</span><span class="dots">${dots}</span></button>`;
     }).join("");
     return `

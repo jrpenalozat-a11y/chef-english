@@ -1,6 +1,6 @@
 // Service worker — Garzón Bilingüe (PWA offline)
 // Subir la versión del caché cada vez que se cambien assets del núcleo.
-const CACHE = "gb-v8";
+const CACHE = "gb-v9";
 const CORE = [
   "/",
   "/index.html",
