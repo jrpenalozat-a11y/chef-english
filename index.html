@@ -131,6 +131,9 @@
   .tabs{display:flex;gap:8px;padding:0 16px 6px;}
   .tab{flex:1;padding:11px;border-radius:12px;font-weight:600;font-size:14px;background:var(--surface2);color:var(--soft);transition:all .2s;border:1px solid var(--border);}
   .tab.on{background:var(--text);color:var(--bg1);border-color:transparent;}
+  .backbtn{display:inline-flex;align-items:center;gap:6px;margin:2px 16px 12px;padding:10px 16px;border-radius:12px;font-weight:700;font-size:14px;
+    background:var(--surface2);color:var(--text);border:1px solid var(--border);transition:all .2s;cursor:pointer;}
+  .backbtn:hover{background:var(--surface);transform:translateX(-2px);}
 
   /* ===== Content ===== */
   main{padding:14px 16px 0;}
@@ -1108,6 +1111,7 @@ const state = {
   lang: (()=>{ const l=load("gbLang","en"); return LANGS.includes(l)?l:"en"; })(),
   view: "curso",            // curso | dict | local
   day: 1,
+  dayOpen: false,           // false = lista de días · true = contenido del día abierto
   tab: "learn",             // learn | practice
   dark: load("gbDark", true),
   sound: load("gbSound", true),
@@ -1321,15 +1325,24 @@ function renderWarn(){
 }
 
 function viewCurso(){
-  const d=dayObj();
-  const days=D().curriculum.map(dd=>{
-    const done=dayDone(dd.day), on=dd.day===state.day;
-    const dots=[0,1,2,3,4].map(i=>`<i class="dot ${state.progress[pkey(state.lang,dd.day,i)]?'f':''}"></i>`).join("");
-    return `<button class="day ${on?'on':''} ${done===5?'done':''}" data-act="day" data-day="${dd.day}">
-      ${done===5?'<span class="check">✓</span>':''}
-      <span class="dn">Día ${dd.day}</span><span class="dt">${esc(dd.theme)}</span><span class="dots">${dots}</span></button>`;
-  }).join("");
+  // ===== Pantalla 1: grilla de los 30 días =====
+  if(!state.dayOpen){
+    const days=D().curriculum.map(dd=>{
+      const done=dayDone(dd.day), on=dd.day===state.day;
+      const dots=[0,1,2,3,4].map(i=>`<i class="dot ${state.progress[pkey(state.lang,dd.day,i)]?'f':''}"></i>`).join("");
+      return `<button class="day ${on?'on':''} ${done===5?'done':''}" data-act="day" data-day="${dd.day}">
+        ${done===5?'<span class="check">✓</span>':''}
+        <span class="dn">Día ${dd.day}</span><span class="dt">${esc(dd.theme)}</span><span class="dots">${dots}</span></button>`;
+    }).join("");
+    return `
+      <main>
+        <div class="sech"><h2>Curso · 30 días</h2><span class="tag">Toca un día para abrir sus 5 frases</span></div>
+      </main>
+      <div class="days">${days}</div>`;
+  }
 
+  // ===== Pantalla 2: contenido del día abierto =====
+  const d=dayObj();
   let content;
   if(state.tab==="learn"){
     content = `<div class="list">${d.phrases.map((ph,i)=>{
@@ -1367,7 +1380,7 @@ function viewCurso(){
   }
 
   return `
-    <div class="days">${days}</div>
+    <button class="backbtn" data-act="backdays">← Volver a los días</button>
     <div class="tabs">
       <button class="tab ${state.tab==='learn'?'on':''}" data-act="tab" data-tab="learn">Aprender</button>
       <button class="tab ${state.tab==='practice'?'on':''}" data-act="tab" data-tab="practice">Practicar</button>
@@ -1503,8 +1516,9 @@ document.addEventListener("click", (e)=>{
     speak(text, el.hasAttribute("data-slow"));
     return;
   }
-  if(act==="nav"){ state.view=el.getAttribute("data-view"); state.search=""; if(state.view==="quiz"&&!state.quiz) startQuiz(); tick(); render(); window.scrollTo(0,0); return; }
-  if(act==="day"){ state.day=+el.getAttribute("data-day"); state.flipped={}; state.tab="learn"; tick(); render(); return; }
+  if(act==="nav"){ state.view=el.getAttribute("data-view"); state.search=""; if(state.view==="curso") state.dayOpen=false; if(state.view==="quiz"&&!state.quiz) startQuiz(); tick(); render(); window.scrollTo(0,0); return; }
+  if(act==="day"){ state.day=+el.getAttribute("data-day"); state.dayOpen=true; state.flipped={}; state.tab="learn"; tick(); render(); window.scrollTo(0,0); return; }
+  if(act==="backdays"){ state.dayOpen=false; state.flipped={}; tick(); render(); window.scrollTo(0,0); return; }
   if(act==="tab"){ state.tab=el.getAttribute("data-tab"); state.flipped={}; tick(); render(); return; }
   if(act==="flip"){ const i=+el.getAttribute("data-idx"); state.flipped[i]=!state.flipped[i]; render(); return; }
   if(act==="motive"){ nextMotive(); tick(); return; }
@@ -1529,7 +1543,7 @@ document.addEventListener("click", (e)=>{
     state.progress[k]=!was; if(!was) bell(); save("gbProgress",state.progress);
     const before = was? null : dayDone(state.day);
     render();
-    if(!was && before===5){ nextMotive(); celebrate(); }
+    if(!was && before===5){ nextMotive(); celebrate(undefined, ()=>{ state.dayOpen=false; state.flipped={}; render(); window.scrollTo(0,0); }); }
     return;
   }
   if(act==="dlearn"){
@@ -1585,7 +1599,7 @@ function openSplash(){ splash().classList.remove("hide"); }
 document.addEventListener("click",(e)=>{
   const b=e.target.closest("[data-pick]"); if(!b) return;
   state.lang=b.getAttribute("data-pick"); save("gbLang",state.lang);
-  state.view="curso"; state.day=1; state.tab="learn"; state.flipped={}; state.search=""; state.quiz=null;
+  state.view="curso"; state.day=1; state.dayOpen=false; state.tab="learn"; state.flipped={}; state.search=""; state.quiz=null;
   ac(); intro();
   splash().classList.add("hide");
   sessionStorage.setItem("gbSplash","1");
@@ -1628,7 +1642,7 @@ const CEL = {
 };
 const pickFun = a => a[Math.floor(Math.random()*a.length)];
 
-function celebrate(kind){
+function celebrate(kind,onClose){
   const st=totalStats();
   const cel=document.getElementById("cel");
   const alt=document.getElementById("celAlt");
@@ -1662,9 +1676,10 @@ function celebrate(kind){
   document.getElementById("celPc").textContent="Llevas "+st.pct+"% del curso de "+D().meta.name+".";
   cel.classList.add("show");
   fanfare(); confetti();
-  const safety=setTimeout(()=>cel.classList.remove("show"),18000);
-  document.getElementById("celBtn").onclick=()=>{ clearTimeout(safety); cel.classList.remove("show"); };
-  alt.onclick=()=>{ clearTimeout(safety); cel.classList.remove("show"); openSplash(); };
+  const close=()=>{ cel.classList.remove("show"); if(onClose){ const cb=onClose; onClose=null; cb(); } };
+  const safety=setTimeout(close,18000);
+  document.getElementById("celBtn").onclick=()=>{ clearTimeout(safety); close(); };
+  alt.onclick=()=>{ clearTimeout(safety); onClose=null; cel.classList.remove("show"); openSplash(); };
 }
 function confetti(){
   const cols=["#8b6bff","#3ccdf0","#5ad1c4","#ffd166","#6ea8ff"];

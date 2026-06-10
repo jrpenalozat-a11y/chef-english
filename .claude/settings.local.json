@@ -147,7 +147,11 @@
       "Bash(curl -s -o /dev/null -w '%{http_code}' https://protocolos-servicio.vercel.app/img/frances.jpg)",
       "Bash(curl -s -o /dev/null -w '%{http_code}' https://protocolos-servicio.vercel.app/img/directo.jpg)",
       "Bash(git commit *)",
-      "Bash(gh pr create --title 'Actualizar configuración local Claude: servidores dev para proyectos hermanos' --body ' *)"
+      "Bash(gh pr create --title 'Actualizar configuración local Claude: servidores dev para proyectos hermanos' --body ' *)",
+      "Bash(mkdir -p \"C:/Users/jpena/Desktop/guia-gastronomica-chile\")",
+      "Bash(powershell -Command \"Get-ChildItem -Path 'C:\\\\Users\\\\jpena\\\\Desktop' -Directory | Select-Object -ExpandProperty Name\")",
+      "Bash(git -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english\" add -A)",
+      "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english' commit -m 'Curso: navegacion en 2 pantallas \\(grilla de dias -> contenido del dia\\)' -m '- Pulsar un dia abre su contenido \\(5 frases\\) en pantalla propia con boton volver *)"
     ]
   }
 }

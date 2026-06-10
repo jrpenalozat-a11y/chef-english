@@ -81,3 +81,4 @@ La **clave del texto destino cambia por idioma**: `ph[lang]` (`en` | `pt` | `zh`
 2. Revisar/instalar voces de pt-BR y zh-CN en los dispositivos de prueba.
 3. ¿URL propia (`garzon-bilingue.vercel.app`)? Hoy sigue `chef-english`.
 4. Afinar contraste del tema claro en alguna pantalla si hace falta.
+5. **Pantalla de detalle por día (Curso):** que al tocar un día (de los 30) se abra una pantalla/vista propia con sus 5 lecciones y, además, **usos alternativos** (otras frases/expresiones) para las mismas situaciones que se están enseñando ese día. Pendiente definir qué pasa exactamente "al terminar la oración" (¿se desbloquea el siguiente uso alternativo?, ¿feedback?, ¿pasa a la siguiente frase del día?).
