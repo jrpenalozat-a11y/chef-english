@@ -156,7 +156,9 @@
       "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\protocolos-servicio' commit -m 'La Carta: nueva seccion Charcuteria + mejoras en Cervezas y Quesos' -m '- Cervezas: IBU aproximado, tradicion/pais y grados de fermentacion por estilo; explicacion de fermentacion alta/baja *)",
       "Bash(git -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english\" status -sb)",
       "Bash(git -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\protocolos-servicio\" status -sb)",
-      "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english' commit -m 'Curso: usos alternativos por frase \\(dias 1-5, en/pt/zh\\)' -m '- En la pestana Aprender, desplegable «Otras formas de decirlo» bajo cada frase *)"
+      "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english' commit -m 'Curso: usos alternativos por frase \\(dias 1-5, en/pt/zh\\)' -m '- En la pestana Aprender, desplegable «Otras formas de decirlo» bajo cada frase *)",
+      "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\protocolos-servicio' commit -m 'Quiz: cervezas con preguntas de tradicion/pais, IBU y fermentacion' -m '- 60 preguntas nuevas \\(20 cervezas x 3 atributos\\): pais, IBU aprox y tipo de fermentacion *)",
+      "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english' commit -m 'Curso: gamificacion de frases extra \\(marcador de escalada\\) + flujo de celebracion' -m '- Cada frase alternativa se puede marcar como aprendida \\(almacenamiento gbAlt\\) *)"
     ]
   }
 }

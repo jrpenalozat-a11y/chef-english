@@ -145,6 +145,19 @@
   .altpron b{color:var(--soft);font-weight:600;}
   .altes{font-size:13.5px;color:var(--es);margin-top:3px;}
   .altnota{font-size:12px;color:var(--accent);margin-top:4px;font-style:italic;}
+  .altlbtn{margin-top:9px;background:transparent;border:1px solid var(--border);color:var(--soft);padding:7px 13px;border-radius:10px;font-size:12.5px;font-weight:700;cursor:pointer;transition:all .2s;}
+  .altlbtn:hover{border-color:var(--accent);color:var(--text);}
+  .altlbtn.on{background:var(--accent);color:var(--on-accent);border-color:transparent;}
+  .altitem.done-alt{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset;}
+  /* Marcador de ESCALADA (frases extra) */
+  .climb{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:13px 15px 11px;margin-bottom:13px;}
+  .climb-top{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:13.5px;}
+  .climb-hito{color:var(--accent);font-size:12.5px;font-weight:700;}
+  .climb-track{position:relative;height:9px;background:var(--border);border-radius:6px;margin:20px 0 9px;}
+  .climb-fill{position:absolute;left:0;top:0;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .4s;}
+  .climb-er{position:absolute;top:-13px;transform:translateX(-50%);font-size:18px;transition:left .4s;}
+  .climb-peak{position:absolute;right:-7px;top:-12px;font-size:16px;}
+  .climb-sub{font-size:12px;color:var(--soft);}
 
   /* ===== Content ===== */
   main{padding:14px 16px 0;}
@@ -233,6 +246,8 @@
   .cel-btn{padding:13px 40px;border-radius:99px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:16px;box-shadow:0 10px 28px rgba(109,79,255,.4);}
   .cel-btn.alt{display:block;width:100%;margin-top:10px;padding:11px 20px;background:transparent;border:1.5px solid var(--accent);color:var(--accent);box-shadow:none;font-size:14.5px;}
   .cel-btn.sister-btn{display:block;width:100%;margin-top:10px;padding:11px 20px;text-decoration:none;background:linear-gradient(135deg,#2dd4bf,#14b8a6);color:#04241f;box-shadow:0 10px 26px rgba(45,212,191,.4);font-size:14.5px;}
+  .cel-btn.challenge{display:block;width:100%;margin-bottom:10px;}
+  .cel-btn.outline{background:transparent;border:1.5px solid var(--accent);color:var(--accent);box-shadow:none;}
   .confetti{position:fixed;top:-12px;width:10px;height:14px;z-index:61;pointer-events:none;border-radius:2px;animation:fall linear forwards;}
   @keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.2;}}
 
@@ -294,6 +309,7 @@
     <h2 id="celTitle">¡Felicidades!</h2>
     <p id="celMsg"></p>
     <div class="pc" id="celPc"></div>
+    <button class="cel-btn challenge" id="celChallenge" style="display:none">🧗 Ir por los desafíos</button>
     <button class="cel-btn" id="celBtn">Continuar</button>
     <a class="cel-btn sister-btn" id="celSister" href="https://protocolos-servicio.vercel.app" target="_blank" rel="noopener" style="display:none">📋 Probar Protocolos de Servicio</a>
     <button class="cel-btn alt" id="celAlt" style="display:none">🌐 Probar otro idioma</button>
@@ -1128,6 +1144,7 @@ const state = {
   sound: load("gbSound", true),
   progress: load("gbProgress", {}),   // clave: `${lang}-${day}-${idx}` -> true
   dict: load("gbDict", {en:{},pt:{},zh:{}}), // dict[lang][idx] -> true
+  alt: load("gbAlt", {en:{},pt:{},zh:{}}),   // alt[lang][`${día}-${frase}-${altIdx}`] -> true (frases extra aprendidas)
   quizDone: load("gbQuiz", {en:{},pt:{},zh:{}}), // aciertos del quiz por idioma
   quiz: null,               // estado de la evaluación en curso
   flipped: {},              // idx -> true (practice)
@@ -1137,7 +1154,7 @@ const state = {
   motive: Math.floor(Math.random()*1000),
   installed: ((window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone===true)
 };
-LANGS.forEach(l=>{ if(!state.dict[l]) state.dict[l]={}; if(!state.quizDone[l]) state.quizDone[l]={}; });
+LANGS.forEach(l=>{ if(!state.dict[l]) state.dict[l]={}; if(!state.quizDone[l]) state.quizDone[l]={}; if(!state.alt[l]) state.alt[l]={}; });
 
 const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
@@ -1265,6 +1282,29 @@ const ALT = {
   }
 };
 function getAlts(i){ try{ return (ALT[state.lang] && ALT[state.lang][state.day] && ALT[state.lang][state.day][i]) || []; }catch(e){ return []; } }
+function altLearned(pi,ai){ return !!(state.alt[state.lang] && state.alt[state.lang][`${state.day}-${pi}-${ai}`]); }
+// progreso de "frases extra" (alternativas) del día actual
+function dayAltStats(){
+  const d=dayObj(); let total=0, done=0;
+  d.phrases.forEach((ph,pi)=>{ const alts=getAlts(pi); total+=alts.length; alts.forEach((a,ai)=>{ if(altLearned(pi,ai)) done++; }); });
+  return {done,total,pct: total?Math.round(done/total*100):0};
+}
+// marcador de ESCALADA (solo si el día tiene frases extra)
+function climbMarker(){
+  const {done,total,pct}=dayAltStats();
+  if(!total) return "";
+  let hito;
+  if(pct>=100) hito="🏔️ ¡Cumbre!";
+  else if(pct>=70) hito="🧗 ¡Vas a la cima!";
+  else if(pct>=40) hito="⛰️ ¡Subiendo firme!";
+  else if(pct>0) hito="🥾 ¡En marcha!";
+  else hito="🏕️ Campamento base";
+  return `<div class="climb">
+    <div class="climb-top"><span>🧗 Escalada de extras</span><span class="climb-hito">${hito}</span></div>
+    <div class="climb-track"><div class="climb-fill" style="width:${pct}%"></div><span class="climb-er" style="left:${pct}%">🧗</span><span class="climb-peak">🏔️</span></div>
+    <div class="climb-sub">${done} de ${total} frases extra aprendidas · ${pct}%</div>
+  </div>`;
+}
 
 // ============================================================
 //  AUDIO (Web Audio + Web Speech)
@@ -1477,7 +1517,7 @@ function viewCurso(){
   const d=dayObj();
   let content;
   if(state.tab==="learn"){
-    content = `<div class="list">${d.phrases.map((ph,i)=>{
+    content = `${climbMarker()}<div class="list">${d.phrases.map((ph,i)=>{
       const learned=state.progress[pkey(state.lang,state.day,i)];
       const t=tphrase(ph);
       return `<div class="card ${learned?'learned':''}">
@@ -1492,13 +1532,14 @@ function viewCurso(){
         <button class="lbtn ${learned?'on':''}" data-act="learn" data-idx="${i}">${learned?"✓ Dominada":"Marcar como aprendida"}</button>
         ${(()=>{ const alts=getAlts(i); if(!alts.length) return ""; const open=state.altOpen[i];
           return `<button class="alttog ${open?'on':''}" data-act="alt" data-idx="${i}">💡 Otras formas de decirlo (${alts.length}) <span class="altarrow">${open?'▲':'▼'}</span></button>
-            ${open?`<div class="altbox">${alts.map(a=>`<div class="altitem">
+            ${open?`<div class="altbox">${alts.map((a,ai)=>{ const la=altLearned(i,ai); return `<div class="altitem ${la?'done-alt':''}">
               <div class="alttext">${esc(a.t)}</div>
               <div class="altpron"><b>${esc(D().meta.pronLabel)}:</b> ${esc(a.pron)}</div>
               <div class="altes">${esc(a.es)}</div>
               ${a.nota?`<div class="altnota">↳ ${esc(a.nota)}</div>`:""}
               <div class="row">${sbtn(a.t,false,"◗ escuchar")}${sbtn(a.t,true,"🐢 despacio")}</div>
-            </div>`).join("")}</div>`:""}`; })()}
+              <button class="altlbtn ${la?'on':''}" data-act="altlearn" data-pi="${i}" data-ai="${ai}">${la?"🧗 Aprendida":"Marcar aprendida"}</button>
+            </div>`; }).join("")}</div>`:""}`; })()}
       </div>`;
     }).join("")}</div>`;
   } else {
@@ -1662,6 +1703,17 @@ document.addEventListener("click", (e)=>{
   if(act==="backdays"){ state.dayOpen=false; state.flipped={}; state.altOpen={}; tick(); render(); window.scrollTo(0,0); return; }
   if(act==="tab"){ state.tab=el.getAttribute("data-tab"); state.flipped={}; state.altOpen={}; tick(); render(); return; }
   if(act==="alt"){ const i=+el.getAttribute("data-idx"); state.altOpen[i]=!state.altOpen[i]; render(); return; }
+  if(act==="altlearn"){
+    const pi=+el.getAttribute("data-pi"), ai=+el.getAttribute("data-ai");
+    const k=`${state.day}-${pi}-${ai}`;
+    const was=state.alt[state.lang][k];
+    if(was){ delete state.alt[state.lang][k]; } else { state.alt[state.lang][k]=true; bell(); }
+    save("gbAlt",state.alt);
+    const st=dayAltStats();
+    render();
+    if(!was && st.total>0 && st.done===st.total){ nextMotive(); celebrate("alt", ()=>{ state.dayOpen=false; state.flipped={}; state.altOpen={}; render(); window.scrollTo(0,0); }); }
+    return;
+  }
   if(act==="flip"){ const i=+el.getAttribute("data-idx"); state.flipped[i]=!state.flipped[i]; render(); return; }
   if(act==="motive"){ nextMotive(); tick(); return; }
   if(act==="dark"){ state.dark=!state.dark; save("gbDark",state.dark); render(); return; }
@@ -1685,7 +1737,15 @@ document.addEventListener("click", (e)=>{
     state.progress[k]=!was; if(!was) bell(); save("gbProgress",state.progress);
     const before = was? null : dayDone(state.day);
     render();
-    if(!was && before===5){ nextMotive(); celebrate(undefined, ()=>{ state.dayOpen=false; state.flipped={}; render(); window.scrollTo(0,0); }); }
+    if(!was && before===5){
+      nextMotive();
+      const as=dayAltStats();
+      const hayDesafios = as.total>0 && as.done<as.total;
+      celebrate(undefined,
+        ()=>{ state.dayOpen=false; state.flipped={}; state.altOpen={}; render(); window.scrollTo(0,0); },
+        hayDesafios ? ()=>{ state.altOpen={0:true,1:true,2:true,3:true,4:true}; render(); window.scrollTo(0,0); } : null
+      );
+    }
     return;
   }
   if(act==="dlearn"){
@@ -1783,12 +1843,20 @@ const CEL = {
   m90:["¡90%! Ya hablas tan bien que el chef te pide traducir la carta, el sommelier te consulta los maridajes y los clientes juran que estudiaste en Londres. Un último empujón y eres LEYENDA del servicio. 🏆🔥"]
 };
 const pickFun = a => a[Math.floor(Math.random()*a.length)];
+// Frases para la CUMBRE (al aprender todas las frases extra de un día)
+const CEL_ALT = [
+  "🏔️ ¡CUMBRE CONQUISTADA! Aprendiste hasta las frases extra de este día. Ya no atiendes mesas: las escalas. 🧗‍♂️🔥",
+  "🏔️ ¡Llegaste a la cima! Con tantas formas de decir lo mismo, hasta el cliente más difícil queda sin palabras (y con buena propina 💸).",
+  "🏔️ ¡Bandera en la cumbre! Manejas el plato principal Y las variantes. Eres oficialmente un sherpa del servicio. ⛰️✨",
+  "🏔️ ¡Imparable! Subiste cada frase extra como quien sube escalones de dos en dos. El Everest del garzón es tuyo. 🚀"
+];
 
-function celebrate(kind,onClose){
+function celebrate(kind,onClose,challengeFn){
   const st=totalStats();
   const cel=document.getElementById("cel");
   const alt=document.getElementById("celAlt");
   const sis=document.getElementById("celSister");
+  const chal=document.getElementById("celChallenge");
   let title="¡Felicidades!", emoji="🎉", msg;
   if(st.pct>=100){
     emoji="🏆"; title="¡Todo completo!";
@@ -1801,6 +1869,10 @@ function celebrate(kind,onClose){
   } else if(kind==="quiz"){
     emoji="🏅"; title="¡Evaluación superada!";
     msg="¡Acertaste todas las palabras de la evaluación de "+D().meta.name+"! Eres una máquina del servicio. 🔥";
+    alt.style.display="none"; sis.style.display="none";
+  } else if(kind==="alt"){
+    emoji="🏔️"; title="¡Llegaste a la cumbre!";
+    msg=pickFun(CEL_ALT);
     alt.style.display="none"; sis.style.display="none";
   } else {
     alt.style.display="none"; sis.style.display="none";
@@ -1818,9 +1890,16 @@ function celebrate(kind,onClose){
   document.getElementById("celPc").textContent="Llevas "+st.pct+"% del curso de "+D().meta.name+".";
   cel.classList.add("show");
   fanfare(); confetti();
+  // Botones: en celebraciones dentro de un día (día completo / cumbre) el botón principal vuelve a la grilla
+  const btn=document.getElementById("celBtn");
+  const volverGrilla = (kind===undefined || kind==="alt");
+  btn.textContent = volverGrilla ? "← Volver a los días" : "Continuar";
+  if(chal){ chal.style.display = challengeFn ? "" : "none"; }
+  btn.classList.toggle("outline", !!challengeFn);  // si hay desafíos, "Volver" queda secundario
   const close=()=>{ cel.classList.remove("show"); if(onClose){ const cb=onClose; onClose=null; cb(); } };
   const safety=setTimeout(close,18000);
-  document.getElementById("celBtn").onclick=()=>{ clearTimeout(safety); close(); };
+  btn.onclick=()=>{ clearTimeout(safety); close(); };
+  if(chal) chal.onclick=()=>{ clearTimeout(safety); onClose=null; cel.classList.remove("show"); if(challengeFn) challengeFn(); };
   alt.onclick=()=>{ clearTimeout(safety); onClose=null; cel.classList.remove("show"); openSplash(); };
 }
 function confetti(){
