@@ -151,7 +151,12 @@
       "Bash(mkdir -p \"C:/Users/jpena/Desktop/guia-gastronomica-chile\")",
       "Bash(powershell -Command \"Get-ChildItem -Path 'C:\\\\Users\\\\jpena\\\\Desktop' -Directory | Select-Object -ExpandProperty Name\")",
       "Bash(git -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english\" add -A)",
-      "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english' commit -m 'Curso: navegacion en 2 pantallas \\(grilla de dias -> contenido del dia\\)' -m '- Pulsar un dia abre su contenido \\(5 frases\\) en pantalla propia con boton volver *)"
+      "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english' commit -m 'Curso: navegacion en 2 pantallas \\(grilla de dias -> contenido del dia\\)' -m '- Pulsar un dia abre su contenido \\(5 frases\\) en pantalla propia con boton volver *)",
+      "Bash(git -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\protocolos-servicio\" add -A)",
+      "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\protocolos-servicio' commit -m 'La Carta: nueva seccion Charcuteria + mejoras en Cervezas y Quesos' -m '- Cervezas: IBU aproximado, tradicion/pais y grados de fermentacion por estilo; explicacion de fermentacion alta/baja *)",
+      "Bash(git -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english\" status -sb)",
+      "Bash(git -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\protocolos-servicio\" status -sb)",
+      "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english' commit -m 'Curso: usos alternativos por frase \\(dias 1-5, en/pt/zh\\)' -m '- En la pestana Aprender, desplegable «Otras formas de decirlo» bajo cada frase *)"
     ]
   }
 }

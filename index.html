@@ -134,6 +134,17 @@
   .backbtn{display:inline-flex;align-items:center;gap:6px;margin:2px 16px 12px;padding:10px 16px;border-radius:12px;font-weight:700;font-size:14px;
     background:var(--surface2);color:var(--text);border:1px solid var(--border);transition:all .2s;cursor:pointer;}
   .backbtn:hover{background:var(--surface);transform:translateX(-2px);}
+  .alttog{margin-top:11px;width:100%;text-align:left;background:transparent;border:1px dashed var(--border);color:var(--soft);
+    padding:9px 12px;border-radius:11px;font-weight:600;font-size:13px;cursor:pointer;transition:all .2s;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .alttog:hover,.alttog.on{color:var(--text);border-color:var(--accent);border-style:solid;}
+  .altarrow{font-size:10px;color:var(--accent);}
+  .altbox{margin-top:8px;display:flex;flex-direction:column;gap:8px;}
+  .altitem{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:11px 13px;}
+  .alttext{font-weight:600;font-size:15.5px;color:var(--target);}
+  .altpron{font-size:12.5px;color:var(--pron);margin-top:3px;}
+  .altpron b{color:var(--soft);font-weight:600;}
+  .altes{font-size:13.5px;color:var(--es);margin-top:3px;}
+  .altnota{font-size:12px;color:var(--accent);margin-top:4px;font-style:italic;}
 
   /* ===== Content ===== */
   main{padding:14px 16px 0;}
@@ -1120,6 +1131,7 @@ const state = {
   quizDone: load("gbQuiz", {en:{},pt:{},zh:{}}), // aciertos del quiz por idioma
   quiz: null,               // estado de la evaluación en curso
   flipped: {},              // idx -> true (practice)
+  altOpen: {},              // idx -> true (usos alternativos desplegados)
   search: "",
   warn: "",
   motive: Math.floor(Math.random()*1000),
@@ -1133,6 +1145,126 @@ const D = ()=>DATA[state.lang];
 const dayObj = ()=>D().curriculum.find(d=>d.day===state.day);
 const tphrase = ph => ph[state.lang];                 // texto en idioma destino
 const tpron   = x  => x.ipa || x.pron || "";
+
+// ============================================================
+//  USOS ALTERNATIVOS por frase (muestra: días 1–5 · en/pt/zh)
+//  ALT[idioma][día] = [ por cada una de las 5 frases: [ {t,pron,nota}, ... ] ]
+//  t = frase alternativa · pron = pronunciación · nota = matiz/registro
+// ============================================================
+const ALT = {
+  en: {
+    1: [
+      [ {t:"Hi there, welcome! Do you have a booking with us?",pron:"haɪ ðɛər ˈwɛlkəm duː juː hæv ə ˈbʊkɪŋ wɪð ʌs",es:"¡Hola, bienvenido! ¿Tiene reserva con nosotros?",nota:"Más casual"}, {t:"Good evening. Is your table reserved?",pron:"ɡʊd ˈiːvnɪŋ ɪz jɔːr ˈteɪbəl rɪˈzɜːrvd",es:"Buenas noches. ¿Tiene su mesa reservada?",nota:"Más formal y breve"} ],
+      [ {t:"Just the two of you? Follow me, please.",pron:"dʒʌst ðə tuː ɒv juː ˈfɒloʊ miː pliːz",es:"¿Solo ustedes dos? Síganme, por favor.",nota:"Más casual"}, {t:"A table for two — allow me to seat you.",pron:"ə ˈteɪbəl fɔːr tuː əˈlaʊ miː tuː siːt juː",es:"Una mesa para dos, permítame acomodarlos.",nota:"Más formal"} ],
+      [ {t:"Would you like me to hang up your coat?",pron:"wʊd juː laɪk miː tuː hæŋ ʌp jɔːr koʊt",es:"¿Quiere que le cuelgue el abrigo?",nota:"Más amable"}, {t:"May I take your jacket?",pron:"meɪ aɪ teɪk jɔːr ˈdʒækɪt",es:"¿Me permite su chaqueta?",nota:"Más formal"} ],
+      [ {t:"Inside or out on the terrace?",pron:"ɪnˈsaɪd ɔːr aʊt ɒn ðə ˈtɛrəs",es:"¿Adentro o afuera en la terraza?",nota:"Más directo"}, {t:"Do you have a seating preference?",pron:"duː juː hæv ə ˈsiːtɪŋ ˈprɛfərəns",es:"¿Tiene alguna preferencia de mesa?",nota:"Más formal"} ],
+      [ {t:"I'll be looking after you tonight.",pron:"aɪl biː ˈlʊkɪŋ ˈæftər juː təˈnaɪt",es:"Yo los atenderé esta noche.",nota:"Más cercano"}, {t:"I'll be taking care of your table this evening.",pron:"aɪl biː ˈteɪkɪŋ kɛər ɒv jɔːr ˈteɪbəl ðɪs ˈiːvnɪŋ",es:"Estaré a cargo de su mesa esta noche.",nota:"Más formal"} ]
+    ],
+    2: [
+      [ {t:"Ready to order, or need a minute?",pron:"ˈrɛdi tuː ˈɔːrdər ɔːr niːd ə ˈmɪnɪt",es:"¿Listos para ordenar o necesitan un minuto?",nota:"Más casual"}, {t:"Whenever you're ready to order.",pron:"wɛnˈɛvər jʊər ˈrɛdi tuː ˈɔːrdər",es:"Cuando estén listos para ordenar.",nota:"Más amable"} ],
+      [ {t:"Anything to drink to start?",pron:"ˈɛniθɪŋ tuː drɪŋk tuː stɑːrt",es:"¿Algo de tomar para empezar?",nota:"Más directo"}, {t:"May I bring you a drink while you decide?",pron:"meɪ aɪ brɪŋ juː ə drɪŋk waɪl juː dɪˈsaɪd",es:"¿Le traigo algo de tomar mientras decide?",nota:"Más formal"} ],
+      [ {t:"How do you want your steak done?",pron:"haʊ duː juː wɒnt jɔːr steɪk dʌn",es:"¿Cómo quiere su carne?",nota:"Más casual"}, {t:"What temperature for your steak?",pron:"wɒt ˈtɛmprətʃər fɔːr jɔːr steɪk",es:"¿Qué término para su carne?",nota:"Más técnico"} ],
+      [ {t:"Want to hear today's specials?",pron:"wɒnt tuː hɪər təˈdeɪz ˈspɛʃəlz",es:"¿Quiere conocer las sugerencias de hoy?",nota:"Más casual"}, {t:"May I tell you about our specials?",pron:"meɪ aɪ tɛl juː əˈbaʊt aʊər ˈspɛʃəlz",es:"¿Le cuento nuestras sugerencias?",nota:"Más formal"} ],
+      [ {t:"Great pick! It'll be right out.",pron:"ɡreɪt pɪk ˈɪtəl biː raɪt aʊt",es:"¡Buena elección! Sale enseguida.",nota:"Más casual"}, {t:"An excellent choice. It'll be with you shortly.",pron:"ən ˈɛksələnt tʃɔɪs ˈɪtəl biː wɪð juː ˈʃɔːrtli",es:"Excelente elección. Se la traigo en breve.",nota:"Más formal"} ]
+    ],
+    3: [
+      [ {t:"It's grilled salmon with seasonal veggies.",pron:"ɪts ɡrɪld ˈsæmən wɪð ˈsiːzənəl ˈvɛdʒiz",es:"Es salmón a la parrilla con verduras de temporada.",nota:"Más casual"}, {t:"It's a grilled salmon fillet with seasonal vegetables.",pron:"ɪts ə ɡrɪld ˈsæmən fɪˈleɪ wɪð ˈsiːzənəl ˈvɛdʒtəbəlz",es:"Es un filete de salmón a la parrilla con verduras de temporada.",nota:"Más formal"} ],
+      [ {t:"It has a little kick to it.",pron:"ɪt hæz ə ˈlɪtəl kɪk tuː ɪt",es:"Tiene un toquecito picante.",nota:"Más casual"}, {t:"This dish has a mild touch of spice.",pron:"ðɪs dɪʃ hæz ə maɪld tʌtʃ ɒv spaɪs",es:"Este plato tiene un leve toque picante.",nota:"Más formal"} ],
+      [ {t:"We make the sauce ourselves.",pron:"wiː meɪk ðə sɔːs aʊərˈsɛlvz",es:"La salsa la hacemos nosotros.",nota:"Más casual"}, {t:"The sauce is prepared in house.",pron:"ðə sɔːs ɪz prɪˈpɛərd ɪn haʊs",es:"La salsa es de elaboración propia.",nota:"Más formal"} ],
+      [ {t:"It comes with mashed potatoes on the side.",pron:"ɪt kʌmz wɪð mæʃt pəˈteɪtoʊz ɒn ðə saɪd",es:"Viene con puré de papas de guarnición.",nota:"Variación"}, {t:"It's served with mashed potatoes.",pron:"ɪts sɜːrvd wɪð mæʃt pəˈteɪtoʊz",es:"Se sirve con puré de papas.",nota:"Más breve"} ],
+      [ {t:"It goes great with a red wine.",pron:"ɪt ɡoʊz ɡreɪt wɪð ə rɛd waɪn",es:"Va muy bien con un vino tinto.",nota:"Más casual"}, {t:"I'd recommend it with a red wine.",pron:"aɪd ˌrɛkəˈmɛnd ɪt wɪð ə rɛd waɪn",es:"Se lo recomiendo con un vino tinto.",nota:"Venta sugestiva"} ]
+    ],
+    4: [
+      [ {t:"Any allergies or foods you avoid?",pron:"ˈɛni ˈælərdʒiz ɔːr fuːdz juː əˈvɔɪd",es:"¿Alguna alergia o alimentos que evita?",nota:"Más directo"}, {t:"Is there anything you can't eat?",pron:"ɪz ðɛər ˈɛniθɪŋ juː kɑːnt iːt",es:"¿Hay algo que no pueda comer?",nota:"Más simple"} ],
+      [ {t:"There's no gluten in this one.",pron:"ðɛərz noʊ ˈɡluːtən ɪn ðɪs wʌn",es:"Este no tiene gluten.",nota:"Más casual"}, {t:"This dish contains no gluten.",pron:"ðɪs dɪʃ kənˈteɪnz noʊ ˈɡluːtən",es:"Este plato no contiene gluten.",nota:"Más formal"} ],
+      [ {t:"We can make it without nuts.",pron:"wiː kæn meɪk ɪt wɪˈðaʊt nʌts",es:"Podemos hacerlo sin frutos secos.",nota:"Más casual"}, {t:"The kitchen can prepare it nut-free.",pron:"ðə ˈkɪtʃən kæn prɪˈpɛər ɪt nʌt friː",es:"La cocina puede prepararlo sin frutos secos.",nota:"Más formal"} ],
+      [ {t:"Is this one vegetarian?",pron:"ɪz ðɪs wʌn ˌvɛdʒəˈtɛəriən",es:"¿Este es vegetariano?",nota:"Más directo"}, {t:"Would this work for a vegetarian?",pron:"wʊd ðɪs wɜːrk fɔːr ə ˌvɛdʒəˈtɛəriən",es:"¿Este serviría para un vegetariano?",nota:"Variación"} ],
+      [ {t:"Let me go ask the kitchen.",pron:"lɛt miː ɡoʊ ɑːsk ðə ˈkɪtʃən",es:"Voy a preguntar a la cocina.",nota:"Más casual"}, {t:"Allow me to confirm that with the kitchen.",pron:"əˈlaʊ miː tuː kənˈfɜːrm ðæt wɪð ðə ˈkɪtʃən",es:"Permítame confirmarlo con la cocina.",nota:"Más formal"} ]
+    ],
+    5: [
+      [ {t:"How's everything so far?",pron:"haʊz ˈɛvriθɪŋ soʊ fɑːr",es:"¿Cómo va todo hasta ahora?",nota:"Más casual"}, {t:"Is everything to your liking?",pron:"ɪz ˈɛvriθɪŋ tuː jɔːr ˈlaɪkɪŋ",es:"¿Está todo a su gusto?",nota:"Más formal"} ],
+      [ {t:"Anything else I can get you?",pron:"ˈɛniθɪŋ ɛls aɪ kæn ɡɛt juː",es:"¿Algo más que le pueda traer?",nota:"Variación"}, {t:"Is there anything more I can bring you?",pron:"ɪz ðɛər ˈɛniθɪŋ mɔːr aɪ kæn brɪŋ juː",es:"¿Hay algo más que le pueda traer?",nota:"Más formal"} ],
+      [ {t:"I'll top up your water.",pron:"aɪl tɒp ʌp jɔːr ˈwɔːtər",es:"Le relleno el agua.",nota:"Más casual"}, {t:"Allow me to refill your water.",pron:"əˈlaʊ miː tuː ˈriːfɪl jɔːr ˈwɔːtər",es:"Permítame rellenarle el agua.",nota:"Más formal"} ],
+      [ {t:"Let me take these plates away.",pron:"lɛt miː teɪk ðiːz pleɪts əˈweɪ",es:"Le retiro estos platos.",nota:"Variación"}, {t:"May I clear these plates?",pron:"meɪ aɪ klɪər ðiːz pleɪts",es:"¿Puedo retirar estos platos?",nota:"Pedir permiso"} ],
+      [ {t:"No rush at all, take your time.",pron:"noʊ rʌʃ æt ɔːl teɪk jɔːr taɪm",es:"Sin apuro, tómese su tiempo.",nota:"Variación"}, {t:"Please take all the time you need.",pron:"pliːz teɪk ɔːl ðə taɪm juː niːd",es:"Tómese todo el tiempo que necesite.",nota:"Más formal"} ]
+    ]
+  },
+  pt: {
+    1: [
+      [ {t:"Oi, bem-vindo! Tem reserva?",pron:"OI, bẽ-VIN-du! tẽ he-ZER-va?",es:"¡Hola, bienvenido! ¿Tiene reserva?",nota:"Más casual"}, {t:"Boa noite. A reserva está em seu nome?",pron:"BOA NOI-chi. a he-ZER-va es-TÁ ẽ seu NO-mi?",es:"Buenas noches. ¿La reserva está a su nombre?",nota:"Más formal"} ],
+      [ {t:"São dois? Podem me acompanhar.",pron:"SÃO DOIS? PO-dẽ mi a-kõ-pa-NYAR",es:"¿Son dos? Pueden acompañarme.",nota:"Más casual"}, {t:"Mesa para dois — permitam-me acompanhá-los.",pron:"MEza PA-ra DOIS — per-MI-tã-mi a-kõ-pa-NYÁ-lus",es:"Mesa para dos, permítanme acompañarlos.",nota:"Más formal"} ],
+      [ {t:"Quer que eu guarde o seu casaco?",pron:"KER ki eu GWAR-di u seu ka-ZA-ku?",es:"¿Quiere que le guarde el abrigo?",nota:"Más amable"}, {t:"Posso levar o seu casaco?",pron:"PO-su le-VAR u seu ka-ZA-ku?",es:"¿Puedo llevar su abrigo?",nota:"Variación"} ],
+      [ {t:"Dentro ou na varanda?",pron:"DEN-tru ou na va-RAN-da?",es:"¿Adentro o en la terraza?",nota:"Más directo"}, {t:"Tem preferência de lugar?",pron:"tẽ pre-fe-RÊN-sia di lu-GAR?",es:"¿Tiene preferencia de lugar?",nota:"Más formal"} ],
+      [ {t:"Hoje eu cuido da sua mesa.",pron:"O-ji eu KUI-du da SUA MEza",es:"Hoy yo atiendo su mesa.",nota:"Más cercano"}, {t:"Estarei à disposição esta noite.",pron:"es-ta-REI à dis-po-zi-SÃO ES-ta NOI-chi",es:"Estaré a su disposición esta noche.",nota:"Más formal"} ]
+    ],
+    2: [
+      [ {t:"Já posso anotar o pedido?",pron:"JÁ PO-su a-no-TAR u pe-DI-du?",es:"¿Ya puedo anotar el pedido?",nota:"Más directo"}, {t:"Quando quiser, é só chamar.",pron:"KWAN-du ki-ZER, É SÓ sha-MAR",es:"Cuando quiera, solo llámeme.",nota:"Más amable"} ],
+      [ {t:"Algo para beber primeiro?",pron:"AL-gu PA-ra be-BER pri-MEI-ru?",es:"¿Algo de tomar primero?",nota:"Más directo"}, {t:"Posso trazer uma bebida enquanto decide?",pron:"PO-su tra-ZER U-ma be-BI-da ẽ-KWAN-tu de-SI-di?",es:"¿Le traigo una bebida mientras decide?",nota:"Más formal"} ],
+      [ {t:"Quer o bife em que ponto?",pron:"KER u BI-fi ẽ ki PON-tu?",es:"¿Quiere la carne en qué término?",nota:"Variación"}, {t:"Qual o ponto da carne?",pron:"KWAL u PON-tu da KAR-ni?",es:"¿Cuál es el término de la carne?",nota:"Más breve"} ],
+      [ {t:"Quer saber o especial de hoje?",pron:"KER sa-BER u es-pe-SIÁL di O-ji?",es:"¿Quiere conocer el especial de hoy?",nota:"Más casual"}, {t:"Posso apresentar as sugestões do dia?",pron:"PO-su a-pre-zen-TAR as su-jes-TÕIS du JI-a?",es:"¿Le presento las sugerencias del día?",nota:"Más formal"} ],
+      [ {t:"Boa escolha! Já trago.",pron:"BOA es-KO-lya! JÁ TRA-gu",es:"¡Buena elección! Ya se lo traigo.",nota:"Más casual"}, {t:"Excelente escolha. Trarei em instantes.",pron:"e-se-LEN-chi es-KO-lya. tra-REI ẽ ins-TAN-chis",es:"Excelente elección. Lo traeré en un momento.",nota:"Más formal"} ]
+    ],
+    3: [
+      [ {t:"É salmão grelhado com legumes da época.",pron:"É sal-MÃO gre-LYA-du kõ le-GU-mis da É-po-ka",es:"Es salmón a la parrilla con verduras de la temporada.",nota:"Variación"}, {t:"É um filé de salmão grelhado com legumes.",pron:"É ũ fi-LÉ di sal-MÃO gre-LYA-du kõ le-GU-mis",es:"Es un filete de salmón a la parrilla con verduras.",nota:"Más formal"} ],
+      [ {t:"Tem um leve toque de pimenta.",pron:"tẽ ũ LE-vi TO-ki di pi-MEN-ta",es:"Tiene un leve toque de picante.",nota:"Variación"}, {t:"É só um pouquinho picante.",pron:"É SÓ ũ po-KI-nyu pi-KAN-chi",es:"Es solo un poquito picante.",nota:"Más casual"} ],
+      [ {t:"O molho a gente faz aqui.",pron:"u MO-lyu a JEN-chi FAS a-KI",es:"La salsa la hacemos aquí.",nota:"Más casual"}, {t:"O molho é de produção própria.",pron:"u MO-lyu É di pro-du-SÃO PRÓ-pria",es:"La salsa es de elaboración propia.",nota:"Más formal"} ],
+      [ {t:"Acompanha purê de batata.",pron:"a-kõ-PA-nya pu-RÊ di ba-TA-ta",es:"Acompaña puré de papas.",nota:"Más breve"}, {t:"É servido com purê de batatas.",pron:"É ser-VI-du kõ pu-RÊ di ba-TA-tas",es:"Se sirve con puré de papas.",nota:"Más formal"} ],
+      [ {t:"Combina muito com vinho tinto.",pron:"kõ-BI-na MUI-tu kõ VI-nyu TIN-tu",es:"Combina muy bien con vino tinto.",nota:"Más casual"}, {t:"Eu recomendo com um vinho tinto.",pron:"eu he-ko-MEN-du kõ ũ VI-nyu TIN-tu",es:"Lo recomiendo con un vino tinto.",nota:"Venta sugestiva"} ]
+    ],
+    4: [
+      [ {t:"Tem alguma alergia?",pron:"tẽ al-GU-ma a-ler-JI-a?",es:"¿Tiene alguna alergia?",nota:"Más directo"}, {t:"Há algo que não pode comer?",pron:"Á AL-gu ki NÃO PO-di ko-MER?",es:"¿Hay algo que no pueda comer?",nota:"Variación"} ],
+      [ {t:"Esse não tem glúten.",pron:"E-si NÃO tẽ GLU-tẽ",es:"Ese no tiene gluten.",nota:"Más casual"}, {t:"Este prato não contém glúten.",pron:"ES-chi PRA-tu NÃO kõ-TẼ GLU-tẽ",es:"Este plato no contiene gluten.",nota:"Más formal"} ],
+      [ {t:"Dá para fazer sem castanhas.",pron:"DÁ PA-ra fa-ZER sẽ kas-TA-nyas",es:"Se puede hacer sin frutos secos.",nota:"Más casual"}, {t:"A cozinha prepara sem castanhas.",pron:"a ku-ZI-nya pre-PA-ra sẽ kas-TA-nyas",es:"La cocina lo prepara sin frutos secos.",nota:"Más formal"} ],
+      [ {t:"Esse é vegetariano?",pron:"E-si É ve-je-ta-ri-A-nu?",es:"¿Ese es vegetariano?",nota:"Más directo"}, {t:"Serve para vegetarianos?",pron:"SER-vi PA-ra ve-je-ta-ri-A-nus?",es:"¿Sirve para vegetarianos?",nota:"Variación"} ],
+      [ {t:"Vou perguntar na cozinha.",pron:"VO per-gun-TAR na ku-ZI-nya",es:"Voy a preguntar en la cocina.",nota:"Más casual"}, {t:"Permita-me confirmar com a cozinha.",pron:"per-MI-ta-mi kõ-fir-MAR kõ a ku-ZI-nya",es:"Permítame confirmar con la cocina.",nota:"Más formal"} ]
+    ],
+    5: [
+      [ {t:"Está tudo bem até agora?",pron:"es-TÁ TU-du BẼ a-TÉ a-GO-ra?",es:"¿Está todo bien hasta ahora?",nota:"Variación"}, {t:"Está tudo do seu agrado?",pron:"es-TÁ TU-du du seu a-GRA-du?",es:"¿Está todo a su gusto?",nota:"Más formal"} ],
+      [ {t:"Mais alguma coisa?",pron:"MAIS al-GU-ma KOI-za?",es:"¿Algo más?",nota:"Más breve"}, {t:"Deseja mais alguma coisa?",pron:"de-ZE-ja MAIS al-GU-ma KOI-za?",es:"¿Desea algo más?",nota:"Más formal"} ],
+      [ {t:"Vou completar a sua água.",pron:"VO kõ-ple-TAR a SUA Á-gwa",es:"Le voy a rellenar el agua.",nota:"Variación"}, {t:"Posso repor a sua água?",pron:"PO-su he-POR a SUA Á-gwa?",es:"¿Puedo reponerle el agua?",nota:"Pedir permiso"} ],
+      [ {t:"Já retiro esses pratos.",pron:"JÁ he-CHI-ru E-sis PRA-tus",es:"Ya le retiro estos platos.",nota:"Variación"}, {t:"Posso retirar os pratos?",pron:"PO-su he-chi-RAR us PRA-tus?",es:"¿Puedo retirar los platos?",nota:"Pedir permiso"} ],
+      [ {t:"Sem pressa nenhuma.",pron:"sẽ PRE-sa ne-NYU-ma",es:"Sin ninguna prisa.",nota:"Más breve"}, {t:"Fique à vontade, tem todo o tempo.",pron:"FI-ki à võ-TA-di, tẽ TO-du u TEM-pu",es:"Tómese su tiempo, tiene todo el tiempo.",nota:"Más cálido"} ]
+    ]
+  },
+  zh: {
+    1: [
+      [ {t:"您好，欢迎！有预订吗？",pron:"Nín hǎo, huānyíng! Yǒu yùdìng ma?",es:"¡Hola, bienvenido! ¿Tiene reserva?",nota:"Más breve"}, {t:"晚上好，请问预订是用谁的名字？",pron:"Wǎnshang hǎo, qǐngwèn yùdìng shì yòng shéi de míngzi?",es:"Buenas noches, ¿a nombre de quién está la reserva?",nota:"Más formal"} ],
+      [ {t:"两位是吧？这边请。",pron:"Liǎng wèi shì ba? Zhèbiān qǐng.",es:"¿Son dos, verdad? Por aquí.",nota:"Variación"}, {t:"两位，我带您入座。",pron:"Liǎng wèi, wǒ dài nín rùzuò.",es:"Dos personas, los llevo a su mesa.",nota:"Más formal"} ],
+      [ {t:"需要帮您挂外套吗？",pron:"Xūyào bāng nín guà wàitào ma?",es:"¿Le cuelgo el abrigo?",nota:"Más amable"}, {t:"我帮您放好外套，好吗？",pron:"Wǒ bāng nín fàng hǎo wàitào, hǎo ma?",es:"Le guardo bien el abrigo, ¿le parece?",nota:"Variación"} ],
+      [ {t:"室内还是室外？",pron:"Shìnèi háishi shìwài?",es:"¿Adentro o afuera?",nota:"Más directo"}, {t:"您对座位有偏好吗？",pron:"Nín duì zuòwèi yǒu piānhào ma?",es:"¿Tiene alguna preferencia de mesa?",nota:"Más formal"} ],
+      [ {t:"今晚我来为您服务。",pron:"Jīnwǎn wǒ lái wèi nín fúwù.",es:"Esta noche yo los atenderé.",nota:"Variación"}, {t:"有需要随时叫我。",pron:"Yǒu xūyào suíshí jiào wǒ.",es:"Si necesita algo, llámeme cuando quiera.",nota:"Más cercano"} ]
+    ],
+    2: [
+      [ {t:"可以点菜了吗？",pron:"Kěyǐ diǎncài le ma?",es:"¿Listos para ordenar?",nota:"Más directo"}, {t:"您准备好了叫我就行。",pron:"Nín zhǔnbèi hǎo le jiào wǒ jiùxíng.",es:"Cuando estén listos, solo llámeme.",nota:"Más amable"} ],
+      [ {t:"先来点喝的吗？",pron:"Xiān lái diǎn hē de ma?",es:"¿Primero algo de tomar?",nota:"Más casual"}, {t:"需要先点些饮品吗？",pron:"Xūyào xiān diǎn xiē yǐnpǐn ma?",es:"¿Desea pedir algo de beber primero?",nota:"Más formal"} ],
+      [ {t:"牛排要几成熟？",pron:"Niúpái yào jǐ chéng shú?",es:"¿Qué término quiere la carne?",nota:"Variación"}, {t:"请问牛排的熟度？",pron:"Qǐngwèn niúpái de shúdù?",es:"¿El término de la carne, por favor?",nota:"Más formal"} ],
+      [ {t:"要不要听今天的推荐？",pron:"Yào bù yào tīng jīntiān de tuījiàn?",es:"¿Quiere escuchar las recomendaciones de hoy?",nota:"Más casual"}, {t:"我为您介绍今日特色，好吗？",pron:"Wǒ wèi nín jièshào jīnrì tèsè, hǎo ma?",es:"¿Le presento las especialidades del día?",nota:"Más formal"} ],
+      [ {t:"好的，这就来。",pron:"Hǎo de, zhè jiù lái.",es:"Bien, enseguida se lo traigo.",nota:"Más casual"}, {t:"非常好的选择，稍等。",pron:"Fēicháng hǎo de xuǎnzé, shāo děng.",es:"Muy buena elección, un momento.",nota:"Más formal"} ]
+    ],
+    3: [
+      [ {t:"烤三文鱼，配应季蔬菜。",pron:"Kǎo sānwényú, pèi yìngjì shūcài.",es:"Salmón a la parrilla, con verduras de temporada.",nota:"Variación"}, {t:"这是一份烤三文鱼柳配时蔬。",pron:"Zhè shì yī fèn kǎo sānwényú liǔ pèi shíshū.",es:"Es un filete de salmón a la parrilla con verduras de temporada.",nota:"Más formal"} ],
+      [ {t:"会有一点点辣。",pron:"Huì yǒu yìdiǎndiǎn là.",es:"Pica un poquito.",nota:"Más casual"}, {t:"这道菜带轻微辣味。",pron:"Zhè dào cài dài qīngwēi làwèi.",es:"Este plato tiene un leve sabor picante.",nota:"Más formal"} ],
+      [ {t:"酱汁是我们自己做的。",pron:"Jiàngzhī shì wǒmen zìjǐ zuò de.",es:"La salsa la hacemos nosotros mismos.",nota:"Más casual"}, {t:"酱汁由本店厨房调制。",pron:"Jiàngzhī yóu běndiàn chúfáng tiáozhì.",es:"La salsa la prepara la cocina de la casa.",nota:"Más formal"} ],
+      [ {t:"配土豆泥。",pron:"Pèi tǔdòu ní.",es:"Con puré de papas.",nota:"Más breve"}, {t:"搭配一份土豆泥。",pron:"Dāpèi yī fèn tǔdòu ní.",es:"Acompañado de una porción de puré de papas.",nota:"Variación"} ],
+      [ {t:"配红酒很不错。",pron:"Pèi hóngjiǔ hěn bùcuò.",es:"Va muy bien con vino tinto.",nota:"Más casual"}, {t:"我推荐搭配一杯红葡萄酒。",pron:"Wǒ tuījiàn dāpèi yī bēi hóng pútáojiǔ.",es:"Le recomiendo acompañarlo con una copa de vino tinto.",nota:"Venta sugestiva"} ]
+    ],
+    4: [
+      [ {t:"您有什么过敏吗？",pron:"Nín yǒu shénme guòmǐn ma?",es:"¿Tiene alguna alergia?",nota:"Más directo"}, {t:"有什么不能吃的吗？",pron:"Yǒu shénme bùnéng chī de ma?",es:"¿Hay algo que no pueda comer?",nota:"Más simple"} ],
+      [ {t:"这个没有麸质。",pron:"Zhège méiyǒu fūzhì.",es:"Este no tiene gluten.",nota:"Más casual"}, {t:"本道菜不含麸质。",pron:"Běn dào cài bù hán fūzhì.",es:"Este plato no contiene gluten.",nota:"Más formal"} ],
+      [ {t:"可以不放坚果。",pron:"Kěyǐ bù fàng jiānguǒ.",es:"Se puede sin frutos secos.",nota:"Más casual"}, {t:"厨房可以为您去掉坚果。",pron:"Chúfáng kěyǐ wèi nín qùdiào jiānguǒ.",es:"La cocina puede quitarle los frutos secos.",nota:"Más formal"} ],
+      [ {t:"这个是素的吗？",pron:"Zhège shì sù de ma?",es:"¿Este es vegetariano?",nota:"Más directo"}, {t:"这道菜素食者可以吃吗？",pron:"Zhè dào cài sùshí zhě kěyǐ chī ma?",es:"¿Este plato lo pueden comer los vegetarianos?",nota:"Variación"} ],
+      [ {t:"我去问问厨房。",pron:"Wǒ qù wènwen chúfáng.",es:"Voy a preguntar a la cocina.",nota:"Más casual"}, {t:"请稍等，我向厨房确认。",pron:"Qǐng shāo děng, wǒ xiàng chúfáng quèrèn.",es:"Un momento, lo confirmo con la cocina.",nota:"Más formal"} ]
+    ],
+    5: [
+      [ {t:"还合口味吗？",pron:"Hái hé kǒuwèi ma?",es:"¿Está a su gusto?",nota:"Variación"}, {t:"用餐还满意吗？",pron:"Yòngcān hái mǎnyì ma?",es:"¿Está satisfecho con la comida?",nota:"Más formal"} ],
+      [ {t:"还要别的吗？",pron:"Hái yào biéde ma?",es:"¿Desea algo más?",nota:"Más casual"}, {t:"还需要为您添些什么吗？",pron:"Hái xūyào wèi nín tiān xiē shénme ma?",es:"¿Necesita que le traiga algo más?",nota:"Más formal"} ],
+      [ {t:"帮您加点水。",pron:"Bāng nín jiā diǎn shuǐ.",es:"Le agrego un poco de agua.",nota:"Más casual"}, {t:"我为您续杯水，好吗？",pron:"Wǒ wèi nín xù bēi shuǐ, hǎo ma?",es:"Le relleno el agua, ¿le parece?",nota:"Pedir permiso"} ],
+      [ {t:"帮您把盘子收走。",pron:"Bāng nín bǎ pánzi shōu zǒu.",es:"Le retiro los platos.",nota:"Variación"}, {t:"可以帮您撤盘吗？",pron:"Kěyǐ bāng nín chè pán ma?",es:"¿Puedo retirarle los platos?",nota:"Pedir permiso"} ],
+      [ {t:"不急，您慢慢来。",pron:"Bù jí, nín mànmàn lái.",es:"Sin prisa, tómese su tiempo.",nota:"Variación"}, {t:"您慢慢看，不用赶。",pron:"Nín mànmàn kàn, bùyòng gǎn.",es:"Mire con calma, sin apuro.",nota:"Más cálido"} ]
+    ]
+  }
+};
+function getAlts(i){ try{ return (ALT[state.lang] && ALT[state.lang][state.day] && ALT[state.lang][state.day][i]) || []; }catch(e){ return []; } }
 
 // ============================================================
 //  AUDIO (Web Audio + Web Speech)
@@ -1358,6 +1490,15 @@ function viewCurso(){
           ${sbtn(t,true,"🐢 despacio")}
         </div>
         <button class="lbtn ${learned?'on':''}" data-act="learn" data-idx="${i}">${learned?"✓ Dominada":"Marcar como aprendida"}</button>
+        ${(()=>{ const alts=getAlts(i); if(!alts.length) return ""; const open=state.altOpen[i];
+          return `<button class="alttog ${open?'on':''}" data-act="alt" data-idx="${i}">💡 Otras formas de decirlo (${alts.length}) <span class="altarrow">${open?'▲':'▼'}</span></button>
+            ${open?`<div class="altbox">${alts.map(a=>`<div class="altitem">
+              <div class="alttext">${esc(a.t)}</div>
+              <div class="altpron"><b>${esc(D().meta.pronLabel)}:</b> ${esc(a.pron)}</div>
+              <div class="altes">${esc(a.es)}</div>
+              ${a.nota?`<div class="altnota">↳ ${esc(a.nota)}</div>`:""}
+              <div class="row">${sbtn(a.t,false,"◗ escuchar")}${sbtn(a.t,true,"🐢 despacio")}</div>
+            </div>`).join("")}</div>`:""}`; })()}
       </div>`;
     }).join("")}</div>`;
   } else {
@@ -1517,9 +1658,10 @@ document.addEventListener("click", (e)=>{
     return;
   }
   if(act==="nav"){ state.view=el.getAttribute("data-view"); state.search=""; if(state.view==="curso") state.dayOpen=false; if(state.view==="quiz"&&!state.quiz) startQuiz(); tick(); render(); window.scrollTo(0,0); return; }
-  if(act==="day"){ state.day=+el.getAttribute("data-day"); state.dayOpen=true; state.flipped={}; state.tab="learn"; tick(); render(); window.scrollTo(0,0); return; }
-  if(act==="backdays"){ state.dayOpen=false; state.flipped={}; tick(); render(); window.scrollTo(0,0); return; }
-  if(act==="tab"){ state.tab=el.getAttribute("data-tab"); state.flipped={}; tick(); render(); return; }
+  if(act==="day"){ state.day=+el.getAttribute("data-day"); state.dayOpen=true; state.flipped={}; state.altOpen={}; state.tab="learn"; tick(); render(); window.scrollTo(0,0); return; }
+  if(act==="backdays"){ state.dayOpen=false; state.flipped={}; state.altOpen={}; tick(); render(); window.scrollTo(0,0); return; }
+  if(act==="tab"){ state.tab=el.getAttribute("data-tab"); state.flipped={}; state.altOpen={}; tick(); render(); return; }
+  if(act==="alt"){ const i=+el.getAttribute("data-idx"); state.altOpen[i]=!state.altOpen[i]; render(); return; }
   if(act==="flip"){ const i=+el.getAttribute("data-idx"); state.flipped[i]=!state.flipped[i]; render(); return; }
   if(act==="motive"){ nextMotive(); tick(); return; }
   if(act==="dark"){ state.dark=!state.dark; save("gbDark",state.dark); render(); return; }
