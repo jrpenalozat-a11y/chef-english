@@ -160,7 +160,8 @@
       "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\protocolos-servicio' commit -m 'Quiz: cervezas con preguntas de tradicion/pais, IBU y fermentacion' -m '- 60 preguntas nuevas \\(20 cervezas x 3 atributos\\): pais, IBU aprox y tipo de fermentacion *)",
       "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english' commit -m 'Curso: gamificacion de frases extra \\(marcador de escalada\\) + flujo de celebracion' -m '- Cada frase alternativa se puede marcar como aprendida \\(almacenamiento gbAlt\\) *)",
       "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english' commit -m 'Curso: dia reforzado con insignia de cumbre en la grilla' -m '- Un dia que completa sus 5 frases dominadas Y todos sus desafios \\(extras\\) se marca como «reforzado» *)",
-      "Bash(git -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english\" push origin master)"
+      "Bash(git -C \"C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english\" push origin master)",
+      "Bash(git -C 'C:\\\\Users\\\\jpena\\\\Desktop\\\\chef-english' commit -m 'Curso: reubicar insignia de cumbre junto al check \\(no tapa el «Dia N»\\)' -m '- La bandera de cumbre pasa de la esquina superior izquierda \\(tapaba el titulo\\) a la derecha, justo a la izquierda del check *)"
     ]
   }
 }
