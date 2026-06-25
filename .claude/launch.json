@@ -54,6 +54,42 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["serve", "C:\\Users\\jpena\\Desktop\\guia-gastronomica-chile", "-l", "5178"],
       "port": 5178
+    },
+    {
+      "name": "family-care-app-dev",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "C:\\Users\\jpena\\Desktop\\family-care-app", "-l", "5179"],
+      "port": 5179
+    },
+    {
+      "name": "ia-para-mortales-dev",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "C:\\Users\\jpena\\Desktop\\ia-para-mortales", "-l", "5181"],
+      "port": 5181
+    },
+    {
+      "name": "la-ia-por-dentro-dev",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "C:\\Users\\jpena\\Desktop\\la-ia-por-dentro", "-l", "5182"],
+      "port": 5182
+    },
+    {
+      "name": "claude-a-fondo-dev",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "C:\\Users\\jpena\\Desktop\\claude-a-fondo", "-l", "5183"],
+      "port": 5183
+    },
+    {
+      "name": "family-care-dev",
+      "runtimeExecutable": "C:\\Program Files\\nodejs\\node.exe",
+      "runtimeArgs": [
+        "C:\\Users\\jpena\\Desktop\\family-care\\node_modules\\next\\dist\\bin\\next",
+        "dev",
+        "C:\\Users\\jpena\\Desktop\\family-care",
+        "-p",
+        "5180"
+      ],
+      "port": 5180
     }
   ]
 }
